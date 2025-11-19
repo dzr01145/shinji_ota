@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>太田 真治 | Portfolio</title>
+    <title>Shinji Ota | Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -28,10 +28,12 @@
             },
             fontFamily: {
               sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
+              mono: ['Fira Code', 'monospace'],
             },
             animation: {
               'blob': 'blob 7s infinite',
               'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+              'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             },
             keyframes: {
               blob: {
@@ -49,7 +51,7 @@
         },
       }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+JP:wght@300;400;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
     <style>
       body {
         font-family: 'Inter', 'Noto Sans JP', sans-serif;
@@ -85,5 +87,6 @@
 </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
