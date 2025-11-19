@@ -1,11 +1,11 @@
 import { Project, Skill, Experience } from './types';
 
 export const PERSONAL_INFO = {
-  name: "太田 真治",
-  enName: "SHINJI OTA",
-  title: "Next-Gen Full Stack Developer",
-  tagline: "コードで描き、AIで命を吹き込む。",
-  about: "東京を拠点に活動するフルスタックエンジニア、太田真治。最新のWeb技術と生成AIを融合させ、単なる「機能」ではなく「体験」を創造します。複雑な課題をシンプルかつ美しいコードで解決することに情熱を注いでいます。",
+  name: "SHINJI OTA",
+  jaName: "太田 真治",
+  title: "Creative Technologist / Full Stack Dev",
+  tagline: "Designing the Future with Code & AI.",
+  about: "Tokyo-based Full Stack Engineer specializing in Next.js, WebGL, and Generative AI. I bridge the gap between creative design and robust engineering to build digital experiences that leave a lasting impact.",
   email: "shinji.ota@example.com",
   github: "https://github.com",
   linkedin: "https://linkedin.com",
@@ -15,39 +15,39 @@ export const PERSONAL_INFO = {
 export const SKILLS: Skill[] = [
   { name: "React / Next.js", level: 98, icon: "⚛️", category: "Frontend" },
   { name: "TypeScript", level: 95, icon: "📘", category: "Frontend" },
-  { name: "Three.js / WebGL", level: 80, icon: "🧊", category: "Frontend" },
-  { name: "Node.js", level: 85, icon: "🟢", category: "Backend" },
-  { name: "Python / AI Integration", level: 88, icon: "🧠", category: "Backend" },
-  { name: "Gemini API", level: 92, icon: "✨", category: "AI" },
-  { name: "Docker / K8s", level: 75, icon: "⚓", category: "Tools" },
-  { name: "CI/CD Automation", level: 85, icon: "⚙️", category: "Tools" },
+  { name: "Three.js / WebGL", level: 85, icon: "🧊", category: "Frontend" },
+  { name: "Node.js / Hono", level: 90, icon: "🟢", category: "Backend" },
+  { name: "Python / AI Agents", level: 88, icon: "🧠", category: "Backend" },
+  { name: "Gemini API", level: 95, icon: "✨", category: "AI" },
+  { name: "Cloud Architecture", level: 80, icon: "☁️", category: "Tools" },
+  { name: "UI/UX Design", level: 85, icon: "🎨", category: "Tools" },
 ];
 
 export const PROJECTS: Project[] = [
   {
     id: 1,
-    title: "AI Architect",
-    description: "Gemini 2.5 Flashを活用した次世代アーキテクチャ設計支援ツール。自然言語で要件を伝えると、最適なシステム構成図とIaCコードを即座に生成します。",
-    technologies: ["Next.js", "Gemini API", "Mermaid.js", "Terraform"],
-    imageUrl: "https://picsum.photos/800/600?random=10",
+    title: "Aether Architect",
+    description: "Gemini 2.5 Flashを活用したAIアーキテクチャ設計ツール。自然言語からクラウドインフラ図とTerraformコードを即座に生成・視覚化します。",
+    technologies: ["Next.js", "Gemini API", "React Flow", "AWS CDK"],
+    imageUrl: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop",
     demoUrl: "#",
     repoUrl: "#"
   },
   {
     id: 2,
-    title: "Neural Beats",
-    description: "Web Audio APIとAIを組み合わせたジェネレーティブ音楽プラットフォーム。ユーザーの感情に合わせてリアルタイムにビジュアルとサウンドトラックを生成。",
-    technologies: ["React", "Tone.js", "WebGL", "Canvas API"],
-    imageUrl: "https://picsum.photos/800/600?random=11",
+    title: "Neon Pulse",
+    description: "Web Audio APIとWebGLを融合させた没入型音楽ビジュアライザー。楽曲の周波数に合わせてパーティクルシステムがリアルタイムに反応します。",
+    technologies: ["Three.js", "GLSL", "React", "Web Audio API"],
+    imageUrl: "https://images.unsplash.com/photo-1514525253440-b393452e3383?q=80&w=1000&auto=format&fit=crop",
     demoUrl: "#",
     repoUrl: "#"
   },
   {
     id: 3,
-    title: "Crypto Sentinel",
-    description: "分散型金融(DeFi)のための高度な分析ダッシュボード。オンチェーンデータをリアルタイムで解析し、異常検知アルゴリズムによりリスクを可視化。",
-    technologies: ["TypeScript", "Ethers.js", "D3.js", "GraphQL"],
-    imageUrl: "https://picsum.photos/800/600?random=12",
+    title: "DeFi Sentinel",
+    description: "AI駆動型のブロックチェーン分析プラットフォーム。スマートコントラクトの脆弱性をリアルタイムで検知し、リスクスコアを算出。",
+    technologies: ["TypeScript", "Solidity", "Python", "OpenAI"],
+    imageUrl: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2000&auto=format&fit=crop",
     demoUrl: "#",
     repoUrl: "#"
   }
@@ -56,14 +56,14 @@ export const PROJECTS: Project[] = [
 export const EXPERIENCE: Experience[] = [
   {
     company: "Future Tech Labs",
-    role: "Lead Product Engineer",
+    role: "Lead Engineer",
     period: "2022 - Present",
-    description: "AI駆動型SaaSプロダクトの開発をリード。マイクロサービスアーキテクチャへの移行を指揮し、デプロイ頻度を300%向上させることに成功。"
+    description: "AI活用型SaaSプロダクトの技術選定とアーキテクチャ設計をリード。開発効率を最大化するためのDevOpsパイプラインを構築。"
   },
   {
-    company: "Creative Studios Tokyo",
-    role: "Frontend Developer",
-    period: "2019 - 2022",
-    description: "アワード受賞歴のあるキャンペーンサイトや、没入感のあるWebGL体験の実装を担当。デザイナーと密接に連携し、UI/UXの限界に挑戦。"
+    company: "Global Design Inc.",
+    role: "Frontend Specialist",
+    period: "2020 - 2022",
+    description: "大手クライアントのブランドサイト構築を担当。WebGLを用いたリッチな表現と、Core Web Vitalsを意識したパフォーマンスチューニングを両立。"
   }
 ];
