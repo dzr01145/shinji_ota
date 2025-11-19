@@ -12,7 +12,7 @@ const About: React.FC = () => {
           <div className="md:w-1/2">
             <h2 className="text-sm font-bold text-cyan-400 tracking-widest uppercase mb-2">About Me</h2>
             <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Crafting digital experiences with passion and precision.
+              情熱と技術で、<br/>最高のデジタル体験を。
             </h3>
             <p className="text-slate-400 leading-relaxed mb-8 text-lg">
               {PERSONAL_INFO.about}
@@ -22,17 +22,17 @@ const About: React.FC = () => {
               <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
                 <Code2 className="text-cyan-400 mb-3" size={28} />
                 <h4 className="text-white font-bold mb-1">Clean Code</h4>
-                <p className="text-sm text-slate-500">Maintainable & scalable architecture.</p>
+                <p className="text-sm text-slate-500">保守性と拡張性に優れたアーキテクチャ</p>
               </div>
               <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
                 <Brain className="text-purple-400 mb-3" size={28} />
                 <h4 className="text-white font-bold mb-1">AI Integration</h4>
-                <p className="text-sm text-slate-500">LLM powered smart applications.</p>
+                <p className="text-sm text-slate-500">LLMを活用したインテリジェント機能</p>
               </div>
               <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
                 <Rocket className="text-green-400 mb-3" size={28} />
                 <h4 className="text-white font-bold mb-1">Performance</h4>
-                <p className="text-sm text-slate-500">Optimized for speed and SEO.</p>
+                <p className="text-sm text-slate-500">Core Web Vitalsを意識した高速化</p>
               </div>
             </div>
           </div>

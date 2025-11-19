@@ -12,7 +12,7 @@ const Skills: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-sm font-bold text-cyan-400 tracking-widest uppercase mb-2">My Arsenal</h2>
-          <h3 className="text-3xl md:text-4xl font-bold text-white">Technical Skills</h3>
+          <h3 className="text-3xl md:text-4xl font-bold text-white">技術スタック・スキル</h3>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

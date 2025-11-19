@@ -9,10 +9,10 @@ const Projects: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-end mb-12">
           <div>
             <h2 className="text-sm font-bold text-cyan-400 tracking-widest uppercase mb-2">Portfolio</h2>
-            <h3 className="text-3xl md:text-4xl font-bold text-white">Featured Projects</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-white">開発実績</h3>
           </div>
           <a href="#" className="hidden md:block text-slate-400 hover:text-white text-sm border-b border-slate-700 pb-1 hover:border-white transition-all">
-            View Github
+            GitHubですべて見る
           </a>
         </div>
 
@@ -56,7 +56,7 @@ const Projects: React.FC = () => {
         </div>
         
         <div className="mt-12 text-center md:hidden">
-           <a href="#" className="text-slate-400 hover:text-white text-sm border-b border-slate-700 pb-1">View Github</a>
+           <a href="#" className="text-slate-400 hover:text-white text-sm border-b border-slate-700 pb-1">GitHubを見る</a>
         </div>
       </div>
     </section>

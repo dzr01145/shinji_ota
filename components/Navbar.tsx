@@ -15,10 +15,10 @@ const Navbar: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: 'About', href: '#about' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Contact', href: '#contact' },
+    { name: '経歴', href: '#about' },
+    { name: 'スキル', href: '#skills' },
+    { name: '実績', href: '#projects' },
+    { name: 'お問い合わせ', href: '#contact' },
   ];
 
   return (
@@ -60,7 +60,7 @@ const Navbar: React.FC = () => {
             href="#contact"
             className="px-6 py-2 bg-white text-black text-sm font-bold hover:bg-cyan-400 transition-colors"
           >
-            Let's Talk
+            ご相談はこちら
           </a>
         </div>
 

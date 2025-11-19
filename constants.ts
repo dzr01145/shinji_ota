@@ -4,8 +4,8 @@ export const PERSONAL_INFO = {
   name: "SHINJI OTA",
   jaName: "太田 真治",
   title: "Creative Technologist / Full Stack Dev",
-  tagline: "Designing the Future with Code & AI.",
-  about: "Tokyo-based Full Stack Engineer specializing in Next.js, WebGL, and Generative AI. I bridge the gap between creative design and robust engineering to build digital experiences that leave a lasting impact.",
+  tagline: "コードとAIで、未来を実装する。",
+  about: "東京を拠点に活動するフルスタックエンジニア。Next.js、WebGL、そして生成AI技術を駆使し、クリエイティブなデザインと堅牢なシステム実装を融合させたデジタル体験を創造します。直感的なUI/UXとスケーラブルなアーキテクチャの両立を追求しています。",
   email: "shinji.ota@example.com",
   github: "https://github.com",
   linkedin: "https://linkedin.com",
@@ -56,14 +56,14 @@ export const PROJECTS: Project[] = [
 export const EXPERIENCE: Experience[] = [
   {
     company: "Future Tech Labs",
-    role: "Lead Engineer",
-    period: "2022 - Present",
-    description: "AI活用型SaaSプロダクトの技術選定とアーキテクチャ設計をリード。開発効率を最大化するためのDevOpsパイプラインを構築。"
+    role: "リードエンジニア",
+    period: "2022 - 現在",
+    description: "AI活用型SaaSプロダクトの技術選定とアーキテクチャ設計を主導。開発効率を最大化するためのDevOpsパイプライン構築や、若手エンジニアのメンタリングも担当。"
   },
   {
     company: "Global Design Inc.",
-    role: "Frontend Specialist",
+    role: "フロントエンドスペシャリスト",
     period: "2020 - 2022",
-    description: "大手クライアントのブランドサイト構築を担当。WebGLを用いたリッチな表現と、Core Web Vitalsを意識したパフォーマンスチューニングを両立。"
+    description: "大手クライアントのブランドサイト構築を担当。WebGLを用いたリッチな表現と、Core Web Vitalsを意識したパフォーマンスチューニングを両立し、CVR向上に貢献。"
   }
 ];

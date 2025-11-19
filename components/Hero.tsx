@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowRight, Github, Linkedin, Twitter, ChevronDown, Cpu } from 'lucide-react';
+import { ArrowRight, Github, Linkedin, Twitter, Cpu } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
 
 const Hero: React.FC = () => {
@@ -76,7 +76,7 @@ const Hero: React.FC = () => {
             >
               <div className="absolute inset-0 bg-cyan-500 translate-x-1 translate-y-1 -z-10 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform"></div>
               <span className="flex items-center gap-2">
-                View Work <ArrowRight size={18} />
+                実績を見る <ArrowRight size={18} />
               </span>
             </a>
             <a 
