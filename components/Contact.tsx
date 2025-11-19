@@ -4,7 +4,7 @@ import { PERSONAL_INFO } from '../constants';
 
 const Contact: React.FC = () => {
   return (
-    <section id="contact" className="py-24 bg-slate-950 border-t border-slate-900">
+    <section id="contact" className="py-24 bg-slate-950 border-t border-slate-900 scroll-mt-28">
       <div className="max-w-5xl mx-auto px-6 text-center">
         <h2 className="text-sm font-bold text-cyan-400 tracking-widest uppercase mb-2">Get in Touch</h2>
         <h3 className="text-4xl md:text-5xl font-bold text-white mb-8">新しい価値を、共に創りましょう。</h3>

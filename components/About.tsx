@@ -4,7 +4,7 @@ import { PERSONAL_INFO, EXPERIENCE } from '../constants';
 
 const About: React.FC = () => {
   return (
-    <section id="about" className="py-24 bg-slate-950">
+    <section id="about" className="py-24 bg-slate-950 scroll-mt-28">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row gap-16">
           

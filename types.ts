@@ -6,6 +6,7 @@ export interface Project {
   imageUrl: string;
   demoUrl?: string;
   repoUrl?: string;
+  category: 'AI/ML' | 'Web/App' | 'Creative' | 'Blockchain';
 }
 
 export interface Skill {
@@ -13,6 +14,7 @@ export interface Skill {
   level: number; // 0-100
   icon: string;
   category: 'Frontend' | 'Backend' | 'Tools' | 'AI';
+  description?: string;
 }
 
 export interface ChatMessage {

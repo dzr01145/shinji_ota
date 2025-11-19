@@ -14,16 +14,16 @@
               brand: {
                 50: '#f0f9ff',
                 100: '#e0f2fe',
-                500: '#0ea5e9', // Sky 500
+                500: '#0ea5e9',
                 600: '#0284c7',
                 900: '#0c4a6e',
                 950: '#082f49',
               },
               dark: {
-                bg: '#0f172a', // Slate 900
-                card: '#1e293b', // Slate 800
-                text: '#f8fafc', // Slate 50
-                muted: '#94a3b8', // Slate 400
+                bg: '#0f172a',
+                card: '#1e293b',
+                text: '#f8fafc',
+                muted: '#94a3b8',
               }
             },
             fontFamily: {
@@ -34,6 +34,7 @@
               'blob': 'blob 7s infinite',
               'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
               'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'float-y': 'floatY 3s ease-in-out infinite',
             },
             keyframes: {
               blob: {
@@ -45,6 +46,10 @@
               fadeInUp: {
                 '0%': { opacity: '0', transform: 'translateY(20px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              floatY: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
               }
             },
           },
@@ -55,22 +60,21 @@
     <style>
       body {
         font-family: 'Inter', 'Noto Sans JP', sans-serif;
-        background-color: #0f172a;
+        background-color: #050505;
         color: #f8fafc;
       }
-      /* Custom scrollbar */
       ::-webkit-scrollbar {
         width: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #0f172a;
+        background: #050505;
       }
       ::-webkit-scrollbar-thumb {
-        background: #334155;
+        background: #1e293b;
         border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #475569;
+        background: #0ea5e9;
       }
     </style>
   <script type="importmap">

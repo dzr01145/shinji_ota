@@ -14,6 +14,25 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+
+    const targetId = href.replace('#', '');
+    const element = document.getElementById(targetId);
+
+    if (element) {
+      const headerOffset = 100; // Fixed header height + extra space
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   const navLinks = [
     { name: '経歴', href: '#about' },
     { name: 'スキル', href: '#skills' },
@@ -30,7 +49,11 @@ const Navbar: React.FC = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-3 group">
+        <a 
+          href="#home" 
+          onClick={(e) => handleNavClick(e, '#home')}
+          className="flex items-center gap-3 group cursor-pointer"
+        >
           <div className="bg-white/5 border border-white/10 p-2 rounded group-hover:bg-cyan-500 group-hover:border-cyan-400 transition-all duration-300">
             <Code className="text-white group-hover:text-black transition-colors" size={20} />
           </div>
@@ -50,7 +73,8 @@ const Navbar: React.FC = () => {
             <a 
               key={link.name} 
               href={link.href}
-              className="text-sm font-medium text-slate-400 hover:text-white transition-colors relative group"
+              onClick={(e) => handleNavClick(e, link.href)}
+              className="text-sm font-medium text-slate-400 hover:text-white transition-colors relative group cursor-pointer"
             >
               <span className="relative z-10">{link.name}</span>
               <span className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-cyan-500 transition-all duration-300 group-hover:w-full"></span>
@@ -58,7 +82,8 @@ const Navbar: React.FC = () => {
           ))}
           <a 
             href="#contact"
-            className="px-6 py-2 bg-white text-black text-sm font-bold hover:bg-cyan-400 transition-colors"
+            onClick={(e) => handleNavClick(e, '#contact')}
+            className="px-6 py-2 bg-white text-black text-sm font-bold hover:bg-cyan-400 transition-colors cursor-pointer rounded-sm"
           >
             ご相談はこちら
           </a>
@@ -80,8 +105,8 @@ const Navbar: React.FC = () => {
             <a 
               key={link.name} 
               href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-xl font-medium text-slate-300 hover:text-cyan-400 py-3 border-b border-slate-900"
+              onClick={(e) => handleNavClick(e, link.href)}
+              className="text-xl font-medium text-slate-300 hover:text-cyan-400 py-3 border-b border-slate-900 cursor-pointer"
             >
               {link.name}
             </a>
