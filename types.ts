@@ -6,14 +6,14 @@ export interface Project {
   imageUrl: string;
   demoUrl?: string;
   repoUrl?: string;
-  category: 'AI/ML' | 'Web/App' | 'Creative' | 'Blockchain';
+  category: 'Consulting' | 'Safety DX' | 'Research' | 'Crisis Mgmt';
 }
 
 export interface Skill {
   name: string;
   level: number; // 0-100
   icon: string;
-  category: 'Frontend' | 'Backend' | 'Tools' | 'AI';
+  category: 'Engineering' | 'Management' | 'DX / AI' | 'Personal' | 'Crisis Mgmt';
   description?: string;
 }
 

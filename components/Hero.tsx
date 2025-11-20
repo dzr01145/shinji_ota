@@ -1,31 +1,57 @@
+
 import React, { useEffect, useState, useRef } from 'react';
-import { ArrowRight, Github, Linkedin, Twitter, Terminal } from 'lucide-react';
+import { ArrowRight, Github, Linkedin, Twitter, Terminal, Activity } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
 
 const Hero: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [text, setText] = useState('');
-  const fullText = PERSONAL_INFO.title;
   const [isTyping, setIsTyping] = useState(true);
+  const [phraseIndex, setPhraseIndex] = useState(0);
 
-  // Typing Effect
+  const phrases = [
+    "Risk Engineer...",
+    "Safety Architect...",
+    "Professional P.E.Jp...",
+    "Translator of Safety..."
+  ];
+
+  // Typing Effect Loop
   useEffect(() => {
-    let currentIndex = 0;
-    let timeoutId: ReturnType<typeof setTimeout>;
+    let currentText = '';
+    let isDeleting = false;
+    let loopNum = 0;
+    let typingSpeed = 100;
 
-    const type = () => {
-      if (currentIndex <= fullText.length) {
-        setText(fullText.slice(0, currentIndex));
-        currentIndex++;
-        timeoutId = setTimeout(type, 100);
+    const handleType = () => {
+      const i = loopNum % phrases.length;
+      const fullText = phrases[i];
+
+      if (isDeleting) {
+        currentText = fullText.substring(0, currentText.length - 1);
+        typingSpeed = 50;
       } else {
-        setIsTyping(false);
+        currentText = fullText.substring(0, currentText.length + 1);
+        typingSpeed = 100;
       }
+
+      setText(currentText);
+
+      if (!isDeleting && currentText === fullText) {
+        typingSpeed = 2000; // Pause at end
+        isDeleting = true;
+      } else if (isDeleting && currentText === '') {
+        isDeleting = false;
+        loopNum++;
+        typingSpeed = 500; // Pause before starting new word
+      }
+
+      setTimeout(handleType, typingSpeed);
     };
 
-    type();
-    return () => clearTimeout(timeoutId);
-  }, [fullText]);
+    const timer = setTimeout(handleType, typingSpeed);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Canvas Network Animation
   useEffect(() => {
@@ -123,13 +149,13 @@ const Hero: React.FC = () => {
         <div className="lg:col-span-7 space-y-6">
           <div className="inline-flex items-center gap-3 px-3 py-1 rounded border border-cyan-900/50 bg-cyan-950/10 backdrop-blur-md animate-fade-in-up">
             <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.8)] animate-pulse"></div>
-            <span className="text-xs font-mono text-cyan-400 tracking-widest">AVAILABLE FOR WORK</span>
+            <span className="text-xs font-mono text-cyan-400 tracking-widest">CONSULTING AVAILABLE</span>
           </div>
           
           <div className="relative">
             <h2 className="text-xl md:text-2xl font-mono text-slate-500 mb-2 tracking-tighter flex items-center gap-2">
-              <Terminal size={20} />
-              <span>Initialize Protocol...</span>
+              <Activity size={20} />
+              <span>System Status: Stable</span>
             </h2>
             <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-white leading-[0.9] mb-4">
               SHINJI
@@ -141,7 +167,7 @@ const Hero: React.FC = () => {
             <p className="text-2xl font-light text-slate-300 tracking-wide flex items-center gap-3 h-8">
               <span className="font-mono text-cyan-400 text-lg">
                 &gt; {text}
-                <span className={`inline-block w-2 h-5 ml-1 bg-cyan-400 ${isTyping ? 'animate-pulse' : 'opacity-0'}`}></span>
+                <span className="inline-block w-2 h-5 ml-1 bg-cyan-400 animate-pulse"></span>
               </span>
             </p>
           </div>
@@ -169,9 +195,9 @@ const Hero: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-8 pt-12 opacity-60 hover:opacity-100 transition-opacity animate-fade-in-up" style={{ animationDelay: '1s' }}>
-            <a href={PERSONAL_INFO.github} className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Github size={24} /></a>
-            <a href={PERSONAL_INFO.linkedin} className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Linkedin size={24} /></a>
-            <a href={PERSONAL_INFO.twitter} className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Twitter size={24} /></a>
+            <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Github size={24} /></a>
+            <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Linkedin size={24} /></a>
+            <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Twitter size={24} /></a>
           </div>
         </div>
 
@@ -184,7 +210,7 @@ const Hero: React.FC = () => {
             <div className="absolute -inset-4 border border-cyan-500/20 z-0 rotate-3 group-hover:rotate-0 transition-transform duration-700"></div>
             
             <img 
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1000&auto=format&fit=crop" 
+              src="https://ai.studio/img1_path66696e19b676c%20(3).jpg" 
               alt="Shinji Ota" 
               className="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 transition-all duration-700 ease-in-out"
             />
@@ -193,7 +219,14 @@ const Hero: React.FC = () => {
             <div className="absolute -right-8 top-12 bg-slate-950/90 backdrop-blur border border-cyan-500/30 p-4 shadow-2xl flex flex-col items-center gap-2 z-30 animate-float-y">
               <div className="w-2 h-2 bg-cyan-500 rounded-full animate-ping"></div>
               <div className="writing-vertical-lr font-mono text-xs text-cyan-400 tracking-widest uppercase py-2">
-                System Online
+                Safety First
+              </div>
+            </div>
+
+            <div className="absolute -left-6 bottom-24 bg-slate-950/90 backdrop-blur border border-purple-500/30 p-4 shadow-2xl z-30 animate-float-y" style={{ animationDelay: '1s' }}>
+              <div className="flex items-center gap-3">
+                <Activity size={16} className="text-purple-400" />
+                <span className="font-mono text-xs text-purple-300">ISO 45001 Compliant</span>
               </div>
             </div>
           </div>

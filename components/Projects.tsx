@@ -1,3 +1,5 @@
+
+
 import React, { useState } from 'react';
 import { ExternalLink, Github, Filter, Layers } from 'lucide-react';
 import { PROJECTS } from '../constants';
@@ -45,17 +47,18 @@ const Projects: React.FC = () => {
           {filteredProjects.map((project) => (
             <div 
               key={project.id} 
-              className="group bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 hover:border-cyan-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 hover:-translate-y-2 flex flex-col h-full animate-fade-in-up"
+              className="group bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 hover:border-cyan-500/30 transition-all duration-700 hover:shadow-2xl hover:shadow-cyan-500/5 flex flex-col h-full animate-fade-in-up"
             >
               <div className="relative h-48 overflow-hidden shrink-0">
-                <div className="absolute inset-0 bg-slate-900 animate-pulse" />
+                <div className="absolute inset-0 bg-slate-900" />
                 <img 
                   src={project.imageUrl} 
                   alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-80"></div>
+                {/* Removed variable opacity to prevent flickering (chikachika) */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
                 
                 <div className="absolute top-4 right-4 bg-slate-900/80 backdrop-blur px-3 py-1 rounded-full border border-slate-700 text-xs font-mono text-cyan-400">
                   {project.category}
@@ -64,8 +67,8 @@ const Projects: React.FC = () => {
               
               <div className="p-6 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-4">
-                  <h4 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">{project.title}</h4>
-                  <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-x-4 group-hover:translate-x-0">
+                  <h4 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors duration-500">{project.title}</h4>
+                  <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-700 translate-x-4 group-hover:translate-x-0">
                     {project.repoUrl && <a href={project.repoUrl} className="text-slate-400 hover:text-white transition-colors"><Github size={18} /></a>}
                     {project.demoUrl && <a href={project.demoUrl} className="text-slate-400 hover:text-white transition-colors"><ExternalLink size={18} /></a>}
                   </div>
@@ -77,7 +80,7 @@ const Projects: React.FC = () => {
 
                 <div className="flex flex-wrap gap-2 mt-auto">
                   {project.technologies.map((tech) => (
-                    <span key={tech} className="px-3 py-1 text-xs font-medium bg-slate-900 text-slate-300 rounded border border-slate-800 group-hover:border-cyan-500/30 transition-colors">
+                    <span key={tech} className="px-3 py-1 text-xs font-medium bg-slate-900 text-slate-300 rounded border border-slate-800 group-hover:border-cyan-500/30 transition-colors duration-700">
                       {tech}
                     </span>
                   ))}
