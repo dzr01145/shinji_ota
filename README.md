@@ -1,20 +1,89 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Shinji Ota Portfolio
 
-# Run and deploy your AI Studio app
+クリエイティブ開発者 Shinji Ota のポートフォリオサイトです。Gemini AI を活用したインタラクティブなポートフォリオ体験を提供します。
 
-This contains everything you need to run your app locally.
+## 特徴
 
-View your app in AI Studio: https://ai.studio/apps/drive/1iB1HWW2siA1PbPAU1G375LmkFjfXq6pI
+- 🎨 モダンでレスポンシブなデザイン
+- 🤖 Gemini AI 搭載のチャット機能
+- ⚡ React + TypeScript + Vite による高速な開発体験
+- 🎭 スムーズなスクロールアニメーション
+- 📱 モバイルフレンドリーな UI
 
-## Run Locally
+## 技術スタック
 
-**Prerequisites:**  Node.js
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- Lucide React (アイコン)
+- Google Gemini AI
 
+## セットアップ
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 前提条件
+
+- Node.js (v18 以上推奨)
+- Gemini API キー ([Google AI Studio](https://makersuite.google.com/app/apikey) で取得)
+
+### インストール
+
+1. リポジトリをクローン:
+   ```bash
+   git clone https://github.com/yourusername/shinji_ota.git
+   cd shinji_ota
+   ```
+
+2. 依存関係をインストール:
+   ```bash
+   npm install
+   ```
+
+3. 環境変数を設定:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+   `.env.local` を開いて、Gemini API キーを設定:
+   ```
+   GEMINI_API_KEY=your_api_key_here
+   ```
+
+4. 開発サーバーを起動:
+   ```bash
+   npm run dev
+   ```
+
+5. ブラウザで http://localhost:5173 を開く
+
+## ビルド
+
+本番環境用にビルド:
+```bash
+npm run build
+```
+
+ビルドしたアプリをプレビュー:
+```bash
+npm run preview
+```
+
+## デプロイ
+
+### Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/shinji_ota)
+
+### Netlify
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/shinji_ota)
+
+環境変数 `GEMINI_API_KEY` を設定することを忘れずに。
+
+## ライセンス
+
+MIT License - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
+
+## お問い合わせ
+
+ポートフォリオサイト内のコンタクトフォーム、または AI チャットでお気軽にお問い合わせください。

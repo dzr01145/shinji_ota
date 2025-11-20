@@ -1,8 +1,11 @@
 {
   "name": "shinji-ota-portfolio",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "1.0.0",
+  "description": "Creative Developer Portfolio with Gemini AI - Shinji Ota のポートフォリオサイト",
   "type": "module",
+  "author": "Shinji Ota",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
