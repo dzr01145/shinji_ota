@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowRight, Github, Linkedin, Twitter, Terminal, Activity } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
-import profileImg from '../profile_image.jpg';
+import profileImg from '../src/assets/profile_image.jpg';
 
 const Hero: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
