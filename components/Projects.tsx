@@ -54,11 +54,11 @@ const Projects: React.FC = () => {
                 <img 
                   src={project.imageUrl} 
                   alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
                   loading="lazy"
                 />
-                {/* Removed variable opacity to prevent flickering (chikachika) */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60"></div>
+                {/* Static opacity to prevent flickering */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent opacity-60 pointer-events-none"></div>
                 
                 <div className="absolute top-4 right-4 bg-slate-900/80 backdrop-blur px-3 py-1 rounded-full border border-slate-700 text-xs font-mono text-cyan-400">
                   {project.category}

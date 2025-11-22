@@ -210,9 +210,9 @@ const Hero: React.FC = () => {
             <div className="absolute -inset-4 border border-cyan-500/20 z-0 rotate-3 group-hover:rotate-0 transition-transform duration-700"></div>
             
             <img 
-              src="https://ai.studio/img1_path66696e19b676c%20(3).jpg" 
+              src="./img1_path66696e19b676c%20(3).jpg" 
               alt="Shinji Ota" 
-              className="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 transition-all duration-700 ease-in-out"
+              className="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-[1.02]"
             />
             
             {/* Floating Tech Elements */}

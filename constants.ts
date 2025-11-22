@@ -30,7 +30,7 @@ export const PROJECTS: Project[] = [
     title: "Safety DX Strategy",
     description: "「第14次労働災害防止計画」に向けたDX推進プロジェクト。AIによる不安全行動の検知やVR訓練の導入を提言し、行政計画と現場運用の橋渡し役を担う。",
     technologies: ["Safety DX", "AI Analysis", "VR Training", "Policy Making"],
-    imageUrl: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2070&auto=format&fit=crop",
     demoUrl: "#",
     category: "Safety DX"
   },
@@ -39,7 +39,7 @@ export const PROJECTS: Project[] = [
     title: "Global Mining Consulting",
     description: "海外鉱山および国内製造業に対する労働安全コンサルティング。現場特有の「不安全バイアス」を分析し、鉱山保安の知見を応用した堅牢な安全規定を策定。",
     technologies: ["Mining Safety", "Risk Assessment", "Global Std", "Audit"],
-    imageUrl: "https://images.unsplash.com/photo-1616328835543-b221602384c2?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1578321272128-78497d0b159a?q=80&w=2070&auto=format&fit=crop",
     category: "Consulting"
   },
   {
@@ -47,7 +47,7 @@ export const PROJECTS: Project[] = [
     title: "Social Safety Net Research",
     description: "シルバー人材センター向け安全就業実態調査。高齢就業者の身体機能低下と作業リスクの相関をデータ分析し、持続可能な就業環境のためのガイドラインを作成。",
     technologies: ["Data Analysis", "Social Research", "Guideline", "Elderly Care"],
-    imageUrl: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop",
     category: "Research"
   },
   {
