@@ -2,8 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { ArrowRight, Github, Linkedin, Twitter, Terminal, Activity } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
 
-const BASE_URL = import.meta.env.BASE_URL || '/';
-
 const Hero: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [text, setText] = useState('');
@@ -211,7 +209,7 @@ const Hero: React.FC = () => {
             <div className="absolute -inset-4 border border-cyan-500/20 z-0 rotate-3 group-hover:rotate-0 transition-transform duration-700"></div>
 
             <img
-              src={`${BASE_URL}profile_image.jpg`}
+              src="profile_image.jpg"
               alt="Shinji Ota"
               className="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-[1.02]"
             />
