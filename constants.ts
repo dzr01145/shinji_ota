@@ -39,7 +39,7 @@ export const PROJECTS: Project[] = [
     title: "Global Mining Consulting",
     description: "海外鉱山および国内製造業に対する労働安全コンサルティング。現場特有の「不安全バイアス」を分析し、鉱山保安の知見を応用した堅牢な安全規定を策定。",
     technologies: ["Mining Safety", "Risk Assessment", "Global Std", "Audit"],
-    imageUrl: "https://images.unsplash.com/photo-1578321272128-78497d0b159a?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?q=80&w=2070&auto=format&fit=crop",
     category: "Consulting"
   },
   {
