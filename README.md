@@ -70,13 +70,36 @@ npm run preview
 
 ## デプロイ
 
+### GitHub Pages
+
+このリポジトリは GitHub Actions を使用して自動的に GitHub Pages にデプロイされます。
+
+カスタムドメイン: https://shinji-ota.com
+
+#### デプロイ方法
+
+main ブランチにプッシュすると、自動的にビルド＆デプロイされます:
+
+```bash
+git push origin main
+```
+
+GitHub Actions が自動的に：
+1. 依存関係をインストール
+2. プロジェクトをビルド
+3. gh-pages ブランチにデプロイ
+
+を実行します。
+
+カスタムドメインは `public/CNAME` ファイルで設定されています。
+
 ### Vercel
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/shinji_ota)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/dzr01145/shinji_ota)
 
 ### Netlify
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/shinji_ota)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/dzr01145/shinji_ota)
 
 環境変数 `GEMINI_API_KEY` を設定することを忘れずに。
 
