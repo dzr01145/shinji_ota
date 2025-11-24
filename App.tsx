@@ -8,7 +8,26 @@ import Contact from './components/Contact';
 import AIChat from './components/AIChat';
 import ScrollObserver from './components/ScrollObserver';
 
+import PasswordGate from './components/PasswordGate';
+
 const App: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const auth = localStorage.getItem('site_authenticated');
+    if (auth === 'true') {
+      setIsAuthenticated(true);
+    }
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) return null;
+
+  if (!isAuthenticated) {
+    return <PasswordGate onAuthenticated={() => setIsAuthenticated(true)} />;
+  }
+
   return (
     <div className="bg-slate-950 text-slate-200 selection:bg-cyan-500/30 selection:text-cyan-100 min-h-screen overflow-x-hidden">
       <Navbar />
