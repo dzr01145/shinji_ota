@@ -70,6 +70,30 @@ npm run preview
 
 ## デプロイ
 
+### GitHub Pages
+
+このリポジトリは GitHub Actions を使用して自動的に GitHub Pages にデプロイされます。
+
+#### 初回セットアップ
+
+1. GitHubリポジトリの Settings > Pages に移動
+2. **Source** を「GitHub Actions」に変更
+3. Settings > Secrets and variables > Actions に移動
+4. **New repository secret** をクリック
+5. 名前: `GEMINI_API_KEY`、値: あなたのGemini APIキー を入力して保存
+
+#### デプロイ
+
+main/master ブランチにプッシュすると、自動的にビルド＆デプロイされます:
+
+```bash
+git push origin main
+```
+
+手動でデプロイする場合は、GitHubの Actions タブから「Deploy to GitHub Pages」ワークフローを手動実行できます。
+
+カスタムドメインを使用する場合は、`public/CNAME` ファイルにドメイン名を記載してください（すでに `shinji-ota.com` が設定済み）。
+
 ### Vercel
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/shinji_ota)
