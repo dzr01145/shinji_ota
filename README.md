@@ -93,6 +93,29 @@ GitHub Actions が自動的に：
 
 カスタムドメインは `public/CNAME` ファイルで設定されています。
 
+### Render
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+#### Renderでのデプロイ手順
+
+1. https://render.com にアクセスしてGitHubで連携
+2. **New Static Site** をクリック
+3. このリポジトリ（`dzr01145/shinji_ota`）を選択
+4. 設定を入力：
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `dist`
+5. **Environment Variables** で `GEMINI_API_KEY` を追加
+6. **Create Static Site** をクリック
+
+#### パスワード保護の設定（Renderの場合）
+
+Renderでパスワード保護を有効にする：
+1. デプロイ後、サイトの Settings > Headers & Redirects に移動
+2. Basic Auth を有効化（有料プランの機能）
+
+または、`render.yaml` を使用して自動設定（リポジトリに含まれています）。
+
 ### Vercel
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/dzr01145/shinji_ota)
