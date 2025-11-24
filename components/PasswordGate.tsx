@@ -11,9 +11,9 @@ const PasswordGate: React.FC<PasswordGateProps> = ({ onAuthenticated }) => {
     const [error, setError] = useState(false);
     const [isChecking, setIsChecking] = useState(false);
 
-    // 認証情報設定
-    const CORRECT_USERNAME = 'admin';
-    const CORRECT_PASSWORD = '123';
+    // 認証情報設定（環境変数から読み込み、なければデフォルト値を使用）
+    const CORRECT_USERNAME = import.meta.env.VITE_AUTH_USER || 'admin';
+    const CORRECT_PASSWORD = import.meta.env.VITE_AUTH_PASSWORD || '123';
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
