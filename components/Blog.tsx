@@ -144,10 +144,10 @@ const Blog: React.FC = () => {
                 )}
             </div>
 
-            {/* FAB for Upload */}
+            {/* FAB for Upload - Moved to bottom-left */}
             <button
                 onClick={() => setIsUploadOpen(true)}
-                className="fixed bottom-8 right-8 bg-gradient-to-r from-cyan-500 to-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50"
+                className="fixed bottom-8 left-8 bg-gradient-to-r from-cyan-500 to-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50"
             >
                 <Plus size={24} />
             </button>

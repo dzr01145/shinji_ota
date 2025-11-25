@@ -117,17 +117,17 @@ app.post('/api/chat', async (req, res) => {
       systemInstruction: SYSTEM_INSTRUCTION + `
       
       **CRITICAL RESPONSE RULES:**
-      1. **BREVITY**: Keep ALL responses concise. Aim for under 300 Japanese characters unless specifically asked for a detailed explanation. If the response is long, summarize it first.
-      2. **NO REFUSALS**: Do NOT say "Sorry, I couldn't generate a response" or "I don't know" just because the exact info is missing.
-      3. **SPECULATION**: If asked about personality or something not in the knowledge base (e.g., "What is he like?"), infer from his background (e.g., "Based on his experience in mining and safety, he is likely disciplined, logical, and deeply cares about human life.") or provide a general polite response. ALWAYS preface such answers with "知識ベースには明記されていませんが、経歴から推測すると..." or "想像ですが...".
-      4. **FORMAT**: Use Markdown.
+      1. **BREVITY**: Keep ALL responses concise. Aim for under 150 Japanese characters unless specifically asked for a detailed explanation. If the response is long, summarize it first.
+      2. **NO REFUSALS**: NEVER say "Sorry, I couldn't generate a response" or "I don't know". If the exact info is missing, YOU MUST INFER it from context or provide a general, polite response based on common sense for a safety consultant.
+      3. **SPECULATION**: If asked about personality or something not in the knowledge base, infer from his background (e.g., "Based on his experience in mining and safety, he is likely disciplined, logical, and deeply cares about human life."). ALWAYS preface such answers with "知識ベースには明記されていませんが、経歴から推測すると..." or "想像ですが...".
+      4. **FORMAT**: Use Markdown (bolding, lists) to make text easy to read.
       `
     });
 
     const chat = model.startChat({
       history: [],
       generationConfig: {
-        maxOutputTokens: 800, // Increased to prevent cutting off, but prompt should limit length
+        maxOutputTokens: 800,
       },
     });
 
@@ -151,22 +151,56 @@ app.post('/api/chat', async (req, res) => {
 
 // --- Blog API ---
 import fs from 'fs';
+import pg from 'pg';
+const { Pool } = pg;
 
 const BLOG_FILE = path.join(__dirname, 'blog_posts.json');
+let pool;
 
-// Initialize blog file if not exists
-if (!fs.existsSync(BLOG_FILE)) {
-  fs.writeFileSync(BLOG_FILE, JSON.stringify([]));
+// Initialize DB or File
+if (process.env.DATABASE_URL) {
+  console.log('Connecting to PostgreSQL...');
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+  });
+
+  pool.query(`
+    CREATE TABLE IF NOT EXISTS blog_posts (
+      id SERIAL PRIMARY KEY,
+      image_url TEXT NOT NULL,
+      caption TEXT,
+      location TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `).then(() => console.log('Blog table initialized'))
+    .catch(err => console.error('DB Init Error:', err));
+} else {
+  console.log('Using JSON file for storage');
+  if (!fs.existsSync(BLOG_FILE)) {
+    fs.writeFileSync(BLOG_FILE, JSON.stringify([]));
+  }
 }
 
 // Get all blog posts
-app.get('/api/blog', (req, res) => {
+app.get('/api/blog', async (req, res) => {
   try {
-    const data = fs.readFileSync(BLOG_FILE, 'utf8');
-    const posts = JSON.parse(data);
-    // Sort by date desc
-    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-    res.json(posts);
+    if (pool) {
+      const result = await pool.query('SELECT * FROM blog_posts ORDER BY created_at DESC');
+      const posts = result.rows.map(row => ({
+        id: row.id.toString(),
+        imageUrl: row.image_url,
+        caption: row.caption,
+        date: row.created_at,
+        location: row.location
+      }));
+      res.json(posts);
+    } else {
+      const data = fs.readFileSync(BLOG_FILE, 'utf8');
+      const posts = JSON.parse(data);
+      posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+      res.json(posts);
+    }
   } catch (error) {
     console.error('Error reading blog posts:', error);
     res.status(500).json({ error: 'Failed to fetch blog posts' });
@@ -174,9 +208,9 @@ app.get('/api/blog', (req, res) => {
 });
 
 // Create new blog post (Admin only)
-app.post('/api/blog', (req, res) => {
+app.post('/api/blog', async (req, res) => {
   const { password, post } = req.body;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'; // Default fallback (should be set in env)
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
 
   if (password !== adminPassword) {
     return res.status(401).json({ error: 'Unauthorized: Incorrect password' });
@@ -187,21 +221,38 @@ app.post('/api/blog', (req, res) => {
   }
 
   try {
-    const data = fs.readFileSync(BLOG_FILE, 'utf8');
-    const posts = JSON.parse(data);
+    if (pool) {
+      const result = await pool.query(
+        'INSERT INTO blog_posts (image_url, caption, location) VALUES ($1, $2, $3) RETURNING *',
+        [post.imageUrl, post.caption || '', post.location || '']
+      );
+      const newPost = result.rows[0];
+      res.json({
+        success: true, post: {
+          id: newPost.id.toString(),
+          imageUrl: newPost.image_url,
+          caption: newPost.caption,
+          date: newPost.created_at,
+          location: newPost.location
+        }
+      });
+    } else {
+      const data = fs.readFileSync(BLOG_FILE, 'utf8');
+      const posts = JSON.parse(data);
 
-    const newPost = {
-      id: Date.now().toString(),
-      imageUrl: post.imageUrl,
-      caption: post.caption || '',
-      date: new Date().toISOString(),
-      location: post.location || ''
-    };
+      const newPost = {
+        id: Date.now().toString(),
+        imageUrl: post.imageUrl,
+        caption: post.caption || '',
+        date: new Date().toISOString(),
+        location: post.location || ''
+      };
 
-    posts.push(newPost);
-    fs.writeFileSync(BLOG_FILE, JSON.stringify(posts, null, 2));
+      posts.push(newPost);
+      fs.writeFileSync(BLOG_FILE, JSON.stringify(posts, null, 2));
 
-    res.json({ success: true, post: newPost });
+      res.json({ success: true, post: newPost });
+    }
   } catch (error) {
     console.error('Error saving blog post:', error);
     res.status(500).json({ error: 'Failed to save blog post' });
