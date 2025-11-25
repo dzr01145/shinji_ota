@@ -6,7 +6,8 @@ import {
     Camera,
     Search,
     ExternalLink,
-    CheckCircle2
+    CheckCircle2,
+    Scale
 } from 'lucide-react';
 
 const AIPlayground: React.FC = () => {
@@ -121,6 +122,14 @@ const AIPlayground: React.FC = () => {
                             buttonText="アプリを開く"
                             features={["5段階リスク評価", "報告書自動生成", "PPTX出力"]}
                             badge="Recommended"
+                        />
+                        <ToolCard
+                            icon={<Scale className="w-8 h-8 text-cyan-400" />}
+                            title="製品安全・PL／品質コンプライアンス相談チャット"
+                            description="製造物責任、リコール対応、品質不正防止などに関連するリスクへのアドバイスを提供します。"
+                            link="https://pl-chatbot.onrender.com/"
+                            buttonText="アプリを開く"
+                            features={["PL法・製品安全法対応", "リコール判断・決裁支援", "品質不正・改ざん予防"]}
                         />
                     </div>
                 </section>
