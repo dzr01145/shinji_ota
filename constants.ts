@@ -45,7 +45,7 @@ export const PROJECTS: Project[] = [
     title: "Mining Safety Consulting",
     description: "国内鉱山および製造業に対する労働安全コンサルティング。現場特有の「不安全バイアス」を分析し、鉱山保安法やISO45001に基づいた堅牢な安全規定を策定。",
     technologies: ["Mining Safety", "Risk Assessment", "ISO 45001", "Audit"],
-    imageUrl: "/images/mining-safety.jpg",
+    imageUrl: "/images/mining-safety-final.jpg",
     category: "Consulting"
   },
   {
