@@ -22,7 +22,7 @@ const Projects: React.FC = () => {
             <h2 className="text-sm font-bold text-cyan-400 tracking-widest uppercase mb-2 flex items-center gap-2">
               <Layers size={16} /> Portfolio
             </h2>
-            <h3 className="text-3xl md:text-4xl font-bold text-white">開発実績</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-white">実績</h3>
           </div>
 
           {/* Filter Tabs */}
@@ -73,7 +73,7 @@ const Projects: React.FC = () => {
                   </div>
                 </div>
 
-                <p className="text-slate-400 text-sm mb-6 line-clamp-3 leading-relaxed flex-1">
+                <p className="text-slate-400 text-sm mb-6 leading-relaxed flex-1">
                   {project.description}
                 </p>
 
