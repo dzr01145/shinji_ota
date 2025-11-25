@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Loader2, Sparkles, Minimize2 } from 'lucide-react';
 import { sendMessageToGemini } from '../services/geminiService';
 import { ChatMessage } from '../types';
+import ReactMarkdown from 'react-markdown';
 
 const AIChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,7 +60,7 @@ const AIChat: React.FC = () => {
                 AI Assistant
               </h3>
             </div>
-            <button 
+            <button
               onClick={() => setIsOpen(false)}
               className="text-slate-400 hover:text-white transition-colors"
             >
@@ -70,18 +71,25 @@ const AIChat: React.FC = () => {
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-slate-700">
             {messages.map((msg, idx) => (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div 
-                  className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${
-                    msg.role === 'user' 
-                      ? 'bg-cyan-600 text-white rounded-tr-sm' 
+                <div
+                  className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${msg.role === 'user'
+                      ? 'bg-cyan-600 text-white rounded-tr-sm'
                       : 'bg-slate-800 text-slate-200 border border-slate-700 rounded-tl-sm'
-                  } ${msg.isError ? 'border-red-500 text-red-200 bg-red-900/20' : ''}`}
+                    } ${msg.isError ? 'border-red-500 text-red-200 bg-red-900/20' : ''}`}
                 >
-                  {msg.text}
+                  {msg.role === 'model' ? (
+                    <ReactMarkdown
+                      className="prose prose-invert prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ul:pl-4 prose-li:my-0.5 prose-headings:my-2 prose-headings:text-cyan-300 prose-strong:text-cyan-300 prose-a:text-cyan-400 prose-code:bg-slate-700 prose-code:px-1 prose-code:rounded prose-code:text-cyan-200"
+                    >
+                      {msg.text}
+                    </ReactMarkdown>
+                  ) : (
+                    msg.text
+                  )}
                 </div>
               </div>
             ))}
@@ -108,7 +116,7 @@ const AIChat: React.FC = () => {
                 className="flex-1 bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none"
                 disabled={isLoading}
               />
-              <button 
+              <button
                 onClick={handleSend}
                 disabled={isLoading || !input.trim()}
                 className="p-1.5 bg-cyan-600 hover:bg-cyan-500 rounded-lg text-white disabled:opacity-50 disabled:hover:bg-cyan-600 transition-all"
@@ -129,7 +137,7 @@ const AIChat: React.FC = () => {
         className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:scale-110 transition-all duration-300 z-50"
       >
         {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
-        
+
         {!isOpen && (
           <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-slate-900"></span>
         )}
