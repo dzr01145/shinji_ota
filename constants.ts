@@ -7,7 +7,7 @@ export const PERSONAL_INFO = {
   jaName: "太田 真治",
   title: "Principal Consultant / Risk Engineer",
   tagline: "現場と経営をつなぐ、「安全文化の翻訳者」。",
-  about: "SOMPOリスクマネジメントにてグループリーダーを務める労働安全のスペシャリスト。鉱山保安のバックグラウンドを持ち、技術士（総合技術監理・衛生工学）として国内外の現場を支援。「事例→リスク抽出→PDCA」の論理的アプローチにより、確実なリスク低減と組織の安全文化醸成をデザインする。",
+  about: "労働安全のスペシャリスト。鉱山保安のバックグラウンドを持ち、技術士（総合技術監理・衛生工学）として国内外の現場を支援。「事例→リスク抽出→PDCA」の論理的アプローチにより、確実なリスク低減と組織の安全文化醸成をデザインする。",
   email: "shinji.ota@example.com",
   github: "#",
   linkedin: "#",
@@ -62,8 +62,8 @@ export const PROJECTS: Project[] = [
 
 export const EXPERIENCE: Experience[] = [
   {
-    company: "SOMPO Risk Management",
-    role: "Group Leader / Senior Consultant",
+    company: "Risk Management Firm",
+    role: "Senior Consultant",
     period: "Current",
     description: "リスクエンジニアリング部・賠償／労災グループ。国内外の製造・運送・鉱業に対し、技術士・労働安全コンサルタントの立場から安全文化醸成を支援。"
   },

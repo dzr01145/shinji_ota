@@ -202,7 +202,7 @@ const Hero: React.FC = () => {
 
         {/* Visual/Image Area */}
         <div className="lg:col-span-5 relative hidden lg:block animate-blob">
-          <div className="relative z-10 w-full max-w-md mx-auto aspect-[3/4] bg-slate-900 relative group perspective-1000">
+          <div className="relative z-10 w-full max-w-sm mx-auto aspect-[3/4] bg-slate-900 relative group perspective-1000">
             {/* Glitch Effect Layers */}
             <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 mix-blend-overlay z-20 pointer-events-none"></div>
             <div className="absolute -inset-4 border border-slate-800 z-0 group-hover:scale-105 transition-transform duration-700"></div>
@@ -211,7 +211,7 @@ const Hero: React.FC = () => {
             <img
               src="/profile_image.jpg"
               alt="Shinji Ota"
-              className="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-[1.02]"
+              className="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-[1.02] filter grayscale-[20%] sepia-[20%] hue-rotate-[190deg] brightness-[80%] contrast-[110%]"
             />
 
             {/* Floating Tech Elements */}

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>課題解決メニュー - Your Safety Partner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-color: #DF082A;
+            --brand-color-dark: #B00622;
+            --brand-color-light: rgba(223, 8, 42, 0.12);
+            --brand-color-soft: rgba(223, 8, 42, 0.08);
+        }
+        body {
+            font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
+        }
+        .text-brand { color: var(--brand-color); }
+        .hover-text-brand:hover { color: var(--brand-color); }
+        .bg-brand { background-color: var(--brand-color); }
+        .hover-bg-brand:hover { background-color: var(--brand-color-dark); }
+        .border-brand { border-color: var(--brand-color); }
+        .bg-brand-soft { background-color: var(--brand-color-light); }
+        .bg-brand-softest { background-color: var(--brand-color-soft); }
+        .hover\:bg-brand-soft:hover { background-color: var(--brand-color-light); }
+        .hover\:bg-brand-softest:hover { background-color: var(--brand-color-soft); }
+    </style>
+    <script>
+        // 認証チェック - ログインしていない場合はログインページへリダイレクト
+        (async function checkAuth() {
+            try {
+                const response = await fetch('/api/auth/me', {
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    window.location.href = '/login.html';
+                }
+            } catch (error) {
+                console.error('認証チェックエラー:', error);
+                window.location.href = '/login.html';
+            }
+        })();
+    </script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="https://www.sompo-rc.co.jp/img/common/logo_sompo.png" alt="Sompo Risk Management ロゴ" class="h-10 w-auto">
+                <a href="index.html" class="text-2xl font-bold text-brand">Your Safety Partner</a>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="dashboard.html" class="text-gray-600 hover-text-brand">ダッシュボード</a>
+                <a href="chat.html" class="text-gray-600 hover-text-brand">AIチャット相談</a>
+                <a href="pricing.html" class="text-brand font-semibold">課題解決メニュー</a>
+                <a href="experts.html" class="text-gray-600 hover-text-brand">専門家を探す</a>
+                <div class="flex flex-col items-center leading-tight">
+                    <a href="about.html" class="text-gray-600 hover-text-brand">このサイトについて</a>
+                    <span class="text-[11px] text-brand whitespace-nowrap">(初めての方はこちらをご覧ください)</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                 
+                 <a href="login.html" class="bg-brand text-white px-4 py-2 rounded-lg hover-bg-brand transition">管理者ログイン</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center">
+                <h1 class="text-3xl md:text-4xl font-bold text-brand mb-4">課題解決メニュー</h1>
+                <p class="text-lg text-gray-600">
+                    当サービスは、お客様が必要な時に、必要な分だけ専門家の力やAIアプリなどの支援を受けられる仕組みです。<br>
+                    <span class="font-semibold">無理な営業は一切行いませんのでご安心ください。</span>
+                </p>
+            </div>
+
+            <div class="mt-8 bg-white/90 rounded-2xl border border-brand-soft shadow-sm p-6 max-w-3xl mx-auto">
+                <ol class="space-y-3 text-gray-700 text-base">
+                    <li class="flex gap-3">
+                        <span class="text-brand text-xl">1️⃣</span>
+                        <div>
+                            <a href="#free-tools" class="font-semibold text-gray-900 hover:underline">無料メニュー</a>
+                            <p class="text-sm text-gray-600 mt-1">簡単な相談体験やチェックツールなど、アカウント登録のみで利用できるメニューをご紹介します。</p>
+                        </div>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="text-brand text-xl">2️⃣</span>
+                        <div>
+                            <a href="#paid-menu" class="font-semibold text-gray-900 hover:underline">有料メニュー</a>
+                            <ul class="mt-1 text-sm text-gray-600 list-disc list-inside space-y-1">
+                                <li><a href="#video-contents" class="hover:underline text-gray-900">動画コンテンツ</a></li>
+                                <li><a href="#paid-app" class="hover:underline text-gray-900">アプリ・デバイス提供サービス</a></li>
+                                <li><a href="#paid-expert" class="hover:underline text-gray-900">専門家支援</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="space-y-12 mt-12">
+            <section id="free-tools">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold text-brand mb-4">無料メニュー</h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        まずは無償サービスで体験し、必要に応じて有料メニューへステップアップしてください。
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                    <!-- Free Tool 0: Simple Chat -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col text-center items-center transform hover:-translate-y-1 transition duration-300 border-2 border-brand relative">
+                        <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">おすすめ</span>
+                        <div class="bg-brand-softest p-4 rounded-full">
+                            <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v7a2 2 0 01-2 2H7l-4 4V10a2 2 0 012-2h2"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 3h-6a2 2 0 00-2 2v7a2 2 0 002 2h6a2 2 0 002-2V5a2 2 0 00-2-2z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mt-4">簡易相談チャット（2往復無料）</h3>
+                        <p class="mt-2 text-gray-600 flex-grow">安全管理のお悩みを２往復まで無料で相談できます。（無料の場合は指名した専門家にならない場合があります）</p>
+                        <a href="experts.html" class="mt-6 w-full block text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition">
+                            無料相談を試す
+                        </a>
+                        <p class="mt-2 text-xs text-gray-500">※AIまたは上記アドバイスでは無料サービス内での対応を優先しますのでご安心ください。有料サービスの紹介は必要に応じてご案内します。</p>
+                    </div>
+                    <!-- Free Tool 1: Safety and Health Chat -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col text-center items-center transform hover:-translate-y-1 transition duration-300">
+                        <div class="bg-brand-softest p-4 rounded-full">
+                            <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mt-4">労働安全衛生チャット</h3>
+                        <p class="mt-2 text-gray-600 flex-grow">多様な労働安全衛生に関連する質問に対応。<br>労働安全衛生法や労災事例をAIが引用しながら回答。<br>安全教育、活動など多くのシーンで活用できる専門チャットボットです。</p>
+                        <a href="https://safety-chatbot.onrender.com/" class="mt-6 w-full block text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition" target="_blank" rel="noopener">
+                            アプリの詳細を見る
+                        </a>
+                    </div>
+
+                    <!-- Free Tool 2: Manual Download -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col text-center items-center transform hover:-translate-y-1 transition duration-300">
+                        <div class="bg-brand-softest p-4 rounded-full">
+                             <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mt-4">手順書ダウンロード</h3>
+                        <div class="flex items-center justify-center gap-1 text-xs text-brand font-semibold bg-brand-soft px-2 py-1 rounded-full mt-2 inline-flex mx-auto">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Coming Soon！
+                        </div>
+                        <p class="mt-2 text-gray-600 flex-grow">すぐに使えるヒヤリハット報告書や安全作業手順書の雛形を無料でダウンロードできます。</p>
+                        <a href="https://jsite.mhlw.go.jp/nagasaki-roudoukyoku/library/nagasaki-roudoukyoku/anzen-eisei/201112/tejun-11120804.xls" class="mt-6 w-full block text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition" target="_blank" rel="noopener">
+                            テンプレート例（長崎労働局　xlsダウンロード）
+                        </a>
+                    </div>
+
+                    <!-- Free Tool 3: Training Videos -->
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col text-center items-center transform hover:-translate-y-1 transition duration-300">
+                        <div class="bg-brand-softest p-4 rounded-full">
+                            <svg class="w-8 h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mt-4">教育ビデオ</h3>
+                        <div class="flex items-center justify-center gap-1 text-xs text-brand font-semibold bg-brand-soft px-2 py-1 rounded-full mt-2 inline-flex mx-auto">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Coming Soon！
+                        </div>
+                        <p class="mt-2 text-gray-600 flex-grow">朝礼やミーティングで活用できる短い教育ビデオ。従業員の安全意識向上に繋がります。</p>
+                        <a href="https://anzeninfo.mhlw.go.jp/information/kyozaishiryo/jpn.html" class="mt-6 w-full block text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition" target="_blank" rel="noopener">
+                            ビデオを視聴する（外部サイト）
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="paid-menu">
+                <h2 class="text-2xl font-semibold text-brand mb-4 text-center">有料メニュー</h2>
+                <section id="video-contents" class="space-y-8 mt-12">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">動画コンテンツ</h3>
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col border border-brand-soft">
+                        <div class="flex flex-col gap-2">
+                            <h3 class="text-lg font-semibold text-brand">動画視聴型ヘルスケア教育</h3>
+                            <div class="flex items-center gap-4">
+                                <img src="https://www.sompo-hs.co.jp/llax_douga/_assets/img/logo-sompo.png" alt="SOMPOヘルスサポート ロゴ" class="h-3 w-auto object-contain">
+                                <span class="text-sm text-gray-600">提供</span>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-gray-700 leading-relaxed">介護・医療現場の豊富な実例をもとに、健康管理や安全対策を短時間の動画で学べるオンライン教材です。スマートフォンやタブレットでも視聴でき、現場での教育・振り返りにご活用いただけます。</p>
+                        <ul class="mt-4 space-y-2 text-sm text-gray-600 list-disc list-inside">
+                            <li>転倒予防、感染症対策、腰痛予防など、テーマ別に充実したラインナップ</li>
+                            <li>視聴履歴の管理や受講状況のレポート出力にも対応</li>
+                        </ul>
+                        <div class="mt-6">
+                            <a href="https://www.sompo-hs.co.jp/llax_douga/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-brand text-white px-5 py-3 rounded-lg font-semibold hover-bg-brand transition">詳細を確認する（SOMPOヘルスサポート）</a>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col">
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-bold text-brand">【参考】中小企業の皆さま向けのweb研修・診断</h3>
+                            <div class="mt-2 flex items-center gap-2 text-xs text-gray-500">
+                                <img src="https://www.sompo-japan.co.jp/-/media/SJNK/images/company/brand/sompo-mark_basic.jpg?la=ja-JP" alt="SOMPOロゴ" class="h-5 w-5 object-contain rounded-full shadow-sm">
+                                <span class="font-semibold tracking-wide whitespace-nowrap">SOMPOリスクマネジメント提供</span>
+                            </div>
+                            <p class="mt-3 text-gray-600 leading-relaxed">
+                                SOMPOリスクマネジメントが提供する中小企業向けのweb研修・診断ポータルです。安全衛生・防災・事業継続に関する
+                                eラーニングとセルフチェックメニューを通じて、現場改善の第一歩を支援します。
+                            </p>
+                            <ul class="mt-4 space-y-2 text-sm text-gray-700">
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-brand mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    安全衛生やBCPをテーマにしたオンライン研修コンテンツをいつでも受講可能
+                                </li>
+                                <li class="flex items-start">
+                                    <svg class="w-5 h-5 text-brand mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    自社の課題を把握できる診断・セルフチェックツールが入手できます
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="https://www.sompo-rc.co.jp/smb_services?utm_source=srmtop&utm_medium=pickup&utm_campaign=smb_top" class="mt-6 block w-full text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition" target="_blank" rel="noopener">
+                            詳細ページを見る（外部サイト）
+                        </a>
+                    </div>
+                </section>
+                <h3 id="paid-app" class="text-xl font-bold text-gray-800 mt-12 mb-2">アプリ・デバイス提供サービス</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4">
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col relative text-center">
+                        <div class="flex-grow">
+                            <div class="bg-brand-softest p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand mb-2">リスクアセスメント支援ツール</h3>
+                            <div class="flex items-center justify-center gap-1 text-xs text-gray-500 mb-4">
+                                <img src="https://www.sompo-japan.co.jp/-/media/SJNK/images/company/brand/sompo-mark_basic.jpg?la=ja-JP" alt="SOMPOグループロゴ" class="h-5 w-5 object-contain rounded-full shadow-sm">
+                                <span class="font-semibold tracking-wide whitespace-nowrap">SOMPOリスクマネジメント提供</span>
+                            </div>
+                            <p class="mt-2 text-gray-600">リスクアセスメントの洗い出しから残留リスク管理まで効率化・有効化する管理ツールです。</p>
+                            <p class="text-4xl font-bold my-6">4,000円/月〜</p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>法令と連動したリスクアセスメント機能</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>従業員ごとの教育履歴管理</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>導入から運用までのサポート付き</li>
+                            </ul>
+                        </div>
+                        <a href="https://ra-compass.onrender.com/" class="mt-6 block w-full text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition" target="_blank" rel="noopener">
+                            アプリの詳細を見る
+                        </a>
+                        <button type="button" class="mt-3 w-full inline-flex items-center justify-center gap-2 border border-brand text-brand font-semibold py-3 rounded-lg hover:bg-brand-soft transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h11l2-7H5.4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 13l-1.35 5.4a1 1 0 00.97 1.3H19M7 13L5 6H3"></path>
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="18" cy="21" r="1"></circle>
+                            </svg>
+                            <span>カートに追加</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col border-2 border-brand relative text-center">
+                         <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">おすすめ</span>
+                        <div class="flex-grow">
+                            <div class="bg-brand-softest p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand mb-2">熱中症管理サービス「みまもりふくろう」</h3>
+                            <div class="flex items-center justify-center gap-1 text-xs text-gray-500 mb-4">
+                                <img src="https://www.sompo-japan.co.jp/-/media/SJNK/images/company/brand/sompo-mark_basic.jpg?la=ja-JP" alt="SOMPOグループロゴ" class="h-5 w-5 object-contain rounded-full shadow-sm">
+                                <span class="font-semibold tracking-wide whitespace-nowrap">SOMPOリスクマネジメント提供</span>
+                            </div>
+                            <p class="mt-2 text-gray-600">WBGTなどの環境データと作業者の状況を見える化し、熱中症リスクを素早くキャッチします。</p>
+                            <p class="text-4xl font-bold my-6 text-gray-900">ご相談後にお見積り</p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>現場の暑さ指数をリアルタイム監視しアラート通知</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>休憩・給水のタイミングを自動ガイド</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>蓄積データを活かした熱中症対策のPDCA支援</li>
+                            </ul>
+                        </div>
+                         <a href="https://www.sompo-rc.co.jp/services/view/184" class="mt-6 block w-full text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition" target="_blank" rel="noopener">
+                            みまもりふくろうを詳しく見る
+                        </a>
+                        <button type="button" class="mt-3 w-full inline-flex items-center justify-center gap-2 border border-brand text-brand font-semibold py-3 rounded-lg hover:bg-brand-soft transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h11l2-7H5.4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 13l-1.35 5.4a1 1 0 00.97 1.3H19M7 13L5 6H3"></path>
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="18" cy="21" r="1"></circle>
+                            </svg>
+                            <span>カートに追加</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col relative text-center">
+                        <div class="flex-grow">
+                            <div class="bg-brand-softest p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand mb-2">労働安全衛生マネジメントアプリ</h3>
+                            <div class="flex items-center justify-center gap-1 text-xs text-gray-500 mb-4">
+                                <img src="https://www.koshida-art.co.jp/img/interface/lg.svg" alt="KOSHIDAブランドロゴ" class="h-4 w-auto object-contain">
+                                <span class="font-semibold tracking-wide whitespace-nowrap">㈱コシダアート提供</span>
+                            </div>
+                            <p class="mt-2 text-gray-600">労働安全衛生活動の進捗や是正状況をクラウドで一元管理できるマネジメントシステムです。</p>
+                            <p class="text-4xl font-bold my-6">8,000円/月〜</p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>ヒヤリハットや是正処置のワークフローを可視化</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>ダッシュボードでKPIと監査結果をリアルタイム共有</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>モバイル・PC対応で現場から即記録</li>
+                            </ul>
+                        </div>
+                        <a href="https://www.koshida-art.co.jp/zero/" class="mt-6 block w-full text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition" target="_blank" rel="noopener">
+                            アプリの詳細を見る
+                        </a>
+                        <button type="button" class="mt-3 w-full inline-flex items-center justify-center gap-2 border border-brand text-brand font-semibold py-3 rounded-lg hover:bg-brand-soft transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h11l2-7H5.4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 13l-1.35 5.4a1 1 0 00.97 1.3H19M7 13L5 6H3"></path>
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="18" cy="21" r="1"></circle>
+                            </svg>
+                            <span>カートに追加</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col border-2 border-brand relative text-center">
+                         <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">おすすめ</span>
+                        <div class="flex-grow">
+                            <div class="bg-brand-softest p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand mb-2">現場の安全パトロール支援アプリ</h3>
+                            <div class="flex items-center justify-center gap-1 text-xs text-gray-500 mb-4">
+                                <img src="https://www.sompo-japan.co.jp/-/media/SJNK/images/company/brand/sompo-mark_basic.jpg?la=ja-JP" alt="SOMPOグループロゴ" class="h-5 w-5 object-contain rounded-full shadow-sm">
+                                <span class="font-semibold tracking-wide whitespace-nowrap">SOMPOリスクマネジメント提供</span>
+                            </div>
+                            <p class="mt-2 text-gray-600">現場写真からAIで危険源を自動抽出し、現場での即時改善指示からパトロール日報作成までを一貫支援します。</p>
+                            <p class="text-4xl font-bold my-6">5,000円/月〜</p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>AIが画像解析で想定リスクと改善案を提示</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>パトロール日報テンプレートに自動レイアウトし編集可能</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>クラウド保存でマルチデバイス共有・アーカイブ</li>
+                            </ul>
+                        </div>
+                        <a href="https://rskrep-by-claude.onrender.com/" class="mt-6 block w-full text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition" target="_blank" rel="noopener">
+                            アプリの詳細を見る
+                        </a>
+                        <button type="button" class="mt-3 w-full inline-flex items-center justify-center gap-2 border border-brand text-brand font-semibold py-3 rounded-lg hover:bg-brand-soft transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h11l2-7H5.4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 13l-1.35 5.4a1 1 0 00.97 1.3H19M7 13L5 6H3"></path>
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="18" cy="21" r="1"></circle>
+                            </svg>
+                            <span>カートに追加</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col border-2 border-brand relative text-center">
+                         <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">おすすめ</span>
+                        <div class="flex-grow">
+                            <div class="bg-brand-softest p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand mb-2">KYT支援ボット</h3>
+                            <div class="flex items-center justify-center gap-1 text-xs text-gray-500 mb-4">
+                                <img src="https://www.sompo-japan.co.jp/-/media/SJNK/images/company/brand/sompo-mark_basic.jpg?la=ja-JP" alt="SOMPOグループロゴ" class="h-5 w-5 object-contain rounded-full shadow-sm">
+                                <span class="font-semibold tracking-wide whitespace-nowrap">SOMPOリスクマネジメント提供</span>
+                            </div>
+                            <p class="mt-2 text-gray-600">現場作業の入力だけで、AIが危険要因を自動抽出し、最適な対策や指差し唱和スローガン、KYTシート、関連イラストまで自動生成。管理者のKYT運営を効率化します。</p>
+                            <p class="text-4xl font-bold my-6">5,000円/月〜</p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>作業内容を入力するだけで危険要因と対策を自動提示</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>行動目標・指差呼称を自動生成し教育効果を高める</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>生成AIがKYTシートと画像を自動作成</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>シートの保存・共有でチーム活用も簡単</li>
+                            </ul>
+                        </div>
+                        <a href="https://ky-support.onrender.com/" class="mt-6 block w-full text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition" target="_blank" rel="noopener">
+                            アプリの詳細を見る
+                        </a>
+                        <button type="button" class="mt-3 w-full inline-flex items-center justify-center gap-2 border border-brand text-brand font-semibold py-3 rounded-lg hover:bg-brand-soft transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h11l2-7H5.4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 13l-1.35 5.4a1 1 0 00.97 1.3H19M7 13L5 6H3"></path>
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="18" cy="21" r="1"></circle>
+                            </svg>
+                            <span>カートに追加</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col relative text-center">
+                        <div class="flex-grow">
+                            <div class="bg-brand-softest p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand mb-2">労働安全衛生チャット＋</h3>
+                            <div class="flex items-center justify-center gap-1 text-xs text-gray-500 mb-4">
+                                <img src="https://www.sompo-japan.co.jp/-/media/SJNK/images/company/brand/sompo-mark_basic.jpg?la=ja-JP" alt="SOMPOグループロゴ" class="h-5 w-5 object-contain rounded-full shadow-sm">
+                                <span class="font-semibold tracking-wide whitespace-nowrap">SOMPOリスクマネジメント提供</span>
+                            </div>
+                            <p class="mt-2 text-gray-600">無料版「労働安全衛生チャット」の強力版。労働安全衛生法1,974条文と労災事例2,622件をAIが瞬時に検索・回答。</p>
+                            <p class="text-4xl font-bold my-6">5,000円/月〜</p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>労働安全衛生法1,974条文を完全網羅</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>労災事例2,622件のデータベース</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>AIが関連法令と事例を引用しながら回答</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>安全教育や研修資料作成に最適</li>
+                            </ul>
+                        </div>
+                        <a href="https://manus-chatbot.onrender.com" class="mt-6 block w-full text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition" target="_blank" rel="noopener">
+                            アプリの詳細を見る
+                        </a>
+                        <button type="button" class="mt-3 w-full inline-flex items-center justify-center gap-2 border border-brand text-brand font-semibold py-3 rounded-lg hover:bg-brand-soft transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h11l2-7H5.4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 13l-1.35 5.4a1 1 0 00.97 1.3H19M7 13L5 6H3"></path>
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="18" cy="21" r="1"></circle>
+                            </svg>
+                            <span>カートに追加</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col border-2 border-brand relative text-center">
+                         <span class="absolute top-0 -translate-y-1/2 left-1/2 -translate-x-1/2 bg-brand text-white text-xs font-bold px-3 py-1 rounded-full">おすすめ</span>
+                        <div class="flex-grow">
+                            <div class="bg-brand-softest p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand mb-2">労働災害リスクファインダー<br>～最強リスクアセスメントAI～</h3>
+                            <div class="flex items-center justify-center gap-1 text-xs text-gray-500 mb-4">
+                                <img src="https://www.sompo-japan.co.jp/-/media/SJNK/images/company/brand/sompo-mark_basic.jpg?la=ja-JP" alt="SOMPOグループロゴ" class="h-5 w-5 object-contain rounded-full shadow-sm">
+                                <span class="font-semibold tracking-wide whitespace-nowrap">SOMPOリスクマネジメント提供</span>
+                            </div>
+                            <p class="mt-2 text-gray-600">労働安全衛生の専門家レベルのリスク分析を、AIが現場写真やキーワードから自動生成。本質的対策・工学的対策の提案まで網羅した報告書を出力します。</p>
+                            <p class="text-4xl font-bold my-6">9,000円/月<span class="text-sm font-normal text-gray-600">（年間プラン割引有）</span></p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>🎯 5段階リスクレベル自動評価で優先順位付け</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>📝 報告書（通常・詳細）災害事例・改善策など</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>💼 PPTX自動レイアウト、編集・追記も可能</li>
+                            </ul>
+                        </div>
+                        <a href="https://risk-report-tool.onrender.com/" class="mt-6 block w-full text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition" target="_blank" rel="noopener">
+                            アプリの詳細を見る
+                        </a>
+                        <button type="button" class="mt-3 w-full inline-flex items-center justify-center gap-2 border border-brand text-brand font-semibold py-3 rounded-lg hover:bg-brand-soft transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h11l2-7H5.4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 13l-1.35 5.4a1 1 0 00.97 1.3H19M7 13L5 6H3"></path>
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="18" cy="21" r="1"></circle>
+                            </svg>
+                            <span>カートに追加</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <h3 id="paid-expert" class="text-xl font-bold text-gray-800 mb-2">専門家支援</h3>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-4">
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col text-center">
+                        <div class="flex-grow">
+                            <div class="bg-brand-softest p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand mb-2">継続的な専門家アドバイス</h3>
+                            <div class="flex items-center justify-center gap-1 text-xs text-brand font-semibold bg-brand-soft px-2 py-1 rounded-full mb-4 inline-flex mx-auto">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Coming Soon！
+                            </div>
+                            <p class="mt-2 text-gray-600">気軽に相談できるパートナーとして、オンラインで継続的にサポートします。<span class="text-brand underline">※サービス内容は専門家によって変わります</span></p>
+                            <p class="text-2xl font-bold my-6 leading-relaxed">
+                                ライトプラン 10,000円/月〜
+                                <span class="block text-sm font-normal text-gray-700">（チャット10往復、WEB面談2回✕30分まで）</span>
+                                プレミアムプラン 30,000円/月〜
+                                <span class="block text-sm font-normal text-gray-700">（チャット50往復、WEB面談5回✕30分まで）</span>
+                            </p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>例1:専任コンサルタントによる定例MTG</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>例2:チャットでのお悩み相談</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>例3:安全衛生委員会の運営サポート</li>
+                            </ul>
+                        </div>
+                        <a href="experts.html" class="mt-6 block w-full text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition">
+                            まずは専門家に相談する
+                        </a>
+                        <button type="button" class="mt-3 w-full inline-flex items-center justify-center gap-2 border border-brand text-brand font-semibold py-3 rounded-lg hover:bg-brand-soft transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h11l2-7H5.4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 13l-1.35 5.4a1 1 0 00.97 1.3H19M7 13L5 6H3"></path>
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="18" cy="21" r="1"></circle>
+                            </svg>
+                            <span>カートに追加</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-8 flex flex-col text-center">
+                        <div class="flex-grow">
+                            <div class="bg-brand-softest p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4 mx-auto">
+                                <svg class="w-6 h-6 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-brand mb-2">現場訪問による詳細診断</h3>
+                            <div class="flex items-center justify-center gap-1 text-xs text-brand font-semibold bg-brand-soft px-2 py-1 rounded-full mb-4 inline-flex mx-auto">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Coming Soon！
+                            </div>
+                            <p class="mt-2 text-gray-600">専門家が直接現場を訪問し、潜在的なリスクを洗い出して改善策を提案します。<span class="text-brand underline">※サービス内容は専門家によって変わります</span></p>
+                            <p class="text-4xl font-bold my-6">30,000<span class="text-xl ml-1">円 / 回～（旅費交通費別途）</span></p>
+                            <ul class="space-y-3 text-gray-700">
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>例1:1日間の現場巡回とヒアリング</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>例2:写真付きの診断レポート</li>
+                                <li class="flex items-center"><svg class="w-5 h-5 text-brand mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>例3:経営層への報告会にて改善計画の提示</li>
+                            </ul>
+                        </div>
+                        <a href="experts.html" class="mt-6 block w-full text-center bg-brand text-white font-semibold py-3 rounded-lg hover-bg-brand transition">
+                            対応可能な専門家を探す
+                        </a>
+                        <button type="button" class="mt-3 w-full inline-flex items-center justify-center gap-2 border border-brand text-brand font-semibold py-3 rounded-lg hover:bg-brand-soft transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h11l2-7H5.4"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 13l-1.35 5.4a1 1 0 00.97 1.3H19M7 13L5 6H3"></path>
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="18" cy="21" r="1"></circle>
+                            </svg>
+                            <span>カートに追加</span>
+                        </button>
+                    </div>
+                    </div>
+                </div>
+            </section>
+
+    </main>
+
+    <footer class="bg-brand text-white">
+        <div class="container mx-auto px-6 py-4 flex items-center space-x-3">
+            <img src="https://www.sompo-rc.co.jp/img/common/logo_sompo.png" alt="Sompo Risk Management ロゴ" class="h-8 w-auto">
+            <p class="text-sm">© Sompo Risk Management Inc.</p>
+        </div>
+    </footer>
+
+    <!-- カートアイコン（フローティング） -->
+    <button onclick="showCartModal()" class="fixed bottom-6 right-6 bg-brand text-white w-16 h-16 rounded-full shadow-2xl hover:bg-brand-dark transition flex items-center justify-center z-40">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h11l2-7H5.4M7 13l-1.35 5.4a1 1 0 00.97 1.3H19M7 13L5 6H3"></path>
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="18" cy="21" r="1"></circle>
+        </svg>
+        <span id="cartBadge" class="hidden absolute -top-2 -right-2 bg-yellow-400 text-gray-900 text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">0</span>
+    </button>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/cart.js"></script>
+    <script>
+        // カートボタンに手動でデータ属性を追加
+        document.addEventListener("DOMContentLoaded", function() {
+            const cartButtons = document.querySelectorAll("button[type=button]");
+            cartButtons.forEach((btn, index) => {
+                const text = btn.textContent;
+                if (text.includes("カートに追加")) {
+                    const card = btn.closest(".bg-white");
+                    const title = card ? card.querySelector("h3") : null;
+                    const priceText = card ? card.querySelector(".text-4xl") : null;
+                    
+                    if (title) {
+                        const itemName = title.textContent.trim().split("\n")[0];
+                        btn.setAttribute("data-add-to-cart", "true");
+                        btn.setAttribute("data-item-name", itemName);
+                        btn.setAttribute("data-item-type", "service");
+                        btn.setAttribute("data-item-price", "50000");
+                        btn.setAttribute("data-item-description", priceText ? priceText.textContent.trim() : "");
+                    }
+                }
+            });
+            setupAddToCartButtons();
+        });
+    </script>
+</body>
+</html>
