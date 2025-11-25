@@ -79,6 +79,7 @@ const AIPlayground: React.FC = () => {
                             description="労働安全衛生法や労災事例をAIが引用しながら回答。安全教育、活動など多くのシーンで活用できる専門チャットボットです。"
                             link="https://safety-chatbot.onrender.com/"
                             buttonText="アプリを開く"
+                            imageUrl="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=2000&auto=format&fit=crop"
                         />
 
                         {/* Premium Tools - Now using ToolCard style */}
@@ -89,6 +90,7 @@ const AIPlayground: React.FC = () => {
                             link="https://ra-compass.onrender.com/"
                             buttonText="アプリを開く"
                             features={["法令連動リスク評価", "教育履歴管理", "導入サポート"]}
+                            imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<Camera className="w-8 h-8 text-cyan-400" />}
@@ -97,6 +99,7 @@ const AIPlayground: React.FC = () => {
                             link="https://rskrep-by-claude.onrender.com/"
                             buttonText="アプリを開く"
                             features={["AI画像解析", "日報自動作成", "クラウド共有"]}
+                            imageUrl="https://images.unsplash.com/photo-1535378437327-b71280637040?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<AlertTriangle className="w-8 h-8 text-cyan-400" />}
@@ -105,6 +108,7 @@ const AIPlayground: React.FC = () => {
                             link="https://ky-support.onrender.com/"
                             buttonText="アプリを開く"
                             features={["危険要因自動提示", "指差呼称生成", "シート自動作成"]}
+                            imageUrl="https://images.unsplash.com/photo-1581092921461-eab62e97a782?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
@@ -113,6 +117,7 @@ const AIPlayground: React.FC = () => {
                             link="https://manus-chatbot.onrender.com"
                             buttonText="アプリを開く"
                             features={["法令完全網羅", "労災事例DB", "根拠引用回答"]}
+                            imageUrl="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<Search className="w-8 h-8 text-cyan-400" />}
@@ -122,6 +127,7 @@ const AIPlayground: React.FC = () => {
                             buttonText="アプリを開く"
                             features={["5段階リスク評価", "報告書自動生成", "PPTX出力"]}
                             badge="Recommended"
+                            imageUrl="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<Scale className="w-8 h-8 text-cyan-400" />}
@@ -130,6 +136,7 @@ const AIPlayground: React.FC = () => {
                             link="https://pl-chatbot.onrender.com/"
                             buttonText="アプリを開く"
                             features={["PL法・製品安全法対応", "リコール判断・決裁支援", "品質不正・改ざん予防"]}
+                            imageUrl="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2000&auto=format&fit=crop"
                         />
                     </div>
                 </section>
@@ -147,39 +154,57 @@ const ToolCard: React.FC<{
     buttonText: string;
     badge?: string;
     features?: string[];
-}> = ({ icon, title, description, link, buttonText, badge, features }) => (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300 group relative flex flex-col h-full">
-        {badge && (
-            <span className="absolute -top-3 left-6 bg-cyan-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full">
-                {badge}
-            </span>
-        )}
-        <div className="bg-slate-800/50 p-3 rounded-lg w-fit mb-4 group-hover:bg-cyan-500/10 transition-colors">
-            {icon}
-        </div>
-        <h3 className="text-xl font-bold text-slate-100 mb-2">{title}</h3>
-        <p className="text-slate-400 text-sm mb-6 flex-grow">{description}</p>
+    imageUrl?: string;
+}> = ({ icon, title, description, link, buttonText, badge, features, imageUrl }) => (
+    <div className="group relative flex flex-col h-full overflow-hidden rounded-xl border border-slate-800 bg-slate-900 transition-all duration-500 hover:border-cyan-500/50 hover:shadow-2xl hover:shadow-cyan-500/10">
 
-        {features && (
-            <ul className="space-y-2 mb-6">
-                {features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-slate-300">
-                        <CheckCircle2 className="w-4 h-4 text-cyan-500" />
-                        {feature}
-                    </li>
-                ))}
-            </ul>
+        {/* Background Image with Overlay */}
+        {imageUrl && (
+            <div className="absolute inset-0 z-0">
+                <img
+                    src={imageUrl}
+                    alt={title}
+                    className="h-full w-full object-cover opacity-40 transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-slate-900/80 transition-opacity duration-500 group-hover:via-slate-950/80"></div>
+            </div>
         )}
 
-        <div className="mt-auto">
-            <a
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full bg-slate-800 hover:bg-cyan-600 hover:text-white text-cyan-400 font-medium py-3 rounded-lg transition-all duration-300"
-            >
-                {buttonText} <ExternalLink className="w-4 h-4" />
-            </a>
+        <div className="relative z-10 flex flex-col h-full p-6">
+            {badge && (
+                <span className="absolute -top-3 left-6 bg-cyan-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-cyan-500/20">
+                    {badge}
+                </span>
+            )}
+
+            <div className="bg-slate-800/80 backdrop-blur-sm p-3 rounded-lg w-fit mb-4 group-hover:bg-cyan-500/20 transition-colors border border-slate-700/50 group-hover:border-cyan-500/30">
+                {icon}
+            </div>
+
+            <h3 className="text-xl font-bold text-slate-100 mb-2 group-hover:text-cyan-400 transition-colors">{title}</h3>
+            <p className="text-slate-400 text-sm mb-6 flex-grow leading-relaxed">{description}</p>
+
+            {features && (
+                <ul className="space-y-2 mb-6">
+                    {features.map((feature, idx) => (
+                        <li key={idx} className="flex items-center gap-2 text-sm text-slate-300">
+                            <CheckCircle2 className="w-4 h-4 text-cyan-500 shrink-0" />
+                            <span className="opacity-90">{feature}</span>
+                        </li>
+                    ))}
+                </ul>
+            )}
+
+            <div className="mt-auto">
+                <a
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 w-full bg-slate-800/80 hover:bg-cyan-600 hover:text-white text-cyan-400 font-medium py-3 rounded-lg transition-all duration-300 backdrop-blur-sm border border-slate-700 group-hover:border-cyan-500/30"
+                >
+                    {buttonText} <ExternalLink className="w-4 h-4" />
+                </a>
+            </div>
         </div>
     </div>
 );
