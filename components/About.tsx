@@ -10,10 +10,13 @@ const About: React.FC = () => {
 
           {/* Left Column: Title & Summary */}
           <div className="md:w-1/2">
-            <h2 className="text-sm font-bold text-cyan-400 tracking-widest uppercase mb-2">About Me</h2>
-            <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              現場の痛みを知る、<br />安全文化の翻訳者。
+            <h2 className="text-sm font-mono font-bold text-cyan-400 tracking-widest mb-2">ABOUT ME</h2>
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              経歴・プロフィール
             </h3>
+            <p className="text-xl text-cyan-100 mb-6 font-medium border-l-4 border-cyan-500 pl-4">
+              現場の痛みを知る、<br />安全文化の翻訳者。
+            </p>
             <p className="text-slate-400 leading-relaxed mb-8 text-lg">
               {PERSONAL_INFO.about}
             </p>
@@ -39,9 +42,11 @@ const About: React.FC = () => {
 
           {/* Right Column: Timeline */}
           <div className="md:w-1/2">
-            <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-              Experience <div className="h-px flex-grow bg-slate-800"></div>
-            </h3>
+            <div className="flex items-end gap-3 mb-6">
+              <h3 className="text-2xl font-bold text-white">経歴詳細</h3>
+              <span className="text-sm font-mono text-cyan-400 mb-1">EXPERIENCE</span>
+              <div className="h-px flex-grow bg-slate-800 mb-2"></div>
+            </div>
             <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-slate-800 before:bg-gradient-to-b before:from-transparent before:via-slate-700 before:to-transparent">
 
               {EXPERIENCE.map((exp, index) => (

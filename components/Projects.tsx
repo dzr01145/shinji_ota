@@ -19,10 +19,10 @@ const Projects: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div>
-            <h2 className="text-sm font-bold text-cyan-400 tracking-widest uppercase mb-2 flex items-center gap-2">
-              <Layers size={16} /> Portfolio
+            <h2 className="text-sm font-mono font-bold text-cyan-400 tracking-widest mb-2">
+              PROJECTS
             </h2>
-            <h3 className="text-3xl md:text-4xl font-bold text-white">実績</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-white">実績・事例</h3>
           </div>
 
           {/* Filter Tabs */}

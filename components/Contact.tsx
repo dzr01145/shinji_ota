@@ -7,8 +7,9 @@ const Contact: React.FC = () => {
   return (
     <section id="contact" className="py-24 bg-slate-950 border-t border-slate-900 scroll-mt-28">
       <div className="max-w-5xl mx-auto px-6 text-center">
-        <h2 className="text-sm font-bold text-cyan-400 tracking-widest uppercase mb-2">Get in Touch</h2>
-        <h3 className="text-4xl md:text-5xl font-bold text-white mb-8">新しい価値を、共に創りましょう。</h3>
+        <h2 className="text-sm font-mono font-bold text-cyan-400 tracking-widest mb-2">CONTACT</h2>
+        <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">お問い合わせ</h3>
+        <p className="text-xl text-slate-300 font-medium mb-8">新しい価値を、共に創りましょう。</p>
 
         <p className="text-slate-400 max-w-2xl mx-auto mb-12 text-lg">
           現在、新規プロジェクトのご相談や技術的なお問い合わせを受け付けています。<br className="hidden md:block" />
