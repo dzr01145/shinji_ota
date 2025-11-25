@@ -24,26 +24,26 @@ const Skills: React.FC = () => {
               </h4>
               <div className="space-y-4">
                 {SKILLS.filter(s => s.category === category).map((skill) => (
-                  <div 
-                    key={skill.name} 
+                  <div
+                    key={skill.name}
                     className="group relative bg-slate-900/50 p-4 rounded-xl border border-slate-800 hover:border-cyan-500/50 transition-all duration-300 hover:bg-slate-800"
                   >
                     <div className="flex justify-between mb-2 relative z-10">
                       <span className="text-slate-300 text-sm font-bold flex items-center gap-3">
-                        <span className="text-xl filter grayscale group-hover:grayscale-0 transition-all">{skill.icon}</span> 
+                        <span className="text-xl filter grayscale group-hover:grayscale-0 transition-all">{skill.icon}</span>
                         {skill.name}
                       </span>
                       <span className="text-cyan-500 font-mono text-xs">{skill.level}%</span>
                     </div>
-                    
+
                     <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden mb-3">
-                      <div 
+                      <div
                         className="bg-gradient-to-r from-cyan-600 to-blue-600 h-full rounded-full transition-all duration-1000 ease-out w-0 group-hover:w-full"
                         style={{ width: `${skill.level}%` }}
                       ></div>
                     </div>
 
-                    <p className="text-xs text-slate-500 leading-relaxed opacity-0 h-0 group-hover:opacity-100 group-hover:h-auto transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                    <p className="text-xs text-slate-300 font-medium leading-relaxed opacity-0 h-0 group-hover:opacity-100 group-hover:h-auto transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
                       {skill.description}
                     </p>
                   </div>
