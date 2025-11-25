@@ -34,7 +34,7 @@ export const PROJECTS: Project[] = [
   {
     id: 1,
     title: "Safety DX Strategy",
-    description: "「第14次労働災害防止計画」に向けたDX推進プロジェクト。AIによる不安全行動の検知やVR訓練の導入を提言し、行政計画と現場運用の橋渡し役を担う。",
+    description: "「第14次労働災害防止計画」を見据えたDX推進支援。AIカメラによる不安全行動検知や、VRを活用した危険体感教育の導入を支援し、現場の安全行動定着を促進。",
     technologies: ["Safety DX", "AI Analysis", "VR Training", "Policy Making"],
     imageUrl: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2070&auto=format&fit=crop",
     demoUrl: "#",
@@ -42,10 +42,10 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 2,
-    title: "Global Mining Consulting",
-    description: "海外鉱山および国内製造業に対する労働安全コンサルティング。現場特有の「不安全バイアス」を分析し、鉱山保安の知見を応用した堅牢な安全規定を策定。",
-    technologies: ["Mining Safety", "Risk Assessment", "Global Std", "Audit"],
-    imageUrl: "https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?q=80&w=2070&auto=format&fit=crop",
+    title: "Mining Safety Consulting",
+    description: "国内鉱山および製造業に対する労働安全コンサルティング。現場特有の「不安全バイアス」を分析し、鉱山保安法やISO45001に基づいた堅牢な安全規定を策定。",
+    technologies: ["Mining Safety", "Risk Assessment", "ISO 45001", "Audit"],
+    imageUrl: "https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?q=80&w=2070&auto=format&fit=crop",
     category: "Consulting"
   },
   {
