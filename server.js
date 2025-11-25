@@ -114,13 +114,20 @@ app.post('/api/chat', async (req, res) => {
     // Using gemini-2.5-flash as requested
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash",
-      systemInstruction: SYSTEM_INSTRUCTION
+      systemInstruction: SYSTEM_INSTRUCTION + `
+      
+      **CRITICAL RESPONSE RULES:**
+      1. **BREVITY**: Keep ALL responses concise. Aim for under 300 Japanese characters unless specifically asked for a detailed explanation. If the response is long, summarize it first.
+      2. **NO REFUSALS**: Do NOT say "Sorry, I couldn't generate a response" or "I don't know" just because the exact info is missing.
+      3. **SPECULATION**: If asked about personality or something not in the knowledge base (e.g., "What is he like?"), infer from his background (e.g., "Based on his experience in mining and safety, he is likely disciplined, logical, and deeply cares about human life.") or provide a general polite response. ALWAYS preface such answers with "知識ベースには明記されていませんが、経歴から推測すると..." or "想像ですが...".
+      4. **FORMAT**: Use Markdown.
+      `
     });
 
     const chat = model.startChat({
       history: [],
       generationConfig: {
-        maxOutputTokens: 500,
+        maxOutputTokens: 800, // Increased to prevent cutting off, but prompt should limit length
       },
     });
 
@@ -131,16 +138,85 @@ app.post('/api/chat', async (req, res) => {
     res.json({ text });
   } catch (error) {
     console.error('Gemini API Error Details:', error);
-    // Log detailed response if available (e.g. from Google API error object)
     if (error.response) {
       try {
-        // Some Google API errors have a response property
         console.error('Error Response Body:', JSON.stringify(error.response));
       } catch (e) {
         console.error('Could not parse error response');
       }
     }
     res.status(500).json({ error: 'Failed to generate response', details: error.message });
+  }
+});
+
+// --- Blog API ---
+import fs from 'fs';
+
+const BLOG_FILE = path.join(__dirname, 'blog_posts.json');
+
+// Initialize blog file if not exists
+if (!fs.existsSync(BLOG_FILE)) {
+  fs.writeFileSync(BLOG_FILE, JSON.stringify([]));
+}
+
+// Get all blog posts
+app.get('/api/blog', (req, res) => {
+  try {
+    const data = fs.readFileSync(BLOG_FILE, 'utf8');
+    const posts = JSON.parse(data);
+    // Sort by date desc
+    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    res.json(posts);
+  } catch (error) {
+    console.error('Error reading blog posts:', error);
+    res.status(500).json({ error: 'Failed to fetch blog posts' });
+  }
+});
+
+// Create new blog post (Admin only)
+app.post('/api/blog', (req, res) => {
+  const { password, post } = req.body;
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123'; // Default fallback (should be set in env)
+
+  if (password !== adminPassword) {
+    return res.status(401).json({ error: 'Unauthorized: Incorrect password' });
+  }
+
+  if (!post || !post.imageUrl) {
+    return res.status(400).json({ error: 'Invalid post data' });
+  }
+
+  try {
+    const data = fs.readFileSync(BLOG_FILE, 'utf8');
+    const posts = JSON.parse(data);
+
+    const newPost = {
+      id: Date.now().toString(),
+      imageUrl: post.imageUrl,
+      caption: post.caption || '',
+      date: new Date().toISOString(),
+      location: post.location || ''
+    };
+
+    posts.push(newPost);
+    fs.writeFileSync(BLOG_FILE, JSON.stringify(posts, null, 2));
+
+    res.json({ success: true, post: newPost });
+  } catch (error) {
+    console.error('Error saving blog post:', error);
+    res.status(500).json({ error: 'Failed to save blog post' });
+  }
+});
+
+// Admin Login Check
+app.post('/api/login', (req, res) => {
+  const { password } = req.body;
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+
+  if (password === adminPassword) {
+    res.json({ success: true });
+  } else {
+    res.status(401).json({ error: 'Invalid password' });
   }
 });
 

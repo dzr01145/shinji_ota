@@ -28,36 +28,45 @@ const AIPlayground: React.FC = () => {
                 {/* Featured Portal Section */}
                 <section className="mb-20 relative">
                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-3xl rounded-3xl -z-10"></div>
-                    <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-700 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden group hover:border-cyan-400/50 transition-all duration-500">
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-cyan-400"></div>
+                    <div className="relative overflow-hidden rounded-2xl border border-slate-700 group hover:border-cyan-400/50 transition-all duration-500">
 
-                        <div className="inline-flex items-center gap-2 bg-slate-800/80 border border-slate-700 rounded-full px-4 py-1 mb-6">
-                            <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-                            <span className="text-xs font-bold text-cyan-400 tracking-wider uppercase">Portal</span>
+                        {/* Background Image for Portal */}
+                        <div className="absolute inset-0 z-0">
+                            <img
+                                src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2000&auto=format&fit=crop"
+                                alt="Office Collaboration"
+                                className="h-full w-full object-cover opacity-30 transition-transform duration-700 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-slate-900/80 group-hover:bg-slate-900/70 transition-colors duration-500"></div>
                         </div>
 
-                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                            Your Safety Partner <span className="text-red-400/80 text-2xl align-middle font-normal">（Mockup）</span>
-                        </h2>
-                        <p className="text-slate-300 text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-                            安全衛生の総合プラットフォーム。<br />
-                            AIツール、専門家ネットワーク、教育コンテンツへアクセス
-                        </p>
+                        <div className="relative z-10 p-8 md:p-12 text-center backdrop-blur-sm">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-cyan-400"></div>
 
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <a
-                                href="https://safety-partner.onrender.com/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/25 min-w-[200px]"
-                            >
-                                ポータルサイトを開く <ExternalLink className="w-5 h-5" />
-                            </a>
+                            <div className="inline-flex items-center gap-2 bg-slate-800/90 border border-slate-700 rounded-full px-4 py-1 mb-6 shadow-lg">
+                                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                                <span className="text-xs font-bold text-cyan-400 tracking-wider uppercase">Portal</span>
+                            </div>
+
+                            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
+                                Your Safety Partner <span className="text-red-400 text-2xl align-middle font-normal">（Mockup）</span>
+                            </h2>
+                            <p className="text-slate-200 text-lg max-w-2xl mx-auto mb-8 leading-relaxed drop-shadow-md font-medium">
+                                安全衛生の総合プラットフォーム。<br />
+                                AIツール、専門家ネットワーク、教育コンテンツへアクセス
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                                <a
+                                    href="https://safety-partner.onrender.com/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/25 min-w-[200px]"
+                                >
+                                    ポータルサイトを開く <ExternalLink className="w-5 h-5" />
+                                </a>
+                            </div>
                         </div>
-
-                        {/* Decorative elements */}
-                        <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl group-hover:bg-cyan-500/20 transition-all duration-500"></div>
-                        <div className="absolute -top-20 -left-20 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all duration-500"></div>
                     </div>
                 </section>
 
@@ -79,7 +88,7 @@ const AIPlayground: React.FC = () => {
                             description="労働安全衛生法や労災事例をAIが引用しながら回答。安全教育、活動など多くのシーンで活用できる専門チャットボットです。"
                             link="https://safety-chatbot.onrender.com/"
                             buttonText="アプリを開く"
-                            imageUrl="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="https://images.unsplash.com/photo-1655720828018-edd2daec9349?q=80&w=2000&auto=format&fit=crop"
                         />
 
                         {/* Premium Tools - Now using ToolCard style */}
@@ -90,7 +99,7 @@ const AIPlayground: React.FC = () => {
                             link="https://ra-compass.onrender.com/"
                             buttonText="アプリを開く"
                             features={["法令連動リスク評価", "教育履歴管理", "導入サポート"]}
-                            imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<Camera className="w-8 h-8 text-cyan-400" />}
@@ -99,7 +108,7 @@ const AIPlayground: React.FC = () => {
                             link="https://rskrep-by-claude.onrender.com/"
                             buttonText="アプリを開く"
                             features={["AI画像解析", "日報自動作成", "クラウド共有"]}
-                            imageUrl="https://images.unsplash.com/photo-1535378437327-b71280637040?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<AlertTriangle className="w-8 h-8 text-cyan-400" />}
@@ -108,7 +117,7 @@ const AIPlayground: React.FC = () => {
                             link="https://ky-support.onrender.com/"
                             buttonText="アプリを開く"
                             features={["危険要因自動提示", "指差呼称生成", "シート自動作成"]}
-                            imageUrl="https://images.unsplash.com/photo-1581092921461-eab62e97a782?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
@@ -117,7 +126,7 @@ const AIPlayground: React.FC = () => {
                             link="https://manus-chatbot.onrender.com"
                             buttonText="アプリを開く"
                             features={["法令完全網羅", "労災事例DB", "根拠引用回答"]}
-                            imageUrl="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<Search className="w-8 h-8 text-cyan-400" />}
@@ -127,7 +136,7 @@ const AIPlayground: React.FC = () => {
                             buttonText="アプリを開く"
                             features={["5段階リスク評価", "報告書自動生成", "PPTX出力"]}
                             badge="Recommended"
-                            imageUrl="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<Scale className="w-8 h-8 text-cyan-400" />}
@@ -164,9 +173,9 @@ const ToolCard: React.FC<{
                 <img
                     src={imageUrl}
                     alt={title}
-                    className="h-full w-full object-cover opacity-40 transition-transform duration-700 group-hover:scale-110"
+                    className="h-full w-full object-cover opacity-50 transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-slate-900/80 transition-opacity duration-500 group-hover:via-slate-950/80"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-900/40 transition-opacity duration-500 group-hover:via-slate-950/70"></div>
             </div>
         )}
 

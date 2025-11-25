@@ -9,6 +9,7 @@ import Contact from './components/Contact';
 import AIChat from './components/AIChat';
 import ScrollObserver from './components/ScrollObserver';
 import AIPlayground from './components/AIPlayground';
+import Blog from './components/Blog';
 import PrivacyPolicy from './components/PrivacyPolicy';
 
 const Home: React.FC = () => (
@@ -39,6 +40,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/ai-tools" element={<AIPlayground />} />
+          <Route path="/blog" element={<Blog />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
         </Routes>
         <AIChat />

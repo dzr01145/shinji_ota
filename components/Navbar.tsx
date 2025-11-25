@@ -65,15 +65,16 @@ const Navbar: React.FC = () => {
     { name: '経歴', href: '#about' },
     { name: 'スキル', href: '#skills' },
     { name: '実績', href: '#projects' },
-    { name: 'AI Tools', href: '/ai-tools' }, // New link
+    { name: 'AI Tools', href: '/ai-tools' },
+    { name: 'Blog', href: '/blog' },
     { name: 'お問い合わせ', href: '#contact' },
   ];
 
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${isScrolled
-          ? 'bg-[#050505]/80 backdrop-blur-md border-b border-slate-800 py-3'
-          : 'bg-transparent py-6'
+        ? 'bg-[#050505]/80 backdrop-blur-md border-b border-slate-800 py-3'
+        : 'bg-transparent py-6'
         }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
