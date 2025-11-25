@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mail, MapPin } from 'lucide-react';
 import { PERSONAL_INFO } from '../constants';
+import { Link } from 'react-router-dom';
 
 const Contact: React.FC = () => {
   return (
@@ -8,9 +9,9 @@ const Contact: React.FC = () => {
       <div className="max-w-5xl mx-auto px-6 text-center">
         <h2 className="text-sm font-bold text-cyan-400 tracking-widest uppercase mb-2">Get in Touch</h2>
         <h3 className="text-4xl md:text-5xl font-bold text-white mb-8">新しい価値を、共に創りましょう。</h3>
-        
+
         <p className="text-slate-400 max-w-2xl mx-auto mb-12 text-lg">
-          現在、新規プロジェクトのご相談や技術的なお問い合わせを受け付けています。<br className="hidden md:block"/>
+          現在、新規プロジェクトのご相談や技術的なお問い合わせを受け付けています。<br className="hidden md:block" />
           アイデアを実現するパートナーをお探しの際は、お気軽にご連絡ください。
         </p>
 
@@ -26,7 +27,7 @@ const Contact: React.FC = () => {
         <div className="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
           <p>&copy; {new Date().getFullYear()} {PERSONAL_INFO.name}. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-cyan-400 transition-colors">プライバシーポリシー</a>
+            <Link to="/privacy" className="hover:text-cyan-400 transition-colors">プライバシーポリシー</Link>
           </div>
         </div>
       </div>
