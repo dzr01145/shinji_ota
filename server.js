@@ -77,10 +77,11 @@ app.post('/api/chat', async (req, res) => {
         }
 
         if (!process.env.GEMINI_API_KEY) {
+            console.error('Server Error: GEMINI_API_KEY is missing in environment variables.');
             return res.status(500).json({ error: 'Server configuration error: API Key missing' });
         }
 
-        // Using gemini-1.5-flash for stability as 2.5 is not standard yet.
+        // Using gemini-1.5-flash for stability
         const model = genAI.getGenerativeModel({
             model: "gemini-1.5-flash",
             systemInstruction: SYSTEM_INSTRUCTION
@@ -99,8 +100,17 @@ app.post('/api/chat', async (req, res) => {
 
         res.json({ text });
     } catch (error) {
-        console.error('Gemini API Error:', error);
-        res.status(500).json({ error: 'Failed to generate response' });
+        console.error('Gemini API Error Details:', error);
+        // Log detailed response if available (e.g. from Google API error object)
+        if (error.response) {
+            try {
+                // Some Google API errors have a response property
+                console.error('Error Response Body:', JSON.stringify(error.response));
+            } catch (e) {
+                console.error('Could not parse error response');
+            }
+        }
+        res.status(500).json({ error: 'Failed to generate response', details: error.message });
     }
 });
 

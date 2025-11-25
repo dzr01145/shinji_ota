@@ -5,9 +5,8 @@ import { PERSONAL_INFO } from '../constants';
 const Hero: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [text, setText] = useState('');
-  const [isTyping, setIsTyping] = useState(true);
-  const [phraseIndex, setPhraseIndex] = useState(0);
 
+  // Typing effect state
   const phrases = [
     "Risk Engineer...",
     "Safety Architect...",
@@ -21,6 +20,7 @@ const Hero: React.FC = () => {
     let isDeleting = false;
     let loopNum = 0;
     let typingSpeed = 100;
+    let timer: NodeJS.Timeout;
 
     const handleType = () => {
       const i = loopNum % phrases.length;
@@ -45,10 +45,10 @@ const Hero: React.FC = () => {
         typingSpeed = 500; // Pause before starting new word
       }
 
-      setTimeout(handleType, typingSpeed);
+      timer = setTimeout(handleType, typingSpeed);
     };
 
-    const timer = setTimeout(handleType, typingSpeed);
+    timer = setTimeout(handleType, typingSpeed);
     return () => clearTimeout(timer);
   }, []);
 
@@ -138,15 +138,15 @@ const Hero: React.FC = () => {
         className="absolute inset-0 z-0 opacity-30"
       />
 
-      {/* Ambient Light Orbs */}
-      <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[120px] animate-pulse-slow pointer-events-none"></div>
-      <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] animate-pulse-slow pointer-events-none"></div>
+      {/* Ambient Light Orbs - Keep these for atmosphere, but they are subtle */}
+      <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-cyan-600/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-12 items-center relative z-10">
+      <div className="max-w-7xl mx-auto px-6 w-full relative z-10 grid lg:grid-cols-12 gap-12 items-center h-full">
 
-        {/* Text Content */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="inline-flex items-center gap-3 px-3 py-1 rounded border border-cyan-900/50 bg-cyan-950/10 backdrop-blur-md animate-fade-in-up">
+        {/* Text Content - Positioned to overlap with image */}
+        <div className="lg:col-span-8 z-20 space-y-6 pt-10 lg:pt-0">
+          <div className="inline-flex items-center gap-3 px-3 py-1 rounded border border-cyan-900/50 bg-cyan-950/30 backdrop-blur-md">
             <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.8)] animate-pulse"></div>
             <span className="text-xs font-mono text-cyan-400 tracking-widest">CONSULTING AVAILABLE</span>
           </div>
@@ -156,7 +156,7 @@ const Hero: React.FC = () => {
               <Activity size={20} />
               <span>System Status: Stable</span>
             </h2>
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-white leading-[0.9] mb-4">
+            <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-white leading-[0.9] mb-4 drop-shadow-2xl">
               SHINJI
               <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 relative">
@@ -171,11 +171,11 @@ const Hero: React.FC = () => {
             </p>
           </div>
 
-          <p className="text-lg text-slate-400 max-w-lg leading-relaxed border-l-2 border-cyan-500/30 pl-6 my-8 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>
+          <p className="text-lg text-slate-300 max-w-lg leading-relaxed border-l-2 border-cyan-500/50 pl-6 my-8 bg-slate-950/50 backdrop-blur-sm p-4 rounded-r-lg">
             {PERSONAL_INFO.tagline}
           </p>
 
-          <div className="flex flex-wrap items-center gap-5 pt-4 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
+          <div className="flex flex-wrap items-center gap-5 pt-4">
             <a
               href="#projects"
               className="group relative px-8 py-4 bg-white text-black font-bold transition-transform hover:-translate-y-1 overflow-hidden"
@@ -187,49 +187,39 @@ const Hero: React.FC = () => {
             </a>
             <a
               href="#contact"
-              className="px-8 py-4 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-cyan-950/30 transition-all font-mono text-sm"
+              className="px-8 py-4 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-cyan-950/30 transition-all font-mono text-sm bg-slate-950/50 backdrop-blur-sm"
             >
               Contact_Me
             </a>
           </div>
 
-          <div className="flex items-center gap-8 pt-12 opacity-60 hover:opacity-100 transition-opacity animate-fade-in-up" style={{ animationDelay: '1s' }}>
+          <div className="flex items-center gap-8 pt-12 opacity-60 hover:opacity-100 transition-opacity">
             <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Github size={24} /></a>
             <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Linkedin size={24} /></a>
             <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Twitter size={24} /></a>
           </div>
         </div>
 
-        {/* Visual/Image Area */}
-        <div className="lg:col-span-5 relative hidden lg:block animate-blob">
-          <div className="relative z-10 w-full max-w-sm mx-auto aspect-[3/4] bg-slate-900 relative group perspective-1000">
-            {/* Glitch Effect Layers */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 mix-blend-overlay z-20 pointer-events-none"></div>
-            <div className="absolute -inset-4 border border-slate-800 z-0 group-hover:scale-105 transition-transform duration-700"></div>
-            <div className="absolute -inset-4 border border-cyan-500/20 z-0 rotate-3 group-hover:rotate-0 transition-transform duration-700"></div>
-
+        {/* Visual/Image Area - Absolute positioned for overlap */}
+        <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-[45%] h-[80%] z-0 pointer-events-none">
+          <div className="relative w-full h-full">
+            {/* Image with heavy filters */}
             <img
               src="/profile_image.jpg"
               alt="Shinji Ota"
-              className="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-[1.02] filter grayscale-[20%] sepia-[20%] hue-rotate-[190deg] brightness-[80%] contrast-[110%]"
+              className="w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-80"
             />
 
-            {/* Floating Tech Elements */}
-            <div className="absolute -right-8 top-12 bg-slate-950/90 backdrop-blur border border-cyan-500/30 p-4 shadow-2xl flex flex-col items-center gap-2 z-30 animate-float-y">
-              <div className="w-2 h-2 bg-cyan-500 rounded-full animate-ping"></div>
-              <div className="writing-vertical-lr font-mono text-xs text-cyan-400 tracking-widest uppercase py-2">
-                Safety First
-              </div>
-            </div>
+            {/* Gradient Overlays to blend with background and text */}
+            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#050505]/60 to-[#050505]"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/50"></div>
 
-            <div className="absolute -left-6 bottom-24 bg-slate-950/90 backdrop-blur border border-purple-500/30 p-4 shadow-2xl z-30 animate-float-y" style={{ animationDelay: '1s' }}>
-              <div className="flex items-center gap-3">
-                <Activity size={16} className="text-purple-400" />
-                <span className="font-mono text-xs text-purple-300">ISO 45001 Compliant</span>
-              </div>
-            </div>
+            {/* Tech Decoration Lines (Static) */}
+            <div className="absolute top-10 right-10 w-20 h-20 border-t-2 border-r-2 border-cyan-500/20"></div>
+            <div className="absolute bottom-10 right-10 w-20 h-20 border-b-2 border-r-2 border-purple-500/20"></div>
           </div>
         </div>
+
       </div>
 
       {/* Scroll indicator */}
