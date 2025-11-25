@@ -13,7 +13,7 @@ export interface Skill {
   name: string;
   level: number; // 0-100
   icon: string;
-  category: 'Engineering' | 'Management' | 'DX / AI' | 'Personal' | 'Crisis Mgmt';
+  category: 'Safety Mgmt' | 'Engineering' | 'DX & Analysis' | 'Consulting';
   description?: string;
 }
 

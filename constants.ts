@@ -15,13 +15,19 @@ export const PERSONAL_INFO = {
 };
 
 export const SKILLS: Skill[] = [
-  { name: "Safety Consulting", level: 98, icon: "🛡️", category: "Engineering", description: "労働安全コンサルタント（土木）として、現場の潜在リスクを特定し改善へ導く" },
-  { name: "Risk Management", level: 95, icon: "⚖️", category: "Management", description: "ISO 45001に基づいたマネジメントシステム構築と運用支援" },
-  { name: "Technical P.E.Jp", level: 100, icon: "🇯🇵", category: "Engineering", description: "技術士（総合技術監理・衛生工学）。複合的な課題に対する技術的最適解の提示" },
-  { name: "Mining Safety", level: 90, icon: "⛏️", category: "Engineering", description: "鉱山保安の専門知見を活かした、特殊環境下での安全対策立案" },
-  { name: "Safety DX / AI", level: 85, icon: "🤖", category: "DX / AI", description: "第14次労働災害防止計画でも提言した、AI・VR・データ活用による安全管理の高度化" },
-  { name: "Crisis Response", level: 92, icon: "🚨", category: "Crisis Mgmt", description: "PL／リコール対応や事故調査など、有事の際の迅速かつ論理的なトラブルシューティング" },
-  { name: "Technical Writing", level: 88, icon: "✍️", category: "Management", description: "専門用語を現場と経営層それぞれの言語に翻訳する「利害調整型」ドキュメンテーション" },
+  { name: "ISO 45001 / OSHMS", level: 98, icon: "🛡️", category: "Safety Mgmt", description: "ISO 45001に基づいた労働安全衛生マネジメントシステムの構築と運用支援" },
+  { name: "Risk Assessment", level: 95, icon: "⚖️", category: "Safety Mgmt", description: "現場の潜在リスクを特定し、本質的安全化へ導くリスクアセスメントとKYT" },
+  { name: "Safety Culture", level: 90, icon: "🤝", category: "Safety Mgmt", description: "経営層と現場をつなぎ、組織全体で安全意識を高める文化醸成" },
+
+  { name: "Technical P.E.Jp", level: 100, icon: "🇯🇵", category: "Engineering", description: "技術士（総合技術監理・資源工学）。複合的な課題に対する技術的最適解の提示" },
+  { name: "Mining Safety", level: 92, icon: "⛏️", category: "Engineering", description: "鉱山保安の専門知見を活かした、特殊環境下での安全対策立案" },
+  { name: "Plant Engineering", level: 85, icon: "🏭", category: "Engineering", description: "重機オペレーションやプラント設備管理の実務経験に基づく現場指導" },
+
+  { name: "Data Analysis", level: 88, icon: "📊", category: "DX & Analysis", description: "事故データやヒヤリハットの統計分析による傾向把握と対策立案" },
+  { name: "Generative AI", level: 85, icon: "🤖", category: "DX & Analysis", description: "ChatGPT等を活用した安全教育コンテンツ作成や業務効率化" },
+
+  { name: "Technical Writing", level: 95, icon: "✍️", category: "Consulting", description: "専門用語を現場と経営層それぞれの言語に翻訳する「利害調整型」ドキュメンテーション" },
+  { name: "Facilitation", level: 90, icon: "🗣️", category: "Consulting", description: "多様なステークホルダー間の合意形成を主導するファシリテーション" },
 ];
 
 export const PROJECTS: Project[] = [
