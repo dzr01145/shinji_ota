@@ -84,9 +84,9 @@ app.post('/api/chat', async (req, res) => {
       console.log('API Key is present.');
     }
 
-    // Using gemini-pro as a fallback for stability if 1.5-flash fails
-    const model = genAI.getGenerativeModel({ 
-      model: "gemini-pro", 
+    // Using gemini-2.5-flash as requested
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
       systemInstruction: SYSTEM_INSTRUCTION
     });
 
@@ -106,12 +106,12 @@ app.post('/api/chat', async (req, res) => {
     console.error('Gemini API Error Details:', error);
     // Log detailed response if available (e.g. from Google API error object)
     if (error.response) {
-       try {
-         // Some Google API errors have a response property
-         console.error('Error Response Body:', JSON.stringify(error.response));
-       } catch (e) {
-         console.error('Could not parse error response');
-       }
+      try {
+        // Some Google API errors have a response property
+        console.error('Error Response Body:', JSON.stringify(error.response));
+      } catch (e) {
+        console.error('Could not parse error response');
+      }
     }
     res.status(500).json({ error: 'Failed to generate response', details: error.message });
   }
@@ -124,8 +124,8 @@ app.get('/chat', (req, res) => res.redirect('https://safety-chatbot.onrender.com
 // Using regex to avoid path-to-regexp errors with '*'
 app.get(/.*/, (req, res) => {
   if (req.path.includes('.')) {
-     res.status(404).end();
-     return;
+    res.status(404).end();
+    return;
   }
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });

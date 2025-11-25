@@ -65,7 +65,7 @@ export const EXPERIENCE: Experience[] = [
     company: "Risk Management Firm",
     role: "Senior Consultant",
     period: "Current",
-    description: "リスクエンジニアリング部・賠償／労災グループ。国内外の製造・運送・鉱業に対し、技術士・労働安全コンサルタントの立場から安全文化醸成を支援。"
+    description: "国内外の製造・運送・鉱業に対し、技術士・労働安全コンサルタントの立場から安全文化醸成を支援。"
   },
   {
     company: "Strategic Safety Initiatives",

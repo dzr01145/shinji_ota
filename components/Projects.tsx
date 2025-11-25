@@ -32,8 +32,8 @@ const Projects: React.FC = () => {
                 key={category}
                 onClick={() => setFilter(category)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${filter === category
-                    ? 'bg-cyan-600 text-white shadow-[0_0_15px_rgba(8,145,178,0.5)]'
-                    : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
+                  ? 'bg-cyan-600 text-white shadow-[0_0_15px_rgba(8,145,178,0.5)]'
+                  : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
                   }`}
               >
                 {category}
@@ -89,12 +89,7 @@ const Projects: React.FC = () => {
           ))}
         </div>
 
-        <div className="mt-12 text-center">
-          <a href={PROJECTS[0].repoUrl} className="inline-flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors text-sm border-b border-transparent hover:border-cyan-400 pb-1">
-            <Github size={16} />
-            GitHubですべてのプロジェクトを見る
-          </a>
-        </div>
+
       </div>
     </section>
   );
