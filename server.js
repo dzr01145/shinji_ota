@@ -29,7 +29,8 @@ app.use(auth);
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // SPA対応：すべてのルートでindex.htmlを返す
-app.get('*', (req, res) => {
+// Express 5系 / path-to-regexp対応のため '/*' を使用
+app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
