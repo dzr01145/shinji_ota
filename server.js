@@ -2,7 +2,6 @@ import express from 'express';
 import basicAuth from 'basic-auth';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,15 +25,11 @@ const auth = (req, res, next) => {
 // 全リクエストに認証を適用
 app.use(auth);
 
-// プロキシ設定: /chat へのアクセスを safety-chatbot へ転送
-// URLは shinji-ota.com/chat のまま維持されます
-app.use('/chat', createProxyMiddleware({
-    target: 'https://safety-chatbot.onrender.com',
-    changeOrigin: true,
-    pathRewrite: {
-        '^/chat': '', // 転送時に /chat を削除してルートにアクセスさせる
-    },
-}));
+// 外部サービスへのリダイレクト設定
+// shinji-ota.com/chat -> safety-chatbot.onrender.com
+app.get('/chat', (req, res) => {
+    res.redirect('https://safety-chatbot.onrender.com');
+});
 
 // 静的ファイル（ビルド成果物）の配信
 app.use(express.static(path.join(__dirname, 'dist')));
