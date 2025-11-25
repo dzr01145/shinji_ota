@@ -7,7 +7,6 @@ import {
     Camera,
     Search,
     ExternalLink,
-    ShoppingCart,
     CheckCircle2
 } from 'lucide-react';
 
@@ -73,70 +72,51 @@ const AIPlayground: React.FC = () => {
                     </div>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {/* Free Tools (Remaining) */}
+                        {/* Free Tools */}
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
                             title="労働安全衛生チャット"
                             description="労働安全衛生法や労災事例をAIが引用しながら回答。安全教育、活動など多くのシーンで活用できる専門チャットボットです。"
                             link="https://safety-chatbot.onrender.com/"
                             buttonText="アプリを開く"
-                            badge="Popular"
-                        />
-                        <ToolCard
-                            icon={<Video className="w-8 h-8 text-cyan-400" />}
-                            title="教育ビデオ"
-                            description="朝礼やミーティングで活用できる短い教育ビデオ。従業員の安全意識向上に繋がります。（厚労省職場のあんぜんサイト）"
-                            link="https://anzeninfo.mhlw.go.jp/information/kyozaishiryo/jpn.html"
-                            buttonText="ビデオを見る"
                         />
 
-                        {/* Premium Tools (Remaining) */}
+                        {/* Premium Tools */}
                         <PremiumCard
                             icon={<Shield className="w-8 h-8 text-purple-400" />}
                             title="リスクアセスメント支援 (RA Compass)"
-                            provider="SOMPOリスクマネジメント"
                             description="リスクアセスメントの洗い出しから残留リスク管理まで効率化。法令連動機能付き。"
-                            price="4,000円/月〜"
                             link="https://ra-compass.onrender.com/"
                             features={["法令連動リスク評価", "教育履歴管理", "導入サポート"]}
                         />
                         <PremiumCard
                             icon={<Camera className="w-8 h-8 text-purple-400" />}
                             title="安全パトロール支援"
-                            provider="SOMPOリスクマネジメント"
                             description="現場写真からAIで危険源を自動抽出。パトロール日報作成まで一貫支援。"
-                            price="5,000円/月〜"
                             link="https://rskrep-by-claude.onrender.com/"
                             features={["AI画像解析", "日報自動作成", "クラウド共有"]}
-                            badge="Recommended"
                         />
                         <PremiumCard
                             icon={<AlertTriangle className="w-8 h-8 text-purple-400" />}
                             title="KYT支援ボット"
-                            provider="SOMPOリスクマネジメント"
                             description="作業内容から危険要因をAIが抽出。KYTシートやイラストを自動生成。"
-                            price="5,000円/月〜"
                             link="https://ky-support.onrender.com/"
                             features={["危険要因自動提示", "指差呼称生成", "シート自動作成"]}
                         />
                         <PremiumCard
                             icon={<Bot className="w-8 h-8 text-purple-400" />}
                             title="労働安全衛生チャット＋"
-                            provider="SOMPOリスクマネジメント"
                             description="1,974条文と2,622件の労災事例を網羅した強力なAIチャットボット。"
-                            price="5,000円/月〜"
                             link="https://manus-chatbot.onrender.com"
                             features={["法令完全網羅", "労災事例DB", "根拠引用回答"]}
                         />
                         <PremiumCard
                             icon={<Search className="w-8 h-8 text-purple-400" />}
                             title="労働災害リスクファインダー"
-                            provider="SOMPOリスクマネジメント"
                             description="現場写真やキーワードからプロレベルのリスク分析報告書をAIが自動生成。"
-                            price="9,000円/月"
                             link="https://risk-report-tool.onrender.com/"
                             features={["5段階リスク評価", "報告書自動生成", "PPTX出力"]}
-                            badge="New"
+                            badge="Recommended"
                         />
                     </div>
                 </section>
@@ -179,28 +159,20 @@ const ToolCard: React.FC<{
 const PremiumCard: React.FC<{
     icon: React.ReactNode;
     title: string;
-    provider: string;
     description: string;
-    price: string;
     link: string;
     features: string[];
     badge?: string;
     buttonText?: string;
-}> = ({ icon, title, provider, description, price, link, features, badge, buttonText = "詳細を見る" }) => (
+}> = ({ icon, title, description, link, features, badge, buttonText = "詳細を見る" }) => (
     <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-purple-500/50 transition-all duration-300 group relative flex flex-col h-full">
         {badge && (
             <span className="absolute -top-3 left-6 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">
                 {badge}
             </span>
         )}
-        <div className="flex justify-between items-start mb-4">
-            <div className="bg-slate-800/50 p-3 rounded-lg group-hover:bg-purple-500/10 transition-colors">
-                {icon}
-            </div>
-            <div className="text-right">
-                <p className="text-xs text-slate-500">{provider}</p>
-                <p className="text-lg font-bold text-slate-200">{price}</p>
-            </div>
+        <div className="bg-slate-800/50 p-3 rounded-lg w-fit mb-4 group-hover:bg-purple-500/10 transition-colors">
+            {icon}
         </div>
         <h3 className="text-xl font-bold text-slate-100 mb-2">{title}</h3>
         <p className="text-slate-400 text-sm mb-6 flex-grow">{description}</p>
@@ -214,20 +186,15 @@ const PremiumCard: React.FC<{
             ))}
         </ul>
 
-        <div className="grid grid-cols-2 gap-3 mt-auto">
+        <div className="mt-auto">
             <a
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 bg-slate-800 hover:bg-purple-600 hover:text-white text-purple-400 font-medium py-2 rounded-lg transition-all duration-300 text-sm"
+                className="flex items-center justify-center gap-2 w-full bg-slate-800 hover:bg-purple-600 hover:text-white text-purple-400 font-medium py-2 rounded-lg transition-all duration-300 text-sm"
             >
                 {buttonText} <ExternalLink className="w-3 h-3" />
             </a>
-            <button
-                className="flex items-center justify-center gap-2 border border-slate-700 hover:border-purple-500 text-slate-300 hover:text-purple-400 font-medium py-2 rounded-lg transition-all duration-300 text-sm"
-            >
-                <ShoppingCart className="w-3 h-3" /> カート
-            </button>
         </div>
     </div>
 );
