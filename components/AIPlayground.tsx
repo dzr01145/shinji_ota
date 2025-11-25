@@ -1,7 +1,6 @@
 import React from 'react';
 import {
     Bot,
-    Video,
     Shield,
     AlertTriangle,
     Camera,
@@ -81,40 +80,45 @@ const AIPlayground: React.FC = () => {
                             buttonText="アプリを開く"
                         />
 
-                        {/* Premium Tools */}
-                        <PremiumCard
-                            icon={<Shield className="w-8 h-8 text-purple-400" />}
+                        {/* Premium Tools - Now using ToolCard style */}
+                        <ToolCard
+                            icon={<Shield className="w-8 h-8 text-cyan-400" />}
                             title="リスクアセスメント支援 (RA Compass)"
                             description="リスクアセスメントの洗い出しから残留リスク管理まで効率化。法令連動機能付き。"
                             link="https://ra-compass.onrender.com/"
+                            buttonText="アプリを開く"
                             features={["法令連動リスク評価", "教育履歴管理", "導入サポート"]}
                         />
-                        <PremiumCard
-                            icon={<Camera className="w-8 h-8 text-purple-400" />}
+                        <ToolCard
+                            icon={<Camera className="w-8 h-8 text-cyan-400" />}
                             title="安全パトロール支援"
                             description="現場写真からAIで危険源を自動抽出。パトロール日報作成まで一貫支援。"
                             link="https://rskrep-by-claude.onrender.com/"
+                            buttonText="アプリを開く"
                             features={["AI画像解析", "日報自動作成", "クラウド共有"]}
                         />
-                        <PremiumCard
-                            icon={<AlertTriangle className="w-8 h-8 text-purple-400" />}
+                        <ToolCard
+                            icon={<AlertTriangle className="w-8 h-8 text-cyan-400" />}
                             title="KYT支援ボット"
                             description="作業内容から危険要因をAIが抽出。KYTシートやイラストを自動生成。"
                             link="https://ky-support.onrender.com/"
+                            buttonText="アプリを開く"
                             features={["危険要因自動提示", "指差呼称生成", "シート自動作成"]}
                         />
-                        <PremiumCard
-                            icon={<Bot className="w-8 h-8 text-purple-400" />}
+                        <ToolCard
+                            icon={<Bot className="w-8 h-8 text-cyan-400" />}
                             title="労働安全衛生チャット＋"
                             description="1,974条文と2,622件の労災事例を網羅した強力なAIチャットボット。"
                             link="https://manus-chatbot.onrender.com"
+                            buttonText="アプリを開く"
                             features={["法令完全網羅", "労災事例DB", "根拠引用回答"]}
                         />
-                        <PremiumCard
-                            icon={<Search className="w-8 h-8 text-purple-400" />}
+                        <ToolCard
+                            icon={<Search className="w-8 h-8 text-cyan-400" />}
                             title="労働災害リスクファインダー"
                             description="現場写真やキーワードからプロレベルのリスク分析報告書をAIが自動生成。"
                             link="https://risk-report-tool.onrender.com/"
+                            buttonText="アプリを開く"
                             features={["5段階リスク評価", "報告書自動生成", "PPTX出力"]}
                             badge="Recommended"
                         />
@@ -125,7 +129,7 @@ const AIPlayground: React.FC = () => {
     );
 };
 
-// Helper Components
+// Unified ToolCard Component
 const ToolCard: React.FC<{
     icon: React.ReactNode;
     title: string;
@@ -133,7 +137,8 @@ const ToolCard: React.FC<{
     link: string;
     buttonText: string;
     badge?: string;
-}> = ({ icon, title, description, link, buttonText, badge }) => (
+    features?: string[];
+}> = ({ icon, title, description, link, buttonText, badge, features }) => (
     <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-cyan-500/50 transition-all duration-300 group relative flex flex-col h-full">
         {badge && (
             <span className="absolute -top-3 left-6 bg-cyan-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full">
@@ -145,55 +150,26 @@ const ToolCard: React.FC<{
         </div>
         <h3 className="text-xl font-bold text-slate-100 mb-2">{title}</h3>
         <p className="text-slate-400 text-sm mb-6 flex-grow">{description}</p>
-        <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 w-full bg-slate-800 hover:bg-cyan-600 hover:text-white text-cyan-400 font-medium py-3 rounded-lg transition-all duration-300"
-        >
-            {buttonText} <ExternalLink className="w-4 h-4" />
-        </a>
-    </div>
-);
 
-const PremiumCard: React.FC<{
-    icon: React.ReactNode;
-    title: string;
-    description: string;
-    link: string;
-    features: string[];
-    badge?: string;
-    buttonText?: string;
-}> = ({ icon, title, description, link, features, badge, buttonText = "詳細を見る" }) => (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-purple-500/50 transition-all duration-300 group relative flex flex-col h-full">
-        {badge && (
-            <span className="absolute -top-3 left-6 bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                {badge}
-            </span>
+        {features && (
+            <ul className="space-y-2 mb-6">
+                {features.map((feature, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-sm text-slate-300">
+                        <CheckCircle2 className="w-4 h-4 text-cyan-500" />
+                        {feature}
+                    </li>
+                ))}
+            </ul>
         )}
-        <div className="bg-slate-800/50 p-3 rounded-lg w-fit mb-4 group-hover:bg-purple-500/10 transition-colors">
-            {icon}
-        </div>
-        <h3 className="text-xl font-bold text-slate-100 mb-2">{title}</h3>
-        <p className="text-slate-400 text-sm mb-6 flex-grow">{description}</p>
-
-        <ul className="space-y-2 mb-6">
-            {features.map((feature, idx) => (
-                <li key={idx} className="flex items-center gap-2 text-sm text-slate-300">
-                    <CheckCircle2 className="w-4 h-4 text-purple-500" />
-                    {feature}
-                </li>
-            ))}
-        </ul>
 
         <div className="mt-auto">
             <a
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full bg-slate-800 hover:bg-purple-600 hover:text-white text-purple-400 font-medium py-2 rounded-lg transition-all duration-300 text-sm"
+                className="inline-flex items-center justify-center gap-2 w-full bg-slate-800 hover:bg-cyan-600 hover:text-white text-cyan-400 font-medium py-3 rounded-lg transition-all duration-300"
             >
-                {buttonText} <ExternalLink className="w-3 h-3" />
+                {buttonText} <ExternalLink className="w-4 h-4" />
             </a>
         </div>
     </div>
