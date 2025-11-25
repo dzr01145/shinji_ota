@@ -20,7 +20,7 @@ const AIPlayground: React.FC = () => {
         <div className="min-h-screen bg-slate-950 text-slate-200 pt-24 pb-20 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="text-center mb-16">
+                <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-6">
                         Safety Solutions & AI Tools
                     </h1>
@@ -29,6 +29,42 @@ const AIPlayground: React.FC = () => {
                         必要な時に、必要な分だけ利用できる柔軟なソリューションを提供します。
                     </p>
                 </div>
+
+                {/* Featured Portal Section */}
+                <section className="mb-20 relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-3xl rounded-3xl -z-10"></div>
+                    <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-700 rounded-2xl p-8 md:p-12 text-center relative overflow-hidden group hover:border-cyan-400/50 transition-all duration-500">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-cyan-400"></div>
+
+                        <div className="inline-flex items-center gap-2 bg-slate-800/80 border border-slate-700 rounded-full px-4 py-1 mb-6">
+                            <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                            <span className="text-xs font-bold text-cyan-400 tracking-wider uppercase">Official Portal</span>
+                        </div>
+
+                        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                            Your Safety Partner ポータル
+                        </h2>
+                        <p className="text-slate-300 text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+                            SOMPOリスクマネジメントが提供する、安全衛生・防災・BCPの総合プラットフォーム。<br />
+                            すべてのAIツール、専門家ネットワーク、教育コンテンツへここからアクセスできます。
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <a
+                                href="https://safety-partner.onrender.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/25 min-w-[200px]"
+                            >
+                                ポータルサイトを開く <ExternalLink className="w-5 h-5" />
+                            </a>
+                        </div>
+
+                        {/* Decorative elements */}
+                        <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl group-hover:bg-cyan-500/20 transition-all duration-500"></div>
+                        <div className="absolute -top-20 -left-20 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all duration-500"></div>
+                    </div>
+                </section>
 
                 {/* Free Tools Section */}
                 <section className="mb-20">
@@ -42,7 +78,6 @@ const AIPlayground: React.FC = () => {
                     </div>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {/* Tool 1 */}
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
                             title="労働安全衛生チャット"
@@ -51,7 +86,6 @@ const AIPlayground: React.FC = () => {
                             buttonText="アプリを開く"
                             badge="Popular"
                         />
-                        {/* Tool 2 */}
                         <ToolCard
                             icon={<FileText className="w-8 h-8 text-cyan-400" />}
                             title="手順書ダウンロード"
@@ -59,7 +93,6 @@ const AIPlayground: React.FC = () => {
                             link="https://jsite.mhlw.go.jp/nagasaki-roudoukyoku/library/nagasaki-roudoukyoku/anzen-eisei/201112/tejun-11120804.xls"
                             buttonText="ダウンロード"
                         />
-                        {/* Tool 3 */}
                         <ToolCard
                             icon={<Video className="w-8 h-8 text-cyan-400" />}
                             title="教育ビデオ"
