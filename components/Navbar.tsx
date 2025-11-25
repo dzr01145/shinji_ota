@@ -88,10 +88,10 @@ const Navbar: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-lg text-white tracking-wider leading-none group-hover:text-cyan-400 transition-colors">
-              {PERSONAL_INFO.name}
+              {PERSONAL_INFO.jaName}
             </span>
-            <span className="text-[10px] text-slate-500 tracking-[0.2em] uppercase leading-none mt-1">
-              Portfolio
+            <span className="text-[10px] text-slate-500 tracking-[0.1em] uppercase leading-none mt-1 group-hover:text-cyan-500/70 transition-colors">
+              {PERSONAL_INFO.name}
             </span>
           </div>
         </a>

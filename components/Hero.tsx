@@ -156,11 +156,15 @@ const Hero: React.FC = () => {
               <Activity size={20} />
               <span>System Status: Stable</span>
             </h2>
-            <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-white leading-[0.9] mb-4 drop-shadow-2xl">
-              SHINJI
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 relative">
-                OTA
+            <h1 className="font-black tracking-tighter text-white leading-[0.9] mb-4 drop-shadow-2xl">
+              <span className="block text-lg md:text-2xl font-mono text-cyan-400 tracking-[0.3em] mb-2 pl-1">
+                SHINJI OTA
+              </span>
+              <span className="block text-6xl md:text-8xl">
+                太田
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 ml-2 md:ml-4 relative">
+                  真治
+                </span>
               </span>
             </h1>
             <p className="text-2xl font-light text-slate-300 tracking-wide flex items-center gap-3 h-8">
