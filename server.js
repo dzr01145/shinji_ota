@@ -13,8 +13,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware for parsing JSON bodies
-app.use(express.json());
+// Increase payload limit for Base64 images
+app.use(express.json({ limit: '50mb' }));
 
 // Basic Authentication Middleware
 const auth = (req, res, next) => {
@@ -256,6 +256,33 @@ app.post('/api/blog', async (req, res) => {
   } catch (error) {
     console.error('Error saving blog post:', error);
     res.status(500).json({ error: 'Failed to save blog post' });
+  }
+});
+
+// Delete blog post (Admin only)
+app.delete('/api/blog/:id', async (req, res) => {
+  const { password } = req.body;
+  const { id } = req.params;
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+
+  if (password !== adminPassword) {
+    return res.status(401).json({ error: 'Unauthorized: Incorrect password' });
+  }
+
+  try {
+    if (pool) {
+      await pool.query('DELETE FROM blog_posts WHERE id = $1', [id]);
+      res.json({ success: true });
+    } else {
+      const data = fs.readFileSync(BLOG_FILE, 'utf8');
+      let posts = JSON.parse(data);
+      posts = posts.filter(post => post.id !== id);
+      fs.writeFileSync(BLOG_FILE, JSON.stringify(posts, null, 2));
+      res.json({ success: true });
+    }
+  } catch (error) {
+    console.error('Error deleting blog post:', error);
+    res.status(500).json({ error: 'Failed to delete blog post' });
   }
 });
 
