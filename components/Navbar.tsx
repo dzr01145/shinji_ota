@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Terminal, Code } from 'lucide-react';
+import { Menu, X, Code } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PERSONAL_INFO } from '../constants';
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,11 +21,36 @@ const Navbar: React.FC = () => {
     e.preventDefault();
     setMobileMenuOpen(false);
 
+    // External link or different page route
+    if (href.startsWith('/')) {
+      navigate(href);
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    // In-page anchor link
+    if (location.pathname !== '/') {
+      navigate('/');
+      // Wait for navigation to complete before scrolling
+      setTimeout(() => {
+        const targetId = href.replace('#', '');
+        const element = document.getElementById(targetId);
+        if (element) {
+          const headerOffset = 100;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        }
+      }, 100);
+      return;
+    }
+
+    // Already on home page
     const targetId = href.replace('#', '');
     const element = document.getElementById(targetId);
 
     if (element) {
-      const headerOffset = 100; // Fixed header height + extra space
+      const headerOffset = 100;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -37,21 +65,21 @@ const Navbar: React.FC = () => {
     { name: '経歴', href: '#about' },
     { name: 'スキル', href: '#skills' },
     { name: '実績', href: '#projects' },
+    { name: 'AI Tools', href: '/ai-tools' }, // New link
     { name: 'お問い合わせ', href: '#contact' },
   ];
 
   return (
-    <nav 
-      className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-[#050505]/80 backdrop-blur-md border-b border-slate-800 py-3' 
+    <nav
+      className={`fixed top-0 left-0 w-full z-40 transition-all duration-300 ${isScrolled
+          ? 'bg-[#050505]/80 backdrop-blur-md border-b border-slate-800 py-3'
           : 'bg-transparent py-6'
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <a 
-          href="#home" 
-          onClick={(e) => handleNavClick(e, '#home')}
+        <a
+          href="/"
+          onClick={(e) => handleNavClick(e, '/')}
           className="flex items-center gap-3 group cursor-pointer"
         >
           <div className="bg-white/5 border border-white/10 p-2 rounded group-hover:bg-cyan-500 group-hover:border-cyan-400 transition-all duration-300">
@@ -70,17 +98,19 @@ const Navbar: React.FC = () => {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => (
-            <a 
-              key={link.name} 
+            <a
+              key={link.name}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className="text-sm font-medium text-slate-400 hover:text-white transition-colors relative group cursor-pointer"
+              className={`text-sm font-medium transition-colors relative group cursor-pointer ${location.pathname === link.href ? 'text-cyan-400' : 'text-slate-400 hover:text-white'
+                }`}
             >
               <span className="relative z-10">{link.name}</span>
-              <span className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-cyan-500 transition-all duration-300 group-hover:w-full"></span>
+              <span className={`absolute bottom-[-4px] left-0 h-[2px] bg-cyan-500 transition-all duration-300 ${location.pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'
+                }`}></span>
             </a>
           ))}
-          <a 
+          <a
             href="#contact"
             onClick={(e) => handleNavClick(e, '#contact')}
             className="px-6 py-2 bg-white text-black text-sm font-bold hover:bg-cyan-400 transition-colors cursor-pointer rounded-sm"
@@ -90,7 +120,7 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Mobile Toggle */}
-        <button 
+        <button
           className="md:hidden text-slate-300 hover:text-white"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
@@ -102,11 +132,12 @@ const Navbar: React.FC = () => {
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-[#050505] border-b border-slate-800 p-6 flex flex-col gap-4 shadow-2xl animate-fade-in-up">
           {navLinks.map((link) => (
-            <a 
-              key={link.name} 
+            <a
+              key={link.name}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className="text-xl font-medium text-slate-300 hover:text-cyan-400 py-3 border-b border-slate-900 cursor-pointer"
+              className={`text-xl font-medium py-3 border-b border-slate-900 cursor-pointer ${location.pathname === link.href ? 'text-cyan-400' : 'text-slate-300 hover:text-cyan-400'
+                }`}
             >
               {link.name}
             </a>
