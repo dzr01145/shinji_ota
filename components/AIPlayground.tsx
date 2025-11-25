@@ -1,14 +1,10 @@
 import React from 'react';
 import {
     Bot,
-    FileText,
     Video,
     Shield,
     AlertTriangle,
-    Thermometer,
-    Activity,
     Camera,
-    Users,
     Search,
     ExternalLink,
     ShoppingCart,
@@ -38,15 +34,15 @@ const AIPlayground: React.FC = () => {
 
                         <div className="inline-flex items-center gap-2 bg-slate-800/80 border border-slate-700 rounded-full px-4 py-1 mb-6">
                             <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-                            <span className="text-xs font-bold text-cyan-400 tracking-wider uppercase">Official Portal</span>
+                            <span className="text-xs font-bold text-cyan-400 tracking-wider uppercase">Portal</span>
                         </div>
 
                         <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                            Your Safety Partner ポータル
+                            Your Safety Partner （Mockup）
                         </h2>
                         <p className="text-slate-300 text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-                            SOMPOリスクマネジメントが提供する、安全衛生・防災・BCPの総合プラットフォーム。<br />
-                            すべてのAIツール、専門家ネットワーク、教育コンテンツへここからアクセスできます。
+                            安全衛生の総合プラットフォーム。<br />
+                            AIツール、専門家ネットワーク、教育コンテンツへアクセス
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -66,18 +62,18 @@ const AIPlayground: React.FC = () => {
                     </div>
                 </section>
 
-                {/* Free Tools Section */}
+                {/* AI TOOLS Section */}
                 <section className="mb-20">
                     <div className="flex items-center gap-4 mb-8">
                         <div className="h-px flex-1 bg-slate-800"></div>
                         <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
-                            <span className="bg-cyan-500/10 p-2 rounded-lg">Free</span>
-                            無料メニュー
+                            <span className="bg-cyan-500/10 p-2 rounded-lg">AI TOOLS</span>
                         </h2>
                         <div className="h-px flex-1 bg-slate-800"></div>
                     </div>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* Free Tools (Remaining) */}
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
                             title="労働安全衛生チャット"
@@ -87,34 +83,14 @@ const AIPlayground: React.FC = () => {
                             badge="Popular"
                         />
                         <ToolCard
-                            icon={<FileText className="w-8 h-8 text-cyan-400" />}
-                            title="手順書ダウンロード"
-                            description="すぐに使えるヒヤリハット報告書や安全作業手順書の雛形を無料でダウンロードできます。（現在は長崎労働局のテンプレート例）"
-                            link="https://jsite.mhlw.go.jp/nagasaki-roudoukyoku/library/nagasaki-roudoukyoku/anzen-eisei/201112/tejun-11120804.xls"
-                            buttonText="ダウンロード"
-                        />
-                        <ToolCard
                             icon={<Video className="w-8 h-8 text-cyan-400" />}
                             title="教育ビデオ"
                             description="朝礼やミーティングで活用できる短い教育ビデオ。従業員の安全意識向上に繋がります。（厚労省職場のあんぜんサイト）"
                             link="https://anzeninfo.mhlw.go.jp/information/kyozaishiryo/jpn.html"
                             buttonText="ビデオを見る"
                         />
-                    </div>
-                </section>
 
-                {/* Premium Apps Section */}
-                <section className="mb-20">
-                    <div className="flex items-center gap-4 mb-8">
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                        <h2 className="text-2xl font-bold text-purple-400 flex items-center gap-2">
-                            <span className="bg-purple-500/10 p-2 rounded-lg">Premium</span>
-                            有料アプリ・サービス
-                        </h2>
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* Premium Tools (Remaining) */}
                         <PremiumCard
                             icon={<Shield className="w-8 h-8 text-purple-400" />}
                             title="リスクアセスメント支援 (RA Compass)"
@@ -123,24 +99,6 @@ const AIPlayground: React.FC = () => {
                             price="4,000円/月〜"
                             link="https://ra-compass.onrender.com/"
                             features={["法令連動リスク評価", "教育履歴管理", "導入サポート"]}
-                        />
-                        <PremiumCard
-                            icon={<Thermometer className="w-8 h-8 text-purple-400" />}
-                            title="熱中症管理「みまもりふくろう」"
-                            provider="SOMPOリスクマネジメント"
-                            description="WBGTなどの環境データと作業者の状況を見える化し、熱中症リスクを素早くキャッチ。"
-                            price="要見積もり"
-                            link="https://www.sompo-rc.co.jp/services/view/184"
-                            features={["リアルタイム監視", "休憩・給水ガイド", "PDCA支援"]}
-                        />
-                        <PremiumCard
-                            icon={<Activity className="w-8 h-8 text-purple-400" />}
-                            title="安全衛生マネジメントアプリ"
-                            provider="㈱コシダアート"
-                            description="労働安全衛生活動の進捗や是正状況をクラウドで一元管理できるシステム。"
-                            price="8,000円/月〜"
-                            link="https://www.koshida-art.co.jp/zero/"
-                            features={["是正処置ワークフロー", "KPIダッシュボード", "モバイル対応"]}
                         />
                         <PremiumCard
                             icon={<Camera className="w-8 h-8 text-purple-400" />}
@@ -179,41 +137,6 @@ const AIPlayground: React.FC = () => {
                             link="https://risk-report-tool.onrender.com/"
                             features={["5段階リスク評価", "報告書自動生成", "PPTX出力"]}
                             badge="New"
-                        />
-                    </div>
-                </section>
-
-                {/* Expert Support Section */}
-                <section>
-                    <div className="flex items-center gap-4 mb-8">
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                        <h2 className="text-2xl font-bold text-emerald-400 flex items-center gap-2">
-                            <span className="bg-emerald-500/10 p-2 rounded-lg">Expert</span>
-                            専門家支援
-                        </h2>
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                        <PremiumCard
-                            icon={<Users className="w-8 h-8 text-emerald-400" />}
-                            title="継続的な専門家アドバイス"
-                            provider="提携専門家"
-                            description="気軽に相談できるパートナーとして、オンラインで継続的にサポートします。"
-                            price="10,000円/月〜"
-                            link="#"
-                            features={["専任コンサルタント", "チャット相談", "委員会運営サポート"]}
-                            buttonText="専門家に相談"
-                        />
-                        <PremiumCard
-                            icon={<Search className="w-8 h-8 text-emerald-400" />}
-                            title="現場訪問による詳細診断"
-                            provider="提携専門家"
-                            description="専門家が直接現場を訪問し、潜在的なリスクを洗い出して改善策を提案します。"
-                            price="30,000円/回〜"
-                            link="#"
-                            features={["現場巡回・ヒアリング", "写真付き診断レポート", "改善計画提示"]}
-                            buttonText="専門家を探す"
                         />
                     </div>
                 </section>
