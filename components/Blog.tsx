@@ -124,7 +124,7 @@ const Blog: React.FC = () => {
                     <div className="w-20 h-20 md:w-32 md:h-32 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-[2px]">
                         <div className="w-full h-full rounded-full bg-black p-[2px]">
                             <img
-                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=200&h=200"
+                                src="/profile_image.jpg"
                                 alt="Profile"
                                 className="w-full h-full rounded-full object-cover"
                             />
@@ -133,14 +133,9 @@ const Blog: React.FC = () => {
                     <div className="flex-1">
                         <div className="flex items-center gap-4 mb-4">
                             <h1 className="text-xl md:text-2xl font-light">shinji_ota_safety</h1>
-                            <button className="bg-slate-800 text-sm px-4 py-1.5 rounded font-semibold hover:bg-slate-700 transition-colors">
-                                Follow
-                            </button>
                         </div>
                         <div className="flex gap-6 mb-4 text-sm md:text-base">
                             <div><span className="font-bold">{posts.length}</span> posts</div>
-                            <div><span className="font-bold">1.2k</span> followers</div>
-                            <div><span className="font-bold">500</span> following</div>
                         </div>
                         <div className="text-sm text-slate-300">
                             <p className="font-bold text-white">太田 真治 / Shinji Ota</p>
@@ -168,9 +163,9 @@ const Blog: React.FC = () => {
                                     alt={post.caption}
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <p className="text-white font-bold flex items-center gap-2">
-                                        <span className="truncate max-w-[80%] px-2">{post.caption}</span>
+                                <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4">
+                                    <p className="text-white text-xs md:text-sm line-clamp-4 text-center">
+                                        {post.caption}
                                     </p>
                                 </div>
                             </div>
