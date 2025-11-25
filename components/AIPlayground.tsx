@@ -36,7 +36,7 @@ const AIPlayground: React.FC = () => {
                         </div>
 
                         <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                            Your Safety Partner （Mockup）
+                            Your Safety Partner <span className="text-red-400/80 text-2xl align-middle font-normal">（Mockup）</span>
                         </h2>
                         <p className="text-slate-300 text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
                             安全衛生の総合プラットフォーム。<br />
