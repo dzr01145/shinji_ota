@@ -67,7 +67,6 @@ const Navbar: React.FC = () => {
     { name: '実績', href: '#projects' },
     { name: 'AI Tools', href: '/ai-tools' },
     { name: 'Blog', href: '/blog' },
-    { name: 'お問い合わせ', href: '#contact' },
   ];
 
   return (
@@ -116,7 +115,7 @@ const Navbar: React.FC = () => {
             onClick={(e) => handleNavClick(e, '#contact')}
             className="px-6 py-2 bg-white text-black text-sm font-bold hover:bg-cyan-400 transition-colors cursor-pointer rounded-sm"
           >
-            ご相談はこちら
+            ご相談・お問い合わせ
           </a>
         </div>
 
