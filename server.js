@@ -318,7 +318,7 @@ app.post('/api/contact', async (req, res) => {
     const transporterConfig = {
       auth: {
         user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        pass: process.env.SMTP_PASS.replace(/ /g, ''),
       },
       connectionTimeout: 20000, // Increased to 20 seconds
       greetingTimeout: 20000,
