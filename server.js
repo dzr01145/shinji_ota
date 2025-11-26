@@ -298,40 +298,9 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-// --- Email API ---
-import nodemailer from 'nodemailer';
-
-let transporter;
-
-// Initialize Nodemailer if config is present
-if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-  const transporterConfig = {
-    service: 'gmail', // Use built-in Gmail service preset
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS.replace(/ /g, ''),
-    },
-    // Remove manual host/port/secure/family settings to let the preset handle it
-    connectionTimeout: 30000,
-    greetingTimeout: 30000,
-    socketTimeout: 30000,
-    logger: true,
-    debug: true
-  };
-
-  transporter = nodemailer.createTransport(transporterConfig);
-
-  // Verify connection (Non-blocking)
-  transporter.verify((error, success) => {
-    if (error) {
-      console.error('SMTP Startup Verification Error:', error);
-    } else {
-      console.log('SMTP Server is ready to take messages');
-    }
-  });
-} else {
-  console.warn('SMTP configuration missing. Email features will be disabled.');
-}
+// --- Email API (SendGrid) ---
+// Using direct fetch to avoid adding new dependencies if possible, or use nodemailer with SendGrid transport
+// But given the timeouts, direct HTTP API is often more reliable on restricted networks.
 
 app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body;
@@ -340,22 +309,46 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
-  if (!transporter) {
+  // Check for SendGrid API Key
+  if (!process.env.SENDGRID_API_KEY) {
+    console.error('SendGrid API Key missing');
     return res.status(503).json({ error: 'Email service not configured' });
   }
 
   try {
-    const mailOptions = {
-      from: `"${name}" <${process.env.SMTP_USER}>`,
-      replyTo: email,
-      to: process.env.CONTACT_EMAIL || 'dzr01145@gmail.com',
-      subject: `[Portfolio Contact] Message from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-      html: `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}</p>`,
-    };
+    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.SENDGRID_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        personalizations: [{
+          to: [{ email: process.env.CONTACT_EMAIL || 'dzr01145@gmail.com' }]
+        }],
+        from: { email: 'noreply@shinji-ota.com', name: 'Portfolio Contact Form' }, // Must be a verified sender in SendGrid
+        reply_to: { email: email, name: name },
+        subject: `[Portfolio Contact] Message from ${name}`,
+        content: [
+          {
+            type: 'text/plain',
+            value: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+          },
+          {
+            type: 'text/html',
+            value: `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}</p>`
+          }
+        ]
+      })
+    });
 
-    await transporter.sendMail(mailOptions);
-    res.json({ success: true, message: 'Email sent successfully' });
+    if (response.ok) {
+      res.json({ success: true, message: 'Email sent successfully' });
+    } else {
+      const errorData = await response.json();
+      console.error('SendGrid Error:', errorData);
+      res.status(500).json({ error: 'Failed to send email via SendGrid' });
+    }
   } catch (error) {
     console.error('Error sending email:', error);
     res.status(500).json({ error: 'Failed to send email', details: error.message });
