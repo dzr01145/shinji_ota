@@ -323,12 +323,19 @@ app.post('/api/contact', async (req, res) => {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
+      // Improved timeout settings
+      connectionTimeout: 10000, // 10 seconds
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
+      // Enable logging for debugging
+      logger: true,
+      debug: true
     });
 
     const mailOptions = {
-      from: `"${name}" <${process.env.SMTP_USER}>`, // Sender address (must be authenticated user usually)
+      from: `"${name}" <${process.env.SMTP_USER}>`, // Sender address
       replyTo: email, // Reply to the user's email
-      to: 'sota67@sompo-rc.co.jp', // Target email
+      to: process.env.CONTACT_EMAIL || 'dzr01145@gmail.com', // Target email updated to user's preference
       subject: `[Portfolio Contact] Message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
       html: `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}</p>`,
@@ -338,7 +345,7 @@ app.post('/api/contact', async (req, res) => {
     res.json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
-    res.status(500).json({ error: 'Failed to send email' });
+    res.status(500).json({ error: 'Failed to send email', details: error.message });
   }
 });
 
