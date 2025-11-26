@@ -181,7 +181,7 @@ const Hero: React.FC = () => {
 
           <div className="flex flex-wrap items-center gap-5 pt-4">
             <a
-              href="#projects"
+              href="#about"
               className="group relative px-8 py-4 bg-white text-black font-bold transition-transform hover:-translate-y-1 overflow-hidden"
             >
               <div className="absolute inset-0 bg-cyan-500 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 ease-out -z-10"></div>

@@ -9,7 +9,7 @@ const Contact: React.FC = () => {
       <div className="max-w-5xl mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-sm font-mono font-bold text-cyan-400 tracking-widest mb-2">CONTACT</h2>
-          <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">お問い合わせ</h3>
+          <h3 className="text-4xl md:text-5xl font-bold text-white mb-6">ご相談・お問い合わせ</h3>
           <p className="text-xl text-slate-300 font-medium mb-8">新しい価値を、共に創りましょう。</p>
           <p className="text-slate-400 max-w-2xl mx-auto text-lg">
             現在、新規プロジェクトのご相談や技術的なお問い合わせを受け付けています。<br className="hidden md:block" />
@@ -147,8 +147,8 @@ const ContactForm: React.FC = () => {
         type="submit"
         disabled={status === 'sending' || status === 'success'}
         className={`w-full py-4 rounded-lg font-bold transition-all flex items-center justify-center gap-2 ${status === 'success'
-            ? 'bg-green-600 text-white cursor-default'
-            : 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-500/25'
+          ? 'bg-green-600 text-white cursor-default'
+          : 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-500/25'
           } ${status === 'sending' ? 'opacity-70 cursor-wait' : ''}`}
       >
         {status === 'sending' ? (
