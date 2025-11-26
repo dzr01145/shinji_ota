@@ -74,28 +74,55 @@ const ContactForm: React.FC = () => {
     setStatus('sending');
     setErrorMessage('');
 
+    // Setup timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + btoa(import.meta.env.VITE_AUTH_USER + ':' + import.meta.env.VITE_AUTH_PASSWORD)
+          'Authorization': 'Basic ' + btoa((import.meta.env.VITE_AUTH_USER || '') + ':' + (import.meta.env.VITE_AUTH_PASSWORD || ''))
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        signal: controller.signal
       });
 
-      const data = await response.json();
+      clearTimeout(timeoutId);
 
-      if (response.ok) {
-        setStatus('success');
-        setFormData({ name: '', email: '', message: '' });
+      // Check content type
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        if (response.ok) {
+          setStatus('success');
+          setFormData({ name: '', email: '', message: '' });
+        } else {
+          setStatus('error');
+          setErrorMessage(data.error || '送信に失敗しました。');
+        }
       } else {
+        // Handle non-JSON response (e.g. 401 text, 404 HTML, 500 text)
+        console.error('Received non-JSON response');
         setStatus('error');
-        setErrorMessage(data.error || '送信に失敗しました。');
+        if (response.status === 401) {
+          setErrorMessage('認証エラー: パスワードが正しくありません。');
+        } else if (response.status === 404) {
+          setErrorMessage('APIエンドポイントが見つかりません。');
+        } else {
+          setErrorMessage('サーバーエラーが発生しました。');
+        }
       }
-    } catch (error) {
+    } catch (error: any) {
+      clearTimeout(timeoutId);
       setStatus('error');
-      setErrorMessage('ネットワークエラーが発生しました。');
+      if (error.name === 'AbortError') {
+        setErrorMessage('タイムアウトしました。しばらく待ってから再試行してください。');
+      } else {
+        console.error('Network error:', error);
+        setErrorMessage('ネットワークエラーが発生しました。');
+      }
     }
   };
 

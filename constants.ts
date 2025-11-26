@@ -16,7 +16,7 @@ export const PERSONAL_INFO = {
   title: "Principal Consultant / Risk Engineer",
   tagline: "現場と経営をつなぐ、「安全文化の翻訳者」。",
   about: "労働安全のスペシャリスト。鉱山保安のバックグラウンドを持ち、技術士（総合技術監理・資源工学）として国内外の現場を支援。「事例→リスク抽出→PDCA」の論理的アプローチにより、確実なリスク低減と組織の安全文化醸成をデザインする。",
-  email: "shinji.ota@example.com",
+  email: "dzr01145@gmail.com",
   github: "#",
   linkedin: "#",
   twitter: "#"
