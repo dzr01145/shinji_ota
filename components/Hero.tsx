@@ -186,7 +186,7 @@ const Hero: React.FC = () => {
             >
               <div className="absolute inset-0 bg-cyan-500 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 ease-out -z-10"></div>
               <span className="flex items-center gap-2 relative z-10 group-hover:text-white transition-colors">
-                実績を見る <ArrowRight size={18} />
+                経歴を見る <ArrowRight size={18} />
               </span>
             </a>
             <a
