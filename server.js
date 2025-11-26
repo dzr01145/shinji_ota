@@ -332,10 +332,20 @@ app.post('/api/contact', async (req, res) => {
       debug: true
     };
 
-    // Remove automatic service selection to ensure our specific settings (like family: 4) are used
-    // if (process.env.SMTP_HOST === 'smtp.gmail.com') { ... }
-
     const transporter = nodemailer.createTransport(transporterConfig);
+
+    // Verify connection configuration
+    await new Promise((resolve, reject) => {
+      transporter.verify(function (error, success) {
+        if (error) {
+          console.error('SMTP Verify Error:', error);
+          reject(error);
+        } else {
+          console.log("SMTP Server is ready to take our messages");
+          resolve(success);
+        }
+      });
+    });
 
     const mailOptions = {
       from: `"${name}" <${process.env.SMTP_USER}>`, // Sender address
