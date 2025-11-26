@@ -306,14 +306,12 @@ let transporter;
 // Initialize Nodemailer if config is present
 if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
   const transporterConfig = {
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: 465, // Port 465 (SSL)
-    secure: true, // True for 465
+    service: 'gmail', // Use built-in Gmail service preset
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS.replace(/ /g, ''),
     },
-    family: 4, // Force IPv4
+    // Remove manual host/port/secure/family settings to let the preset handle it
     connectionTimeout: 30000,
     greetingTimeout: 30000,
     socketTimeout: 30000,
