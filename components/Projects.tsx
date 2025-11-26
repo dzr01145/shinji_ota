@@ -22,7 +22,7 @@ const Projects: React.FC = () => {
             <h2 className="text-sm font-mono font-bold text-cyan-400 tracking-widest mb-2">
               PROJECTS
             </h2>
-            <h3 className="text-3xl md:text-4xl font-bold text-white">実績・事例</h3>
+            <h3 className="text-3xl md:text-4xl font-bold text-white">実績・事例の一部をご紹介</h3>
           </div>
 
           {/* Filter Tabs */}
