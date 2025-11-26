@@ -66,7 +66,16 @@ const Projects: React.FC = () => {
 
               <div className="p-6 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-4">
-                  <h4 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors duration-500">{project.title}</h4>
+                  <div>
+                    <h4 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors duration-500">
+                      {project.titleJa || project.title}
+                    </h4>
+                    {project.titleJa && (
+                      <p className="text-xs text-slate-500 font-mono mt-1 group-hover:text-cyan-500/70 transition-colors">
+                        {project.title}
+                      </p>
+                    )}
+                  </div>
                   <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-700 translate-x-4 group-hover:translate-x-0">
                     {project.repoUrl && <a href={project.repoUrl} className="text-slate-400 hover:text-white transition-colors"><Github size={18} /></a>}
                     {project.demoUrl && <a href={project.demoUrl} className="text-slate-400 hover:text-white transition-colors"><ExternalLink size={18} /></a>}

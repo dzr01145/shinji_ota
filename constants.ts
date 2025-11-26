@@ -42,6 +42,7 @@ export const PROJECTS: Project[] = [
   {
     id: 1,
     title: "Safety DX Strategy",
+    titleJa: "安全DX戦略策定",
     description: "「第14次労働災害防止計画」を見据えたDX推進支援。AIカメラによる不安全行動検知や、VRを活用した危険体感教育の導入を支援し、現場の安全行動定着を促進。",
     technologies: ["Safety DX", "AI Analysis", "VR Training", "Policy Making"],
     imageUrl: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2070&auto=format&fit=crop",
@@ -51,6 +52,7 @@ export const PROJECTS: Project[] = [
   {
     id: 2,
     title: "Mining Safety Consulting",
+    titleJa: "鉱山保安コンサルティング",
     description: "国内鉱山および製造業に対する労働安全コンサルティング。現場特有の「不安全バイアス」を分析し、鉱山保安法やISO45001に基づいた堅牢な安全規定を策定。",
     technologies: ["Mining Safety", "Risk Assessment", "ISO 45001", "Audit"],
     imageUrl: "/images/mining-safety-final.jpg",
@@ -59,6 +61,7 @@ export const PROJECTS: Project[] = [
   {
     id: 3,
     title: "Social Safety Net Research",
+    titleJa: "社会安全ネット調査",
     description: "シルバー人材センター向け安全就業実態調査。高齢就業者の身体機能低下と作業リスクの相関をデータ分析し、持続可能な就業環境のためのガイドラインを作成。",
     technologies: ["Data Analysis", "Social Research", "Guideline", "Elderly Care"],
     imageUrl: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop",
@@ -67,6 +70,7 @@ export const PROJECTS: Project[] = [
   {
     id: 4,
     title: "Critical Incident Verification",
+    titleJa: "重大事故検証・再発防止",
     description: "PCB処理施設におけるトラブル検証および再発防止策の策定。化学的・工学的知見に基づき事故原因を特定し、ステークホルダー間の合意形成を主導。",
     technologies: ["Root Cause Analysis", "Crisis Mgmt", "Chemical Eng", "Negotiation"],
     imageUrl: "https://images.unsplash.com/photo-1516937941344-00b4e0337589?q=80&w=2070&auto=format&fit=crop",
