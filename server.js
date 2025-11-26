@@ -301,6 +301,40 @@ app.post('/api/login', (req, res) => {
 // --- Email API ---
 import nodemailer from 'nodemailer';
 
+let transporter;
+
+// Initialize Nodemailer if config is present
+if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+  const transporterConfig = {
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: 465, // Port 465 (SSL)
+    secure: true, // True for 465
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS.replace(/ /g, ''),
+    },
+    family: 4, // Force IPv4
+    connectionTimeout: 30000,
+    greetingTimeout: 30000,
+    socketTimeout: 30000,
+    logger: true,
+    debug: true
+  };
+
+  transporter = nodemailer.createTransport(transporterConfig);
+
+  // Verify connection (Non-blocking)
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('SMTP Startup Verification Error:', error);
+    } else {
+      console.log('SMTP Server is ready to take messages');
+    }
+  });
+} else {
+  console.warn('SMTP configuration missing. Email features will be disabled.');
+}
+
 app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body;
 
@@ -308,49 +342,15 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
-  // Check if SMTP config is present
-  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    console.error('SMTP configuration missing');
+  if (!transporter) {
     return res.status(503).json({ error: 'Email service not configured' });
   }
 
   try {
-    const transporterConfig = {
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: 465, // Switch to port 465 (SSL)
-      secure: true, // Must be true for port 465
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS.replace(/ /g, ''),
-      },
-      // Force IPv4 to avoid potential IPv6 connection timeouts on some platforms
-      family: 4,
-      connectionTimeout: 30000,
-      greetingTimeout: 30000,
-      socketTimeout: 30000,
-      logger: true,
-      debug: true
-    };
-
-    const transporter = nodemailer.createTransport(transporterConfig);
-
-    // Verify connection configuration
-    await new Promise((resolve, reject) => {
-      transporter.verify(function (error, success) {
-        if (error) {
-          console.error('SMTP Verify Error:', error);
-          reject(error);
-        } else {
-          console.log("SMTP Server is ready to take our messages");
-          resolve(success);
-        }
-      });
-    });
-
     const mailOptions = {
-      from: `"${name}" <${process.env.SMTP_USER}>`, // Sender address
-      replyTo: email, // Reply to the user's email
-      to: process.env.CONTACT_EMAIL || 'dzr01145@gmail.com', // Target email updated to user's preference
+      from: `"${name}" <${process.env.SMTP_USER}>`,
+      replyTo: email,
+      to: process.env.CONTACT_EMAIL || 'dzr01145@gmail.com',
       subject: `[Portfolio Contact] Message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
       html: `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Message:</strong><br>${message.replace(/\n/g, '<br>')}</p>`,
@@ -377,6 +377,6 @@ app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`Server is running on port ${port}`);
 });
