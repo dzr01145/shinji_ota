@@ -24,17 +24,20 @@ const About: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
               <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
                 <ShieldCheck className="text-cyan-400 mb-3" size={28} />
-                <h4 className="text-white font-bold mb-1">Risk Engineering</h4>
+                <h4 className="text-white font-bold mb-1">リスク工学</h4>
+                <p className="text-xs text-cyan-400 font-mono mb-2">Risk Engineering</p>
                 <p className="text-sm text-slate-500">現場視点×工学的アプローチによる本質的安全化</p>
               </div>
               <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
                 <Users className="text-purple-400 mb-3" size={28} />
-                <h4 className="text-white font-bold mb-1">Safety Culture</h4>
+                <h4 className="text-white font-bold mb-1">安全文化</h4>
+                <p className="text-xs text-purple-400 font-mono mb-2">Safety Culture</p>
                 <p className="text-sm text-slate-500">経営層と現場をつなぐ「安全文化」の通訳・醸成</p>
               </div>
               <div className="p-4 bg-slate-900 rounded-xl border border-slate-800">
                 <Cpu className="text-green-400 mb-3" size={28} />
-                <h4 className="text-white font-bold mb-1">DX & Innovation</h4>
+                <h4 className="text-white font-bold mb-1">DX・イノベーション</h4>
+                <p className="text-xs text-green-400 font-mono mb-2">DX & Innovation</p>
                 <p className="text-sm text-slate-500">AI・データ活用による次世代型安全管理の構築</p>
               </div>
             </div>
@@ -57,8 +60,11 @@ const About: React.FC = () => {
 
                   <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 bg-slate-900 border border-slate-800 rounded-2xl hover:border-slate-600 transition-all shadow-sm">
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-bold text-white">{exp.role}</h4>
-                      <span className="text-xs font-mono text-cyan-400 bg-cyan-400/10 px-2 py-1 rounded">{exp.period}</span>
+                      <div>
+                        <h4 className="font-bold text-white text-lg">{exp.role}</h4>
+                        {exp.roleEn && <p className="text-xs text-cyan-500/70 font-mono">{exp.roleEn}</p>}
+                      </div>
+                      <span className="text-xs font-mono text-cyan-400 bg-cyan-400/10 px-2 py-1 rounded shrink-0 ml-4">{exp.period}</span>
                     </div>
                     <div className="text-sm font-medium text-slate-300 mb-2">{exp.company}</div>
                     <p className="text-sm text-slate-400">{exp.description}</p>

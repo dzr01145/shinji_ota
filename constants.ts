@@ -1,6 +1,14 @@
 
 
-import { Project, Skill, Experience } from './types';
+import { Project, Skill } from './types';
+
+export interface Experience {
+  company: string;
+  role: string;
+  roleEn?: string;
+  period: string;
+  description: string;
+}
 
 export const PERSONAL_INFO = {
   name: "SHINJI OTA",
@@ -69,19 +77,22 @@ export const PROJECTS: Project[] = [
 export const EXPERIENCE: Experience[] = [
   {
     company: "Risk Management Firm",
-    role: "Senior Consultant",
+    role: "シニアコンサルタント",
+    roleEn: "Senior Consultant",
     period: "Current",
     description: "国内外の製造・運送・鉱業に対し、技術士・労働安全コンサルタントの立場から安全文化醸成を支援。"
   },
   {
     company: "Strategic Safety Initiatives",
-    role: "Technical Advisor",
+    role: "技術顧問",
+    roleEn: "Technical Advisor",
     period: "Project Based",
     description: "関係官庁や企業経営層への講演活動、産業保健領域の論考執筆、ガイドライン策定など、政策と現場をつなぐアドバイザリー業務に従事。"
   },
   {
     company: "Mining & Industrial Sector",
-    role: "Field Engineer",
+    role: "フィールドエンジニア",
+    roleEn: "Field Engineer",
     period: "Previous",
     description: "鉱山保安およびプラントエンジニアリングの現場にて、危険物取扱や設備保全の実務を経験。現在の「現場重視」のコンサルティングスタイルの原点。"
   }
