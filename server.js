@@ -315,22 +315,29 @@ app.post('/api/contact', async (req, res) => {
   }
 
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+    const transporterConfig = {
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
-      // Improved timeout settings
-      connectionTimeout: 10000, // 10 seconds
-      greetingTimeout: 10000,
-      socketTimeout: 10000,
-      // Enable logging for debugging
+      connectionTimeout: 20000, // Increased to 20 seconds
+      greetingTimeout: 20000,
+      socketTimeout: 20000,
       logger: true,
       debug: true
-    });
+    };
+
+    // Use built-in 'gmail' service if host is smtp.gmail.com
+    // This automatically sets the correct host, port (465), and secure settings
+    if (process.env.SMTP_HOST === 'smtp.gmail.com') {
+      transporterConfig.service = 'gmail';
+    } else {
+      transporterConfig.host = process.env.SMTP_HOST;
+      transporterConfig.port = parseInt(process.env.SMTP_PORT || '587');
+      transporterConfig.secure = process.env.SMTP_SECURE === 'true';
+    }
+
+    const transporter = nodemailer.createTransport(transporterConfig);
 
     const mailOptions = {
       from: `"${name}" <${process.env.SMTP_USER}>`, // Sender address
