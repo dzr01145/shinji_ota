@@ -74,55 +74,30 @@ const ContactForm: React.FC = () => {
     setStatus('sending');
     setErrorMessage('');
 
-    // Setup timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('https://formspree.io/f/mkgadgdn', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + btoa((import.meta.env.VITE_AUTH_USER || '') + ':' + (import.meta.env.VITE_AUTH_PASSWORD || ''))
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData),
-        signal: controller.signal
+        body: JSON.stringify(formData)
       });
 
-      clearTimeout(timeoutId);
-
-      // Check content type
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
+      if (response.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
         const data = await response.json();
-        if (response.ok) {
-          setStatus('success');
-          setFormData({ name: '', email: '', message: '' });
-        } else {
-          setStatus('error');
-          setErrorMessage(data.error || '送信に失敗しました。');
-        }
-      } else {
-        // Handle non-JSON response (e.g. 401 text, 404 HTML, 500 text)
-        console.error('Received non-JSON response');
         setStatus('error');
-        if (response.status === 401) {
-          setErrorMessage('認証エラー: パスワードが正しくありません。');
-        } else if (response.status === 404) {
-          setErrorMessage('APIエンドポイントが見つかりません。');
+        if (Object.hasOwn(data, 'errors')) {
+          setErrorMessage(data.errors.map((error: any) => error.message).join(", "));
         } else {
-          setErrorMessage('サーバーエラーが発生しました。');
+          setErrorMessage('送信に失敗しました。');
         }
       }
-    } catch (error: any) {
-      clearTimeout(timeoutId);
+    } catch (error) {
       setStatus('error');
-      if (error.name === 'AbortError') {
-        setErrorMessage('タイムアウトしました。しばらく待ってから再試行してください。');
-      } else {
-        console.error('Network error:', error);
-        setErrorMessage('ネットワークエラーが発生しました。');
-      }
+      setErrorMessage('ネットワークエラーが発生しました。');
     }
   };
 
@@ -133,6 +108,7 @@ const ContactForm: React.FC = () => {
         <input
           type="text"
           id="name"
+          name="name"
           required
           className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"
           placeholder="山田 太郎"
@@ -145,6 +121,7 @@ const ContactForm: React.FC = () => {
         <input
           type="email"
           id="email"
+          name="email"
           required
           className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors"
           placeholder="your@email.com"
@@ -156,6 +133,7 @@ const ContactForm: React.FC = () => {
         <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-1">お問い合わせ内容</label>
         <textarea
           id="message"
+          name="message"
           required
           rows={4}
           className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors resize-none"
@@ -169,8 +147,8 @@ const ContactForm: React.FC = () => {
         type="submit"
         disabled={status === 'sending' || status === 'success'}
         className={`w-full py-4 rounded-lg font-bold transition-all flex items-center justify-center gap-2 ${status === 'success'
-          ? 'bg-green-600 text-white cursor-default'
-          : 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-500/25'
+            ? 'bg-green-600 text-white cursor-default'
+            : 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-500/25'
           } ${status === 'sending' ? 'opacity-70 cursor-wait' : ''}`}
       >
         {status === 'sending' ? (
@@ -185,8 +163,6 @@ const ContactForm: React.FC = () => {
       {status === 'error' && (
         <p className="text-red-400 text-sm mt-2 bg-red-950/30 p-3 rounded border border-red-900/50">
           {errorMessage}
-          <br />
-          <span className="text-xs opacity-80">※メール設定が未完了の可能性があります。直接メールでお問い合わせください。</span>
         </p>
       )}
     </form>
