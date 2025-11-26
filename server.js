@@ -317,8 +317,8 @@ app.post('/api/contact', async (req, res) => {
   try {
     const transporterConfig = {
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: 587, // Force port 587 for STARTTLS
-      secure: false, // Must be false for port 587
+      port: 465, // Switch to port 465 (SSL)
+      secure: true, // Must be true for port 465
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS.replace(/ /g, ''),
