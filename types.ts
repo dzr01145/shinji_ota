@@ -11,6 +11,7 @@ export interface Project {
 
 export interface Skill {
   name: string;
+  nameJa?: string;
   level: number; // 0-100
   icon: string;
   category: 'Safety Mgmt' | 'Engineering' | 'DX & Analysis' | 'Consulting';

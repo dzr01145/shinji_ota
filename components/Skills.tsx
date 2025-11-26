@@ -41,10 +41,19 @@ const Skills: React.FC = () => {
                     className="group relative bg-slate-900/50 p-4 rounded-xl border border-slate-800 hover:border-cyan-500/50 transition-all duration-300 hover:bg-slate-800"
                   >
                     <div className="flex justify-between mb-2 relative z-10">
-                      <span className="text-slate-300 text-sm font-bold flex items-center gap-3">
+                      <div className="flex items-center gap-3">
                         <span className="text-xl filter grayscale group-hover:grayscale-0 transition-all">{skill.icon}</span>
-                        {skill.name}
-                      </span>
+                        <div>
+                          <span className="text-slate-200 text-sm font-bold block">
+                            {skill.nameJa || skill.name}
+                          </span>
+                          {skill.nameJa && (
+                            <span className="text-[10px] text-slate-500 font-mono block leading-none mt-0.5">
+                              {skill.name}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                       <span className="text-cyan-500 font-mono text-xs">{skill.level}%</span>
                     </div>
 

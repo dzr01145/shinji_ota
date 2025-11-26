@@ -23,19 +23,19 @@ export const PERSONAL_INFO = {
 };
 
 export const SKILLS: Skill[] = [
-  { name: "ISO 45001 / OSHMS", level: 98, icon: "🛡️", category: "Safety Mgmt", description: "ISO 45001に基づいた労働安全衛生マネジメントシステムの構築と運用支援" },
-  { name: "Risk Assessment", level: 95, icon: "⚖️", category: "Safety Mgmt", description: "現場の潜在リスクを特定し、本質的安全化へ導くリスクアセスメントとKYT" },
-  { name: "Safety Culture", level: 90, icon: "🤝", category: "Safety Mgmt", description: "経営層と現場をつなぎ、組織全体で安全意識を高める文化醸成" },
+  { name: "ISO 45001 / OSHMS", nameJa: "労働安全マネジメント", level: 98, icon: "🛡️", category: "Safety Mgmt", description: "ISO 45001に基づいた労働安全衛生マネジメントシステムの構築と運用支援" },
+  { name: "Risk Assessment", nameJa: "リスクアセスメント", level: 95, icon: "⚖️", category: "Safety Mgmt", description: "現場の潜在リスクを特定し、本質的安全化へ導くリスクアセスメントとKYT" },
+  { name: "Safety Culture", nameJa: "安全文化醸成", level: 90, icon: "🤝", category: "Safety Mgmt", description: "経営層と現場をつなぎ、組織全体で安全意識を高める文化醸成" },
 
-  { name: "Technical P.E.Jp", level: 100, icon: "🇯🇵", category: "Engineering", description: "技術士（総合技術監理・資源工学）。複合的な課題に対する技術的最適解の提示" },
-  { name: "Mining Safety", level: 92, icon: "⛏️", category: "Engineering", description: "鉱山保安の専門知見を活かした、特殊環境下での安全対策立案" },
-  { name: "Plant Engineering", level: 85, icon: "🏭", category: "Engineering", description: "重機オペレーションやプラント設備管理の実務経験に基づく現場指導" },
+  { name: "Technical P.E.Jp", nameJa: "技術士 (総合技術監理)", level: 100, icon: "🇯🇵", category: "Engineering", description: "技術士（総合技術監理・資源工学）。複合的な課題に対する技術的最適解の提示" },
+  { name: "Mining Safety", nameJa: "鉱山保安", level: 92, icon: "⛏️", category: "Engineering", description: "鉱山保安の専門知見を活かした、特殊環境下での安全対策立案" },
+  { name: "Plant Engineering", nameJa: "プラントエンジニアリング", level: 85, icon: "🏭", category: "Engineering", description: "重機オペレーションやプラント設備管理の実務経験に基づく現場指導" },
 
-  { name: "Data Analysis", level: 88, icon: "📊", category: "DX & Analysis", description: "事故データやヒヤリハットの統計分析による傾向把握と対策立案" },
-  { name: "Generative AI", level: 85, icon: "🤖", category: "DX & Analysis", description: "ChatGPT等を活用した安全教育コンテンツ作成や業務効率化" },
+  { name: "Data Analysis", nameJa: "データ分析", level: 88, icon: "📊", category: "DX & Analysis", description: "事故データやヒヤリハットの統計分析による傾向把握と対策立案" },
+  { name: "Generative AI", nameJa: "生成AI活用", level: 85, icon: "🤖", category: "DX & Analysis", description: "ChatGPT等を活用した安全教育コンテンツ作成や業務効率化" },
 
-  { name: "Technical Writing", level: 95, icon: "✍️", category: "Consulting", description: "専門用語を現場と経営層それぞれの言語に翻訳する「利害調整型」ドキュメンテーション" },
-  { name: "Facilitation", level: 90, icon: "🗣️", category: "Consulting", description: "多様なステークホルダー間の合意形成を主導するファシリテーション" },
+  { name: "Technical Writing", nameJa: "技術文書作成", level: 95, icon: "✍️", category: "Consulting", description: "専門用語を現場と経営層それぞれの言語に翻訳する「利害調整型」ドキュメンテーション" },
+  { name: "Facilitation", nameJa: "ファシリテーション", level: 90, icon: "🗣️", category: "Consulting", description: "多様なステークホルダー間の合意形成を主導するファシリテーション" },
 ];
 
 export const PROJECTS: Project[] = [
