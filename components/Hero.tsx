@@ -205,19 +205,19 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Visual/Image Area - Absolute positioned for overlap */}
-        <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-[50%] h-[90%] z-0 pointer-events-auto group flex items-center justify-center">
+        <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-[50%] h-[90%] z-10 pointer-events-auto group flex items-center justify-center">
           <div className="relative w-[90%] h-[90%]">
             {/* Image with heavy filters */}
             <div className="relative w-full h-full">
               <img
                 src="/profile_image.jpg"
                 alt="Shinji Ota"
-                className="absolute inset-0 w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-80 transition-opacity duration-200 ease-in-out group-hover:opacity-0"
+                className="absolute inset-0 w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-80 transition-opacity duration-500 ease-in-out group-hover:opacity-0"
               />
               <img
                 src="/profile_image2.jpg"
                 alt="Shinji Ota Alternate"
-                className="absolute inset-0 w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-0 transition-opacity duration-200 ease-in-out group-hover:opacity-80"
+                className="absolute inset-0 w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-80"
               />
             </div>
 
