@@ -215,7 +215,7 @@ const Hero: React.FC = () => {
                 className="absolute inset-0 w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-80 transition-opacity duration-700 ease-in-out group-hover:opacity-0"
               />
               <img
-                src="/profile_image2.png"
+                src="/profile_image2.jpg"
                 alt="Shinji Ota Alternate"
                 className="absolute inset-0 w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-0 transition-opacity duration-700 ease-in-out group-hover:opacity-80"
               />
