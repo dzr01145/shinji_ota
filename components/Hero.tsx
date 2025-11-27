@@ -208,8 +208,8 @@ const Hero: React.FC = () => {
 
         {/* Visual/Image Area - Absolute positioned for overlap */}
         <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-[45%] h-[80%] z-10 pointer-events-auto group flex items-center justify-center">
-          {/* Invisible Hover Trigger Area - Extends to the left */}
-          <div className="absolute inset-y-0 -left-20 w-20 z-20"></div>
+          {/* Invisible Hover Trigger Area - Extends significantly to the left */}
+          <div className="absolute inset-y-0 -left-60 w-60 z-20"></div>
 
           <div className="relative w-full h-full">
             <div className="relative w-[90%] h-[90%]">
