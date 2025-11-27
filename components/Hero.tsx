@@ -145,67 +145,69 @@ const Hero: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 w-full relative z-10 grid lg:grid-cols-12 gap-12 items-center h-full">
 
         {/* Text Content - Positioned to overlap with image */}
-        <div className="lg:col-span-8 z-20 space-y-6 pt-10 lg:pt-0">
-          <div className="inline-flex items-center gap-3 px-3 py-1 rounded border border-cyan-900/50 bg-cyan-950/30 backdrop-blur-md">
-            <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.8)] animate-pulse"></div>
-            <span className="text-xs font-mono text-cyan-400 tracking-widest">CONSULTING AVAILABLE</span>
-          </div>
+        <div className="lg:col-span-8 z-20 pt-10 lg:pt-0 pointer-events-none">
+          <div className="space-y-6 pointer-events-auto">
+            <div className="inline-flex items-center gap-3 px-3 py-1 rounded border border-cyan-900/50 bg-cyan-950/30 backdrop-blur-md">
+              <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.8)] animate-pulse"></div>
+              <span className="text-xs font-mono text-cyan-400 tracking-widest">CONSULTING AVAILABLE</span>
+            </div>
 
-          <div className="relative">
-            <h2 className="text-xl md:text-2xl font-mono text-slate-500 mb-2 tracking-tighter flex items-center gap-2">
-              <Activity size={20} />
-              <span>System Status: Stable</span>
-            </h2>
-            <h1 className="font-black tracking-tighter text-white leading-[0.9] mb-4 drop-shadow-2xl">
-              <span className="block text-lg md:text-2xl font-mono text-cyan-400 tracking-[0.3em] mb-2 pl-1">
-                SHINJI OTA
-              </span>
-              <span className="block text-5xl md:text-7xl">
-                太田
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 ml-2 md:ml-4 relative">
-                  真治
+            <div className="relative">
+              <h2 className="text-xl md:text-2xl font-mono text-slate-500 mb-2 tracking-tighter flex items-center gap-2">
+                <Activity size={20} />
+                <span>System Status: Stable</span>
+              </h2>
+              <h1 className="font-black tracking-tighter text-white leading-[0.9] mb-4 drop-shadow-2xl">
+                <span className="block text-lg md:text-2xl font-mono text-cyan-400 tracking-[0.3em] mb-2 pl-1">
+                  SHINJI OTA
                 </span>
-              </span>
-            </h1>
-            <p className="text-2xl font-light text-slate-300 tracking-wide flex items-center gap-3 h-8">
-              <span className="font-mono text-cyan-400 text-lg">
-                &gt; {text}
-                <span className="inline-block w-2 h-5 ml-1 bg-cyan-400 animate-pulse"></span>
-              </span>
+                <span className="block text-5xl md:text-7xl">
+                  太田
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 ml-2 md:ml-4 relative">
+                    真治
+                  </span>
+                </span>
+              </h1>
+              <p className="text-2xl font-light text-slate-300 tracking-wide flex items-center gap-3 h-8">
+                <span className="font-mono text-cyan-400 text-lg">
+                  &gt; {text}
+                  <span className="inline-block w-2 h-5 ml-1 bg-cyan-400 animate-pulse"></span>
+                </span>
+              </p>
+            </div>
+
+            <p className="text-lg text-slate-300 max-w-lg leading-relaxed border-l-2 border-cyan-500/50 pl-6 my-8 bg-slate-950/50 backdrop-blur-sm p-4 rounded-r-lg">
+              {PERSONAL_INFO.tagline}
             </p>
-          </div>
 
-          <p className="text-lg text-slate-300 max-w-lg leading-relaxed border-l-2 border-cyan-500/50 pl-6 my-8 bg-slate-950/50 backdrop-blur-sm p-4 rounded-r-lg">
-            {PERSONAL_INFO.tagline}
-          </p>
+            <div className="flex flex-wrap items-center gap-5 pt-4">
+              <a
+                href="#about"
+                className="group relative px-8 py-4 bg-white text-black font-bold transition-transform hover:-translate-y-1 overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-cyan-500 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 ease-out -z-10"></div>
+                <span className="flex items-center gap-2 relative z-10 group-hover:text-white transition-colors">
+                  経歴を見る <ArrowRight size={18} />
+                </span>
+              </a>
+              <a
+                href="#contact"
+                className="px-8 py-4 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-cyan-950/30 transition-all font-mono text-sm bg-slate-950/50 backdrop-blur-sm"
+              >
+                Contact_Me
+              </a>
+            </div>
 
-          <div className="flex flex-wrap items-center gap-5 pt-4">
-            <a
-              href="#about"
-              className="group relative px-8 py-4 bg-white text-black font-bold transition-transform hover:-translate-y-1 overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-cyan-500 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-300 ease-out -z-10"></div>
-              <span className="flex items-center gap-2 relative z-10 group-hover:text-white transition-colors">
-                経歴を見る <ArrowRight size={18} />
-              </span>
-            </a>
-            <a
-              href="#contact"
-              className="px-8 py-4 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-cyan-950/30 transition-all font-mono text-sm bg-slate-950/50 backdrop-blur-sm"
-            >
-              Contact_Me
-            </a>
-          </div>
-
-          <div className="flex items-center gap-8 pt-12 opacity-60 hover:opacity-100 transition-opacity">
-            <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Github size={24} /></a>
-            <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Linkedin size={24} /></a>
-            <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Twitter size={24} /></a>
+            <div className="flex items-center gap-8 pt-12 opacity-60 hover:opacity-100 transition-opacity">
+              <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Github size={24} /></a>
+              <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Linkedin size={24} /></a>
+              <a href="#" className="hover:text-cyan-400 transition-colors transform hover:scale-110"><Twitter size={24} /></a>
+            </div>
           </div>
         </div>
 
         {/* Visual/Image Area - Absolute positioned for overlap */}
-        <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-[50%] h-[90%] z-10 pointer-events-auto group flex items-center justify-center">
+        <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-[60%] h-[90%] z-10 pointer-events-auto group flex items-center justify-center">
           <div className="relative w-[90%] h-[90%]">
             {/* Image with heavy filters */}
             <div className="relative w-full h-full">
