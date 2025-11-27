@@ -205,22 +205,29 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Visual/Image Area - Absolute positioned for overlap */}
-        <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-[45%] h-[80%] z-0 pointer-events-none">
+        <div className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-[45%] h-[80%] z-0 pointer-events-auto">
           <div className="relative w-full h-full">
             {/* Image with heavy filters */}
-            <img
-              src="/profile_image.jpg"
-              alt="Shinji Ota"
-              className="w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-80"
-            />
+            <div className="relative w-full h-full group">
+              <img
+                src="/profile_image.jpg"
+                alt="Shinji Ota"
+                className="absolute inset-0 w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-80 transition-opacity duration-700 ease-in-out group-hover:opacity-0"
+              />
+              <img
+                src="/profile_image2.png"
+                alt="Shinji Ota Alternate"
+                className="absolute inset-0 w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-0 transition-opacity duration-700 ease-in-out group-hover:opacity-80"
+              />
+            </div>
 
             {/* Gradient Overlays to blend with background and text */}
-            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#050505]/60 to-[#050505]"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/50"></div>
+            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-[#050505]/60 to-[#050505] pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/50 pointer-events-none"></div>
 
             {/* Tech Decoration Lines (Static) */}
-            <div className="absolute top-10 right-10 w-20 h-20 border-t-2 border-r-2 border-cyan-500/20"></div>
-            <div className="absolute bottom-10 right-10 w-20 h-20 border-b-2 border-r-2 border-purple-500/20"></div>
+            <div className="absolute top-10 right-10 w-20 h-20 border-t-2 border-r-2 border-cyan-500/20 pointer-events-none"></div>
+            <div className="absolute bottom-10 right-10 w-20 h-20 border-b-2 border-r-2 border-purple-500/20 pointer-events-none"></div>
           </div>
         </div>
 
