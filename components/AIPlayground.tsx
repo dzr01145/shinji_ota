@@ -147,6 +147,15 @@ const AIPlayground: React.FC = () => {
                             features={["PL法・製品安全法対応", "リコール判断・決裁支援", "品質不正・改ざん予防"]}
                             imageUrl="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2000&auto=format&fit=crop"
                         />
+                        <ToolCard
+                            icon={<Bot className="w-8 h-8 text-cyan-400" />}
+                            title="AIスライド・インフォグラフィック生成ツール"
+                            description="テキストを入力するだけで、プレゼンテーションのストーリー構成から、プロフェッショナルな品質のスライド画像までをAIが一貫して生成。資料作成の時間を劇的に短縮します。"
+                            link="https://nanobanana-pro-gen.onrender.com/"
+                            buttonText="アプリを開く"
+                            features={["ストーリー構成案の自動提案", "Gemini 3.0 Pro Image生成", "PowerPoint (pptx) 出力"]}
+                            imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
+                        />
                     </div>
                 </section>
             </div>
