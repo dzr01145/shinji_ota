@@ -190,7 +190,7 @@ const ToolCard: React.FC<{
 
         <div className="relative z-10 flex flex-col h-full p-6">
             {badge && (
-                <span className="absolute -top-3 left-6 bg-cyan-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-cyan-500/20">
+                <span className="absolute top-4 left-6 z-20 bg-cyan-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-cyan-500/20">
                     {badge}
                 </span>
             )}
