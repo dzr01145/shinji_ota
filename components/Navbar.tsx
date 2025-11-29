@@ -62,7 +62,8 @@ const Navbar: React.FC = () => {
   };
 
   const navLinks = [
-    { name: '経歴', href: '#about' },
+    { name: 'プロフィール', href: '#about' },
+    { name: '経歴', href: '#experience' },
     { name: 'スキル', href: '#skills' },
     { name: '実績', href: '#projects' },
     { name: 'AI Tools', href: '/ai-tools' },

@@ -74,7 +74,7 @@ const About: React.FC = () => {
         </div>
 
         {/* Timeline Section - Moved below */}
-        <div className="mt-20">
+        <div id="experience" className="mt-20 scroll-mt-28">
           <div className="flex items-end gap-3 mb-12 justify-center">
             <h3 className="text-2xl font-bold text-white">経歴</h3>
             <span className="text-sm font-mono text-cyan-400 mb-1">EXPERIENCE</span>
