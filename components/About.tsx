@@ -9,10 +9,10 @@ const About: React.FC = () => {
         <div className="flex flex-col md:flex-row gap-16">
 
           {/* Left Column: Title & Summary */}
-          <div className="md:w-1/2">
+          <div className="md:w-2/3">
             <h2 className="text-sm font-mono font-bold text-cyan-400 tracking-widest mb-2">ABOUT ME</h2>
             <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              経歴・プロフィール
+              プロフィール
             </h3>
             <p className="text-xl text-cyan-100 mb-6 font-medium border-l-4 border-cyan-500 pl-4">
               現場の痛みを知る、<br />安全文化の翻訳者。
@@ -44,7 +44,7 @@ const About: React.FC = () => {
           </div>
 
           {/* Right Column: Profile Image */}
-          <div className="md:w-1/2 h-[500px] relative">
+          <div className="md:w-1/3 h-[300px] relative">
             <div className="w-full h-full relative group">
               {/* Invisible Hover Trigger Area - Extends significantly to the left */}
               <div className="absolute inset-y-0 -left-[500px] w-[500px] z-20"></div>
@@ -71,7 +71,7 @@ const About: React.FC = () => {
         {/* Timeline Section - Moved below */}
         <div className="mt-20">
           <div className="flex items-end gap-3 mb-12 justify-center">
-            <h3 className="text-2xl font-bold text-white">経歴詳細</h3>
+            <h3 className="text-2xl font-bold text-white">経歴</h3>
             <span className="text-sm font-mono text-cyan-400 mb-1">EXPERIENCE</span>
           </div>
 
