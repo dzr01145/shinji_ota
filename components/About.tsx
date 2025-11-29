@@ -43,36 +43,60 @@ const About: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Timeline */}
-          <div className="md:w-1/2">
-            <div className="flex items-end gap-3 mb-6">
-              <h3 className="text-2xl font-bold text-white">経歴詳細</h3>
-              <span className="text-sm font-mono text-cyan-400 mb-1">EXPERIENCE</span>
-              <div className="h-px flex-grow bg-slate-800 mb-2"></div>
+          {/* Right Column: Profile Image */}
+          <div className="md:w-1/2 h-[500px] relative">
+            <div className="w-full h-full relative group">
+              {/* Invisible Hover Trigger Area - Extends significantly to the left */}
+              <div className="absolute inset-y-0 -left-[500px] w-[500px] z-20"></div>
+
+              <div className="relative w-full h-full rounded-2xl overflow-hidden border border-slate-800 shadow-2xl">
+                <img
+                  src="/profile_image.jpg"
+                  alt="Shinji Ota"
+                  className="absolute inset-0 w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-80 transition-opacity duration-500 ease-in-out group-hover:opacity-0"
+                />
+                <img
+                  src="/profile_image2.jpg"
+                  alt="Shinji Ota Alternate"
+                  className="absolute inset-0 w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-80"
+                />
+
+                {/* Gradient Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60 pointer-events-none"></div>
+              </div>
             </div>
-            <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-slate-800 before:bg-gradient-to-b before:from-transparent before:via-slate-700 before:to-transparent">
+          </div>
+        </div>
 
-              {EXPERIENCE.map((exp, index) => (
-                <div key={index} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full border border-slate-700 bg-slate-900 group-hover:border-cyan-500 transition-colors shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-xl z-10">
-                    <div className="w-3 h-3 bg-cyan-500 rounded-full"></div>
-                  </div>
+        {/* Timeline Section - Moved below */}
+        <div className="mt-20">
+          <div className="flex items-end gap-3 mb-12 justify-center">
+            <h3 className="text-2xl font-bold text-white">経歴詳細</h3>
+            <span className="text-sm font-mono text-cyan-400 mb-1">EXPERIENCE</span>
+          </div>
 
-                  <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 bg-slate-900 border border-slate-800 rounded-2xl hover:border-slate-600 transition-all shadow-sm">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h4 className="font-bold text-white text-lg">{exp.role}</h4>
-                        {exp.roleEn && <p className="text-xs text-cyan-500/70 font-mono">{exp.roleEn}</p>}
-                      </div>
-                      <span className="text-xs font-mono text-cyan-400 bg-cyan-400/10 px-2 py-1 rounded shrink-0 ml-4">{exp.period}</span>
-                    </div>
-                    <div className="text-sm font-medium text-slate-300 mb-2">{exp.company}</div>
-                    <p className="text-sm text-slate-400">{exp.description}</p>
-                  </div>
+          <div className="max-w-4xl mx-auto space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-slate-800 before:bg-gradient-to-b before:from-transparent before:via-slate-700 before:to-transparent">
+
+            {EXPERIENCE.map((exp, index) => (
+              <div key={index} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full border border-slate-700 bg-slate-900 group-hover:border-cyan-500 transition-colors shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-xl z-10">
+                  <div className="w-3 h-3 bg-cyan-500 rounded-full"></div>
                 </div>
-              ))}
 
-            </div>
+                <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 bg-slate-900 border border-slate-800 rounded-2xl hover:border-slate-600 transition-all shadow-sm">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h4 className="font-bold text-white text-lg">{exp.role}</h4>
+                      {exp.roleEn && <p className="text-xs text-cyan-500/70 font-mono">{exp.roleEn}</p>}
+                    </div>
+                    <span className="text-xs font-mono text-cyan-400 bg-cyan-400/10 px-2 py-1 rounded shrink-0 ml-4">{exp.period}</span>
+                  </div>
+                  <div className="text-sm font-medium text-slate-300 mb-2">{exp.company}</div>
+                  <p className="text-sm text-slate-400">{exp.description}</p>
+                </div>
+              </div>
+            ))}
+
           </div>
 
         </div>
