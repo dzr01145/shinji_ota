@@ -49,7 +49,7 @@ const About: React.FC = () => {
               {/* Invisible Hover Trigger Area - Extends significantly to the left */}
               <div className="absolute inset-y-0 -left-[500px] w-[500px] z-20"></div>
 
-              <div className="relative w-full h-full rounded-2xl overflow-hidden border border-slate-800 shadow-2xl">
+              <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl">
                 <img
                   src="/profile_image.jpg"
                   alt="Shinji Ota"
