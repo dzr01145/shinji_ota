@@ -61,8 +61,13 @@ const About: React.FC = () => {
                   className="absolute inset-0 w-full h-full object-cover object-center filter grayscale-[40%] sepia-[20%] hue-rotate-[190deg] brightness-[40%] contrast-[120%] opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-80"
                 />
 
-                {/* Gradient Overlays */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60 pointer-events-none"></div>
+                {/* Gradient Overlays to blend with background */}
+                <div className="absolute inset-0 bg-gradient-to-l from-transparent via-slate-950/60 to-slate-950 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/50 pointer-events-none"></div>
+
+                {/* Tech Decoration Lines (Finder Effect) */}
+                <div className="absolute top-6 right-6 w-12 h-12 border-t-2 border-r-2 border-cyan-500/40 pointer-events-none"></div>
+                <div className="absolute bottom-6 right-6 w-12 h-12 border-b-2 border-r-2 border-purple-500/40 pointer-events-none"></div>
               </div>
             </div>
           </div>
