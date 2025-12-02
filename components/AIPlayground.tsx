@@ -139,6 +139,15 @@ const AIPlayground: React.FC = () => {
                             imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
+                            icon={<Shield className="w-8 h-8 text-cyan-400" />}
+                            title="AI鉱山保安マネジメントシステム"
+                            description="災害・ヒヤリハット報告から、AIがリスクアセスメント案や改善対策を自動生成。年間計画の進捗管理から会議での決定事項の追跡までを統合管理。"
+                            link="https://minig-ms.onrender.com/"
+                            buttonText="アプリを開く"
+                            features={["災害・ヒヤリハットAI分析", "年間計画連動PDCA", "会議指摘事項自動追跡"]}
+                            imageUrl="https://images.unsplash.com/photo-1578326457399-3b34dbbf23b8?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
                             icon={<Scale className="w-8 h-8 text-cyan-400" />}
                             title="製品安全・PL／品質コンプライアンス相談チャット"
                             description="製造物責任、リコール対応、品質不正防止などに関連するリスクへのアドバイスを提供します。"
