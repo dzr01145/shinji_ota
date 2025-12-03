@@ -64,7 +64,7 @@ export const PROJECTS: Project[] = [
     titleJa: "高齢者就業安全リサーチ",
     description: "シルバー人材センター向け安全就業実態調査。高齢就業者の身体機能低下と作業リスクの相関をデータ分析し、持続可能な就業環境のためのガイドラインを作成。",
     technologies: ["Data Analysis", "Social Research", "Guideline", "Elderly Care"],
-    imageUrl: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "/images/aging_workforce_bg.png",
     category: "Research"
   },
   {
