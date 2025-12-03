@@ -162,7 +162,7 @@ const Hero: React.FC = () => {
                 <span className="block text-lg md:text-2xl font-mono text-cyan-400 tracking-[0.3em] mb-2 pl-1">
                   SHINJI OTA
                 </span>
-                <span className="block text-5xl md:text-7xl">
+                <span className="block text-4xl md:text-6xl">
                   太田
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 ml-2 md:ml-4 relative">
                     真治
