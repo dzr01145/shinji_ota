@@ -117,7 +117,7 @@ const AIPlayground: React.FC = () => {
                             link="https://ky-support.onrender.com/"
                             buttonText="アプリを開く"
                             features={["危険要因自動提示", "指差呼称生成", "シート自動作成"]}
-                            imageUrl="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="/images/kyt_support_bg.png"
                         />
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
@@ -126,7 +126,7 @@ const AIPlayground: React.FC = () => {
                             link="https://manus-chatbot.onrender.com"
                             buttonText="アプリを開く"
                             features={["法令完全網羅", "労災事例DB", "根拠引用回答"]}
-                            imageUrl="https://images.unsplash.com/photo-1507146153580-69a1fe6d8aa1?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="/images/safety_chat_plus_bg.png"
                         />
                         <ToolCard
                             icon={<Search className="w-8 h-8 text-cyan-400" />}
@@ -154,7 +154,7 @@ const AIPlayground: React.FC = () => {
                             link="https://pl-chatbot.onrender.com/"
                             buttonText="アプリを開く"
                             features={["PL法・製品安全法対応", "リコール判断・決裁支援", "品質不正・改ざん予防"]}
-                            imageUrl="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="/images/pl_compliance_bg.png"
                         />
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
