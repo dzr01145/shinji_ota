@@ -15,7 +15,7 @@ const About: React.FC = () => {
               プロフィール
             </h3>
             <p className="text-xl text-cyan-100 mb-6 font-medium border-l-4 border-cyan-500 pl-4">
-              現場の痛みを知る、<br />安全文化の翻訳者。
+              現場の『リアル』を知る<br />経営戦略とのシンクロナイザー
             </p>
             <p className="text-slate-400 leading-relaxed mb-8 text-lg">
               {PERSONAL_INFO.about}

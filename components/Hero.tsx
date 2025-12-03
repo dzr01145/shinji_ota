@@ -11,7 +11,8 @@ const Hero: React.FC = () => {
     "Risk Engineer...",
     "Safety Architect...",
     "Professional P.E.Jp...",
-    "Translator of Safety..."
+    "Translator of Safety...",
+    "Synchronizer..."
   ];
 
   // Typing Effect Loop
