@@ -145,7 +145,7 @@ const AIPlayground: React.FC = () => {
                             link="https://minig-ms.onrender.com/"
                             buttonText="アプリを開く"
                             features={["災害・ヒヤリハットAI分析", "年間計画連動PDCA", "会議指摘事項自動追跡"]}
-                            imageUrl="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="/images/mining_manager_bg.png"
                         />
                         <ToolCard
                             icon={<Scale className="w-8 h-8 text-cyan-400" />}
