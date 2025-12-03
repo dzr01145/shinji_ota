@@ -88,7 +88,7 @@ const AIPlayground: React.FC = () => {
                             description="労働安全衛生法や労災事例をAIが引用しながら回答。安全教育、活動など多くのシーンで活用できる専門チャットボットです。"
                             link="https://safety-chatbot.onrender.com/"
                             buttonText="アプリを開く"
-                            imageUrl="https://images.unsplash.com/photo-1655720828018-edd2daec9349?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="/images/safety_chat_bg.png"
                         />
 
                         {/* Premium Tools - Now using ToolCard style */}
