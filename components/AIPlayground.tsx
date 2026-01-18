@@ -11,7 +11,8 @@ import {
     ClipboardCheck,
     MessageSquare,
     Calendar,
-    FileSpreadsheet
+    FileSpreadsheet,
+    Brain
 } from 'lucide-react';
 
 const AIPlayground: React.FC = () => {
@@ -204,6 +205,15 @@ const AIPlayground: React.FC = () => {
                             buttonText="システムを開く"
                             features={["現場写真からのリスク特定", "3軸評価（頻度・可能性・重大性）", "Excel形式での報告書生成"]}
                             imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
+                            icon={<Brain className="w-8 h-8 text-cyan-400" />}
+                            title="暗黙知マネージャー"
+                            description="組織の暗黙知を形式知化し、ナレッジベースとして活用。質問に対して最適な回答をAIが導き出します。"
+                            link="https://knowledge-frontend-pqmv.onrender.com/"
+                            buttonText="マネージャーを開く"
+                            features={["暗黙知の形式知化・共有", "自然言語による質問応答", "プロンプト管理機能"]}
+                            imageUrl="https://images.unsplash.com/photo-1533222535027-afe169d2d0b5?q=80&w=2000&auto=format&fit=crop"
                         />
                     </div>
                 </section>
