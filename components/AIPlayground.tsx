@@ -8,7 +8,8 @@ import {
     ExternalLink,
     CheckCircle2,
     Scale,
-    ClipboardCheck
+    ClipboardCheck,
+    MessageSquare
 } from 'lucide-react';
 
 const AIPlayground: React.FC = () => {
@@ -174,6 +175,15 @@ const AIPlayground: React.FC = () => {
                             buttonText="診断を開始する"
                             features={["導入段階の判定 (準備〜本格導入)", "5つのカテゴリ分析", "AI改善レポート作成"]}
                             imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
+                            icon={<MessageSquare className="w-8 h-8 text-cyan-400" />}
+                            title="サテライトAI チャット"
+                            description="接続設定を行い、カスタマイズされたAIと会話ができるチャットツールです。"
+                            link="https://sateraito-ai-chat.onrender.com/"
+                            buttonText="チャットを始める"
+                            features={["シンプルなチャットインターフェース", "接続設定によるカスタマイズ"]}
+                            imageUrl="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=2000&auto=format&fit=crop"
                         />
                     </div>
                 </section>
