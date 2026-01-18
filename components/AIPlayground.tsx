@@ -10,7 +10,8 @@ import {
     Scale,
     ClipboardCheck,
     MessageSquare,
-    Calendar
+    Calendar,
+    FileSpreadsheet
 } from 'lucide-react';
 
 const AIPlayground: React.FC = () => {
@@ -194,6 +195,15 @@ const AIPlayground: React.FC = () => {
                             buttonText="カレンダーを開く"
                             features={["年間計画の策定と進捗管理", "PDCAサイクルの可視化", "保安活動の抜け漏れ防止"]}
                             imageUrl="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
+                            icon={<FileSpreadsheet className="w-8 h-8 text-cyan-400" />}
+                            title="リスクアセスメント報告書作成システム"
+                            description="現場の写真からリスクを洗い出し、3軸評価を行う報告書作成システムです。Excel形式での出力に対応。"
+                            link="https://excel-risk-report.onrender.com/"
+                            buttonText="システムを開く"
+                            features={["現場写真からのリスク特定", "3軸評価（頻度・可能性・重大性）", "Excel形式での報告書生成"]}
+                            imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2000&auto=format&fit=crop"
                         />
                     </div>
                 </section>
