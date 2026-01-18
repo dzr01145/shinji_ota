@@ -7,7 +7,8 @@ import {
     Search,
     ExternalLink,
     CheckCircle2,
-    Scale
+    Scale,
+    ClipboardCheck
 } from 'lucide-react';
 
 const AIPlayground: React.FC = () => {
@@ -163,6 +164,15 @@ const AIPlayground: React.FC = () => {
                             link="https://nanobanana-pro-gen.onrender.com/"
                             buttonText="アプリを開く"
                             features={["ストーリー構成案の自動提案", "Gemini 3.0 Pro Image生成", "PowerPoint (pptx) 出力"]}
+                            imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
+                            icon={<ClipboardCheck className="w-8 h-8 text-cyan-400" />}
+                            title="鉱山保安MS診断レポート"
+                            description="「鉱山保安マネジメントシステム」手引書に基づく20の質問に答えて、現在の保安活動の導入・定着状況を確認。AIが改善レポートを作成します。"
+                            link="https://web-survey-claude.onrender.com/"
+                            buttonText="診断を開始する"
+                            features={["導入段階の判定 (準備〜本格導入)", "5つのカテゴリ分析", "AI改善レポート作成"]}
                             imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
                         />
                     </div>
