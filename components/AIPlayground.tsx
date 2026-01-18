@@ -9,7 +9,8 @@ import {
     CheckCircle2,
     Scale,
     ClipboardCheck,
-    MessageSquare
+    MessageSquare,
+    Calendar
 } from 'lucide-react';
 
 const AIPlayground: React.FC = () => {
@@ -184,6 +185,15 @@ const AIPlayground: React.FC = () => {
                             buttonText="チャットを始める"
                             features={["シンプルなチャットインターフェース", "接続設定によるカスタマイズ"]}
                             imageUrl="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
+                            icon={<Calendar className="w-8 h-8 text-cyan-400" />}
+                            title="鉱山保安PDCA進行管理カレンダー"
+                            description="鉱山保安活動の年間計画や月次進行をカレンダー形式で可視化・管理するツールです。"
+                            link="https://mine-safety-pdca.onrender.com/"
+                            buttonText="カレンダーを開く"
+                            features={["年間計画の策定と進捗管理", "PDCAサイクルの可視化", "保安活動の抜け漏れ防止"]}
+                            imageUrl="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2000&auto=format&fit=crop"
                         />
                     </div>
                 </section>
