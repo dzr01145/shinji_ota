@@ -213,7 +213,7 @@ const AIPlayground: React.FC = () => {
                             link="https://knowledge-frontend-pqmv.onrender.com/"
                             buttonText="マネージャーを開く"
                             features={["暗黙知の形式知化・共有", "自然言語による質問応答", "プロンプト管理機能"]}
-                            imageUrl="https://images.unsplash.com/photo-1533222535027-afe169d2d0b5?q=80&w=2000&auto=format&fit=crop"
+                            imageUrl="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop"
                         />
                     </div>
                 </section>
