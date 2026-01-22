@@ -134,13 +134,13 @@ const AIPlayground: React.FC = () => {
                     </div>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <ToolCard
-                            icon={<Shield className="w-8 h-8 text-cyan-400" />}
-                            title="リスクアセスメント支援 (RA Compass)"
-                            description="リスクアセスメントの洗い出しから残留リスク管理まで効率化。法令連動機能付き。"
-                            link="https://ra-compass.onrender.com/"
+                            icon={<Camera className="w-8 h-8 text-cyan-400" />}
+                            title="安全パトロール支援"
+                            description="現場写真からAIで危険源を自動抽出。パトロール日報作成まで一貫支援。"
+                            link="https://rskrep-by-claude.onrender.com/"
                             buttonText="アプリを開く"
-                            features={["法令連動リスク評価", "教育履歴管理", "導入サポート"]}
-                            imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2000&auto=format&fit=crop"
+                            features={["AI画像解析", "日報自動作成", "クラウド共有"]}
+                            imageUrl="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<Search className="w-8 h-8 text-cyan-400" />}
@@ -153,21 +153,21 @@ const AIPlayground: React.FC = () => {
                             imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
-                            icon={<Camera className="w-8 h-8 text-cyan-400" />}
-                            title="安全パトロール支援"
-                            description="現場写真からAIで危険源を自動抽出。パトロール日報作成まで一貫支援。"
-                            link="https://rskrep-by-claude.onrender.com/"
-                            buttonText="アプリを開く"
-                            features={["AI画像解析", "日報自動作成", "クラウド共有"]}
-                            imageUrl="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2000&auto=format&fit=crop"
-                        />
-                        <ToolCard
                             icon={<FileSpreadsheet className="w-8 h-8 text-cyan-400" />}
                             title="リスクアセスメント報告書作成システム"
                             description="現場の写真からリスクを洗い出し、3軸評価を行う報告書作成システムです。Excel形式での出力に対応。"
                             link="https://excel-risk-report.onrender.com/"
                             buttonText="システムを開く"
                             features={["現場写真からのリスク特定", "3軸評価（頻度・可能性・重大性）", "Excel形式での報告書生成"]}
+                            imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
+                            icon={<Shield className="w-8 h-8 text-cyan-400" />}
+                            title="リスクアセスメント支援 (RA Compass)"
+                            description="リスクアセスメントの洗い出しから残留リスク管理まで効率化。法令連動機能付き。"
+                            link="https://ra-compass.onrender.com/"
+                            buttonText="アプリを開く"
+                            features={["法令連動リスク評価", "教育履歴管理", "導入サポート"]}
                             imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
@@ -193,15 +193,6 @@ const AIPlayground: React.FC = () => {
                     </div>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <ToolCard
-                            icon={<Shield className="w-8 h-8 text-cyan-400" />}
-                            title="AI鉱山保安マネジメントシステム"
-                            description="災害・ヒヤリハット報告から、AIがリスクアセスメント案や改善対策を自動生成。年間計画の進捗管理から会議での決定事項の追跡までを統合管理。"
-                            link="https://minig-ms.onrender.com/"
-                            buttonText="アプリを開く"
-                            features={["災害・ヒヤリハットAI分析", "年間計画連動PDCA", "会議指摘事項自動追跡"]}
-                            imageUrl="/images/mining_manager_bg.png"
-                        />
-                        <ToolCard
                             icon={<ClipboardCheck className="w-8 h-8 text-cyan-400" />}
                             title="鉱山保安MS診断レポート"
                             description="「鉱山保安マネジメントシステム」手引書に基づく20の質問に答えて、現在の保安活動の導入・定着状況を確認。AIが改善レポートを作成します。"
@@ -209,6 +200,15 @@ const AIPlayground: React.FC = () => {
                             buttonText="診断を開始する"
                             features={["導入段階の判定 (準備〜本格導入)", "5つのカテゴリ分析", "AI改善レポート作成"]}
                             imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
+                            icon={<Shield className="w-8 h-8 text-cyan-400" />}
+                            title="AI鉱山保安マネジメントシステム"
+                            description="災害・ヒヤリハット報告から、AIがリスクアセスメント案や改善対策を自動生成。年間計画の進捗管理から会議での決定事項の追跡までを統合管理。"
+                            link="https://minig-ms.onrender.com/"
+                            buttonText="アプリを開く"
+                            features={["災害・ヒヤリハットAI分析", "年間計画連動PDCA", "会議指摘事項自動追跡"]}
+                            imageUrl="/images/mining_manager_bg.png"
                         />
                         <ToolCard
                             icon={<Calendar className="w-8 h-8 text-cyan-400" />}
