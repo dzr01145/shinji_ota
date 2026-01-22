@@ -75,18 +75,16 @@ const AIPlayground: React.FC = () => {
                     </div>
                 </section>
 
-                {/* AI TOOLS Section */}
+                {/* 1. Specialized AI Chat & Legal Consultation */}
                 <section className="mb-20">
                     <div className="flex items-center gap-4 mb-8">
                         <div className="h-px flex-1 bg-slate-800"></div>
                         <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
-                            <span className="bg-cyan-500/10 p-2 rounded-lg">AI TOOLS</span>
+                            <span className="bg-cyan-500/10 p-2 rounded-lg">専門AIチャット・法令相談</span>
                         </h2>
                         <div className="h-px flex-1 bg-slate-800"></div>
                     </div>
-
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {/* Free Tools */}
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
                             title="労働安全衛生チャット"
@@ -94,35 +92,6 @@ const AIPlayground: React.FC = () => {
                             link="https://safety-chatbot.onrender.com/"
                             buttonText="アプリを開く"
                             imageUrl="/images/safety_chat_bg.png"
-                        />
-
-                        {/* Premium Tools - Now using ToolCard style */}
-                        <ToolCard
-                            icon={<Shield className="w-8 h-8 text-cyan-400" />}
-                            title="リスクアセスメント支援 (RA Compass)"
-                            description="リスクアセスメントの洗い出しから残留リスク管理まで効率化。法令連動機能付き。"
-                            link="https://ra-compass.onrender.com/"
-                            buttonText="アプリを開く"
-                            features={["法令連動リスク評価", "教育履歴管理", "導入サポート"]}
-                            imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2000&auto=format&fit=crop"
-                        />
-                        <ToolCard
-                            icon={<Camera className="w-8 h-8 text-cyan-400" />}
-                            title="安全パトロール支援"
-                            description="現場写真からAIで危険源を自動抽出。パトロール日報作成まで一貫支援。"
-                            link="https://rskrep-by-claude.onrender.com/"
-                            buttonText="アプリを開く"
-                            features={["AI画像解析", "日報自動作成", "クラウド共有"]}
-                            imageUrl="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2000&auto=format&fit=crop"
-                        />
-                        <ToolCard
-                            icon={<AlertTriangle className="w-8 h-8 text-cyan-400" />}
-                            title="KYT支援ボット"
-                            description="作業内容から危険要因をAIが抽出。KYTシートやイラストを自動生成。"
-                            link="https://ky-support.onrender.com/"
-                            buttonText="アプリを開く"
-                            features={["危険要因自動提示", "指差呼称生成", "シート自動作成"]}
-                            imageUrl="/images/kyt_support_bg.png"
                         />
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
@@ -132,6 +101,46 @@ const AIPlayground: React.FC = () => {
                             buttonText="アプリを開く"
                             features={["法令完全網羅", "労災事例DB", "根拠引用回答"]}
                             imageUrl="/images/safety_chat_plus_bg.png"
+                        />
+                        <ToolCard
+                            icon={<Scale className="w-8 h-8 text-cyan-400" />}
+                            title="製品安全・PL／品質コンプライアンス相談チャット"
+                            description="製造物責任、リコール対応、品質不正防止などに関連するリスクへのアドバイスを提供します。"
+                            link="https://pl-chatbot.onrender.com/"
+                            buttonText="アプリを開く"
+                            features={["PL法・製品安全法対応", "リコール判断・決裁支援", "品質不正・改ざん予防"]}
+                            imageUrl="/images/pl_compliance_bg.png"
+                        />
+                        <ToolCard
+                            icon={<MessageSquare className="w-8 h-8 text-cyan-400" />}
+                            title="サテライトAI チャット"
+                            description="接続設定を行い、カスタマイズされたAIと会話ができるチャットツールです。"
+                            link="https://sateraito-ai-chat.onrender.com/"
+                            buttonText="チャットを始める"
+                            features={["シンプルなチャットインターフェース", "接続設定によるカスタマイズ"]}
+                            imageUrl="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=2000&auto=format&fit=crop"
+                        />
+                    </div>
+                </section>
+
+                {/* 2. Safety Management & Risk Assessment */}
+                <section className="mb-20">
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className="h-px flex-1 bg-slate-800"></div>
+                        <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
+                            <span className="bg-cyan-500/10 p-2 rounded-lg">安全管理・リスクアセスメント</span>
+                        </h2>
+                        <div className="h-px flex-1 bg-slate-800"></div>
+                    </div>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <ToolCard
+                            icon={<Shield className="w-8 h-8 text-cyan-400" />}
+                            title="リスクアセスメント支援 (RA Compass)"
+                            description="リスクアセスメントの洗い出しから残留リスク管理まで効率化。法令連動機能付き。"
+                            link="https://ra-compass.onrender.com/"
+                            buttonText="アプリを開く"
+                            features={["法令連動リスク評価", "教育履歴管理", "導入サポート"]}
+                            imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<Search className="w-8 h-8 text-cyan-400" />}
@@ -144,58 +153,13 @@ const AIPlayground: React.FC = () => {
                             imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
-                            icon={<Shield className="w-8 h-8 text-cyan-400" />}
-                            title="AI鉱山保安マネジメントシステム"
-                            description="災害・ヒヤリハット報告から、AIがリスクアセスメント案や改善対策を自動生成。年間計画の進捗管理から会議での決定事項の追跡までを統合管理。"
-                            link="https://minig-ms.onrender.com/"
+                            icon={<Camera className="w-8 h-8 text-cyan-400" />}
+                            title="安全パトロール支援"
+                            description="現場写真からAIで危険源を自動抽出。パトロール日報作成まで一貫支援。"
+                            link="https://rskrep-by-claude.onrender.com/"
                             buttonText="アプリを開く"
-                            features={["災害・ヒヤリハットAI分析", "年間計画連動PDCA", "会議指摘事項自動追跡"]}
-                            imageUrl="/images/mining_manager_bg.png"
-                        />
-                        <ToolCard
-                            icon={<Scale className="w-8 h-8 text-cyan-400" />}
-                            title="製品安全・PL／品質コンプライアンス相談チャット"
-                            description="製造物責任、リコール対応、品質不正防止などに関連するリスクへのアドバイスを提供します。"
-                            link="https://pl-chatbot.onrender.com/"
-                            buttonText="アプリを開く"
-                            features={["PL法・製品安全法対応", "リコール判断・決裁支援", "品質不正・改ざん予防"]}
-                            imageUrl="/images/pl_compliance_bg.png"
-                        />
-                        <ToolCard
-                            icon={<Bot className="w-8 h-8 text-cyan-400" />}
-                            title="AIスライド・インフォグラフィック生成ツール"
-                            description="テキストを入力するだけで、プレゼンテーションのストーリー構成から、プロフェッショナルな品質のスライド画像までをAIが一貫して生成。資料作成の時間を劇的に短縮します。"
-                            link="https://nanobanana-pro-gen.onrender.com/"
-                            buttonText="アプリを開く"
-                            features={["ストーリー構成案の自動提案", "Gemini 3.0 Pro Image生成", "PowerPoint (pptx) 出力"]}
-                            imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
-                        />
-                        <ToolCard
-                            icon={<ClipboardCheck className="w-8 h-8 text-cyan-400" />}
-                            title="鉱山保安MS診断レポート"
-                            description="「鉱山保安マネジメントシステム」手引書に基づく20の質問に答えて、現在の保安活動の導入・定着状況を確認。AIが改善レポートを作成します。"
-                            link="https://web-survey-claude.onrender.com/"
-                            buttonText="診断を開始する"
-                            features={["導入段階の判定 (準備〜本格導入)", "5つのカテゴリ分析", "AI改善レポート作成"]}
-                            imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
-                        />
-                        <ToolCard
-                            icon={<MessageSquare className="w-8 h-8 text-cyan-400" />}
-                            title="サテライトAI チャット"
-                            description="接続設定を行い、カスタマイズされたAIと会話ができるチャットツールです。"
-                            link="https://sateraito-ai-chat.onrender.com/"
-                            buttonText="チャットを始める"
-                            features={["シンプルなチャットインターフェース", "接続設定によるカスタマイズ"]}
-                            imageUrl="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=2000&auto=format&fit=crop"
-                        />
-                        <ToolCard
-                            icon={<Calendar className="w-8 h-8 text-cyan-400" />}
-                            title="鉱山保安PDCA進行管理カレンダー"
-                            description="鉱山保安活動の年間計画や月次進行をカレンダー形式で可視化・管理するツールです。"
-                            link="https://mine-safety-pdca.onrender.com/"
-                            buttonText="カレンダーを開く"
-                            features={["年間計画の策定と進捗管理", "PDCAサイクルの可視化", "保安活動の抜け漏れ防止"]}
-                            imageUrl="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2000&auto=format&fit=crop"
+                            features={["AI画像解析", "日報自動作成", "クラウド共有"]}
+                            imageUrl="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
                             icon={<FileSpreadsheet className="w-8 h-8 text-cyan-400" />}
@@ -207,6 +171,68 @@ const AIPlayground: React.FC = () => {
                             imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
+                            icon={<AlertTriangle className="w-8 h-8 text-cyan-400" />}
+                            title="KYT支援ボット"
+                            description="作業内容から危険要因をAIが抽出。KYTシートやイラストを自動生成。"
+                            link="https://ky-support.onrender.com/"
+                            buttonText="アプリを開く"
+                            features={["危険要因自動提示", "指差呼称生成", "シート自動作成"]}
+                            imageUrl="/images/kyt_support_bg.png"
+                        />
+                    </div>
+                </section>
+
+                {/* 3. Management Systems & PDCA */}
+                <section className="mb-20">
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className="h-px flex-1 bg-slate-800"></div>
+                        <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
+                            <span className="bg-cyan-500/10 p-2 rounded-lg">マネジメントシステム・PDCA</span>
+                        </h2>
+                        <div className="h-px flex-1 bg-slate-800"></div>
+                    </div>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <ToolCard
+                            icon={<Shield className="w-8 h-8 text-cyan-400" />}
+                            title="AI鉱山保安マネジメントシステム"
+                            description="災害・ヒヤリハット報告から、AIがリスクアセスメント案や改善対策を自動生成。年間計画の進捗管理から会議での決定事項の追跡までを統合管理。"
+                            link="https://minig-ms.onrender.com/"
+                            buttonText="アプリを開く"
+                            features={["災害・ヒヤリハットAI分析", "年間計画連動PDCA", "会議指摘事項自動追跡"]}
+                            imageUrl="/images/mining_manager_bg.png"
+                        />
+                        <ToolCard
+                            icon={<ClipboardCheck className="w-8 h-8 text-cyan-400" />}
+                            title="鉱山保安MS診断レポート"
+                            description="「鉱山保安マネジメントシステム」手引書に基づく20の質問に答えて、現在の保安活動の導入・定着状況を確認。AIが改善レポートを作成します。"
+                            link="https://web-survey-claude.onrender.com/"
+                            buttonText="診断を開始する"
+                            features={["導入段階の判定 (準備〜本格導入)", "5つのカテゴリ分析", "AI改善レポート作成"]}
+                            imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
+                            icon={<Calendar className="w-8 h-8 text-cyan-400" />}
+                            title="鉱山保安PDCA進行管理カレンダー"
+                            description="鉱山保安活動の年間計画や月次進行をカレンダー形式で可視化・管理するツールです。"
+                            link="https://mine-safety-pdca.onrender.com/"
+                            buttonText="カレンダーを開く"
+                            features={["年間計画の策定と進捗管理", "PDCAサイクルの可視化", "保安活動の抜け漏れ防止"]}
+                            imageUrl="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2000&auto=format&fit=crop"
+                        />
+                    </div>
+                </section>
+
+                {/* 4. Knowledge Transfer & Operational Support */}
+                <section className="mb-20">
+                    <div className="flex items-center gap-4 mb-8">
+                        <div className="h-px flex-1 bg-slate-800"></div>
+                        <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
+                            <span className="bg-cyan-500/10 p-2 rounded-lg">ナレッジ継承・業務支援</span>
+                        </h2>
+                        <div className="h-px flex-1 bg-slate-800"></div>
+                    </div>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <ToolCard
                             icon={<Brain className="w-8 h-8 text-cyan-400" />}
                             title="暗黙知マネージャー"
                             description="組織の暗黙知を形式知化し、ナレッジベースとして活用。質問に対して最適な回答をAIが導き出します。"
@@ -214,6 +240,15 @@ const AIPlayground: React.FC = () => {
                             buttonText="マネージャーを開く"
                             features={["暗黙知の形式知化・共有", "自然言語による質問応答", "プロンプト管理機能"]}
                             imageUrl="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
+                            icon={<Bot className="w-8 h-8 text-cyan-400" />}
+                            title="AIスライド・インフォグラフィック生成ツール"
+                            description="テキストを入力するだけで、プレゼンテーションのストーリー構成から、プロフェッショナルな品質のスライド画像までをAIが一貫して生成。資料作成の時間を劇的に短縮します。"
+                            link="https://nanobanana-pro-gen.onrender.com/"
+                            buttonText="アプリを開く"
+                            features={["ストーリー構成案の自動提案", "Gemini 3.0 Pro Image生成", "PowerPoint (pptx) 出力"]}
+                            imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
                         />
                     </div>
                 </section>
