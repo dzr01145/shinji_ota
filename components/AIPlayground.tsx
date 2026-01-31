@@ -171,6 +171,15 @@ const AIPlayground: React.FC = () => {
                             imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2000&auto=format&fit=crop"
                         />
                         <ToolCard
+                            icon={<FileSpreadsheet className="w-8 h-8 text-cyan-400" />}
+                            title="リスクアセスメント ジェネレーター"
+                            description="作業手順を入力すると、AIがハザード（危険源）を自動抽出。厚生労働省指針（3要素加算法）に基づいたリスクスコアを自動計算し、対策を提案します。"
+                            link="https://ra-everything-claude-code.onrender.com/"
+                            buttonText="アプリを開く"
+                            features={["AIハザード自動抽出", "厚労省指針準拠(3要素加算法)", "PDF/Excel/JSON出力"]}
+                            imageUrl="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
                             icon={<AlertTriangle className="w-8 h-8 text-cyan-400" />}
                             title="KYT支援ボット"
                             description="作業内容から危険要因をAIが抽出。KYTシートやイラストを自動生成。"
