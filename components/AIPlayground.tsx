@@ -12,7 +12,8 @@ import {
     MessageSquare,
     Calendar,
     FileSpreadsheet,
-    Brain
+    Brain,
+    Newspaper
 } from 'lucide-react';
 
 const AIPlayground: React.FC = () => {
@@ -241,6 +242,15 @@ const AIPlayground: React.FC = () => {
                         <div className="h-px flex-1 bg-slate-800"></div>
                     </div>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <ToolCard
+                            icon={<Newspaper className="w-8 h-8 text-cyan-400" />}
+                            title="OSHニュースクリッピング・エージェント"
+                            description="最新の労働安全衛生ニュースを自動収集し、AIが要約・構造化。さらに図解イラストとスライド資料までを一気通貫で生成するインテリジェンス・ツールです。"
+                            link="https://osh-news-agent.onrender.com/"
+                            buttonText="エージェントを起動"
+                            features={["全自動ニュース収集＆要約", "構造化イラストAI生成", "PPTXスライド自動作成"]}
+                            imageUrl="https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=2000&auto=format&fit=crop"
+                        />
                         <ToolCard
                             icon={<Brain className="w-8 h-8 text-cyan-400" />}
                             title="暗黙知マネージャー"
