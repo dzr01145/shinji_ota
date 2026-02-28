@@ -1,352 +1,399 @@
-import React, { useState, useEffect } from 'react';
-import { Camera, Plus, X, MapPin, Calendar, Lock, Image as ImageIcon, Trash2 } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { BookOpen, Tag, Calendar, ChevronRight, ArrowLeft, Plus, X, Lock, Loader2, Clock, Search } from 'lucide-react';
 
+// =============================================
+// 型定義
+// =============================================
 interface BlogPost {
-    id: string;
-    imageUrl: string;
-    caption: string;
-    date: string;
-    location?: string;
+  id: string;
+  title: string;
+  body: string;
+  category: string;
+  imageUrl?: string | null;
+  tags?: string[];
+  published?: boolean;
+  date: string;
+  updatedAt?: string;
 }
 
-const Blog: React.FC = () => {
-    const [posts, setPosts] = useState<BlogPost[]>([]);
-    const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-    const [isUploadOpen, setIsUploadOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+interface Archive {
+  year: string;
+  month: string;
+  count: number;
+}
 
-    // Upload Form State
-    const [imageUrl, setImageUrl] = useState('');
-    const [caption, setCaption] = useState('');
-    const [location, setLocation] = useState('');
-    const [password, setPassword] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
+const CATEGORIES = ['すべて', '労働安全衛生', 'AIソリューション', 'コンサルタント視点', 'その他'];
 
-    // Delete State
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [deletePassword, setDeletePassword] = useState('');
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+const CATEGORY_COLORS: Record<string, string> = {
+  '労働安全衛生': 'bg-cyan-900/40 text-cyan-300 border-cyan-700',
+  'AIソリューション': 'bg-purple-900/40 text-purple-300 border-purple-700',
+  'コンサルタント視点': 'bg-amber-900/40 text-amber-300 border-amber-700',
+  'その他': 'bg-slate-800 text-slate-300 border-slate-600',
+};
 
-    useEffect(() => {
-        fetchPosts();
-    }, []);
+const MONTH_JP: Record<string, string> = {
+  '01':'1月','02':'2月','03':'3月','04':'4月','05':'5月','06':'6月',
+  '07':'7月','08':'8月','09':'9月','10':'10月','11':'11月','12':'12月'
+};
 
-    const fetchPosts = async () => {
-        try {
-            const res = await fetch('/api/blog');
-            if (res.ok) {
-                const data = await res.json();
-                setPosts(data);
-            }
-        } catch (error) {
-            console.error('Failed to fetch posts', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+// =============================================
+// サブコンポーネント
+// =============================================
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImageUrl(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+/** カテゴリバッジ */
+const CategoryBadge: React.FC<{ category: string; small?: boolean }> = ({ category, small }) => (
+  <span className={`inline-block border rounded-full font-medium ${small ? 'text-xs px-2 py-0.5' : 'text-xs px-3 py-1'} ${CATEGORY_COLORS[category] || CATEGORY_COLORS['その他']}`}>
+    {category}
+  </span>
+);
 
-    const handleUpload = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-
-        try {
-            const res = await fetch('/api/blog', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    password,
-                    post: { imageUrl, caption, location }
-                })
-            });
-
-            if (res.ok) {
-                setIsUploadOpen(false);
-                setImageUrl('');
-                setCaption('');
-                setLocation('');
-                setPassword('');
-                fetchPosts(); // Refresh
-            } else {
-                alert('Upload failed. Check password.');
-            }
-        } catch (error) {
-            console.error('Upload error', error);
-            alert('Error uploading post');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    const handleDelete = async () => {
-        if (!selectedPost) return;
-        setIsDeleting(true);
-
-        try {
-            const res = await fetch(`/api/blog/${selectedPost.id}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password: deletePassword })
-            });
-
-            if (res.ok) {
-                setSelectedPost(null);
-                setShowDeleteConfirm(false);
-                setDeletePassword('');
-                fetchPosts();
-            } else {
-                alert('Delete failed. Check password.');
-            }
-        } catch (error) {
-            console.error('Delete error', error);
-            alert('Error deleting post');
-        } finally {
-            setIsDeleting(false);
-        }
-    };
-
-    return (
-        <div className="min-h-screen bg-black text-white pt-20 pb-20">
-            <div className="max-w-4xl mx-auto px-4">
-
-                {/* Header Profile Section (Instagram style) */}
-                <div className="flex items-center gap-8 mb-12 border-b border-slate-800 pb-8">
-                    <div className="w-20 h-20 md:w-32 md:h-32 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-[2px]">
-                        <div className="w-full h-full rounded-full bg-black p-[2px]">
-                            <img
-                                src="/profile_image.jpg"
-                                alt="Profile"
-                                className="w-full h-full rounded-full object-cover"
-                            />
-                        </div>
-                    </div>
-                    <div className="flex-1">
-                        <div className="flex items-center gap-4 mb-4">
-                            <h1 className="text-xl md:text-2xl font-light">shinji_ota_safety</h1>
-                        </div>
-                        <div className="flex gap-6 mb-4 text-sm md:text-base">
-                            <div><span className="font-bold">{posts.length}</span> posts</div>
-                        </div>
-                        <div className="text-sm text-slate-300">
-                            <p className="font-bold text-white">太田 真治 / Shinji Ota</p>
-                            <p>Safety Consultant ⛑️ | Risk Engineer ⚙️</p>
-                            <p>Building a safer future through technology.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Grid */}
-                {isLoading ? (
-                    <div className="flex justify-center py-20">
-                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-cyan-500"></div>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-3 gap-1 md:gap-4">
-                        {posts.map((post) => (
-                            <div
-                                key={post.id}
-                                className="relative aspect-square group cursor-pointer overflow-hidden bg-slate-900"
-                                onClick={() => setSelectedPost(post)}
-                            >
-                                <img
-                                    src={post.imageUrl}
-                                    alt={post.caption}
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4">
-                                    <p className="text-white text-xs md:text-sm line-clamp-4 text-center">
-                                        {post.caption}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                {/* Empty State */}
-                {!isLoading && posts.length === 0 && (
-                    <div className="text-center py-20 text-slate-500">
-                        <Camera size={48} className="mx-auto mb-4 opacity-50" />
-                        <p>No posts yet.</p>
-                    </div>
-                )}
-            </div>
-
-            {/* FAB for Upload - Bottom Left */}
-            <button
-                onClick={() => setIsUploadOpen(true)}
-                className="fixed bottom-8 left-8 bg-gradient-to-r from-cyan-500 to-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50"
-            >
-                <Plus size={24} />
-            </button>
-
-            {/* Post Modal */}
-            {selectedPost && (
-                <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4" onClick={() => setSelectedPost(null)}>
-                    <div className="bg-black border border-slate-800 rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col md:flex-row overflow-hidden" onClick={e => e.stopPropagation()}>
-                        <div className="md:w-3/5 bg-black flex items-center justify-center">
-                            <img
-                                src={selectedPost.imageUrl}
-                                alt={selectedPost.caption}
-                                className="max-h-[60vh] md:max-h-full w-full object-contain"
-                            />
-                        </div>
-                        <div className="md:w-2/5 p-6 flex flex-col bg-slate-950 border-l border-slate-800 relative">
-                            <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-slate-700 overflow-hidden">
-                                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100&h=100" className="w-full h-full object-cover" />
-                                    </div>
-                                    <span className="font-bold text-sm">shinji_ota_safety</span>
-                                </div>
-                                {/* Delete Button */}
-                                <button
-                                    onClick={() => setShowDeleteConfirm(!showDeleteConfirm)}
-                                    className="text-slate-500 hover:text-red-500 transition-colors"
-                                >
-                                    <Trash2 size={18} />
-                                </button>
-                            </div>
-
-                            {/* Delete Confirmation */}
-                            {showDeleteConfirm && (
-                                <div className="absolute top-16 left-0 w-full bg-slate-900 p-4 border-b border-slate-800 z-10 animate-fade-in-up">
-                                    <p className="text-xs text-red-400 mb-2 font-bold">Delete this post?</p>
-                                    <input
-                                        type="password"
-                                        value={deletePassword}
-                                        onChange={e => setDeletePassword(e.target.value)}
-                                        className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-xs mb-2 focus:border-red-500 outline-none"
-                                        placeholder="Admin Password"
-                                    />
-                                    <button
-                                        onClick={handleDelete}
-                                        disabled={isDeleting}
-                                        className="w-full bg-red-600 hover:bg-red-500 text-white text-xs font-bold py-2 rounded"
-                                    >
-                                        {isDeleting ? 'Deleting...' : 'Confirm Delete'}
-                                    </button>
-                                </div>
-                            )}
-
-                            <div className="flex-1 overflow-y-auto mb-4">
-                                <p className="text-sm leading-relaxed whitespace-pre-wrap">{selectedPost.caption}</p>
-                            </div>
-
-                            <div className="text-xs text-slate-500 mt-auto pt-4 border-t border-slate-800">
-                                {selectedPost.location && (
-                                    <div className="flex items-center gap-1 mb-2 text-cyan-500">
-                                        <MapPin size={12} />
-                                        <span>{selectedPost.location}</span>
-                                    </div>
-                                )}
-                                <div className="flex items-center gap-1 uppercase tracking-wider">
-                                    <Calendar size={12} />
-                                    {new Date(selectedPost.date).toLocaleDateString()}
-                                </div>
-                            </div>
-                        </div>
-                        <button
-                            onClick={() => setSelectedPost(null)}
-                            className="absolute top-4 right-4 text-white md:hidden"
-                        >
-                            <X size={24} />
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {/* Upload Modal */}
-            {isUploadOpen && (
-                <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-                    <div className="bg-slate-900 rounded-xl p-6 w-full max-w-md border border-slate-700">
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-bold">New Post</h2>
-                            <button onClick={() => setIsUploadOpen(false)} className="text-slate-400 hover:text-white">
-                                <X size={24} />
-                            </button>
-                        </div>
-
-                        <form onSubmit={handleUpload} className="space-y-4">
-                            <div>
-                                <label className="block text-xs text-slate-400 mb-1">Photo</label>
-                                <div className="relative w-full h-48 bg-slate-800 border-2 border-dashed border-slate-700 rounded-lg flex flex-col items-center justify-center hover:border-cyan-500 transition-colors cursor-pointer overflow-hidden group">
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleFileChange}
-                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                        required={!imageUrl}
-                                    />
-                                    {imageUrl ? (
-                                        <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                                    ) : (
-                                        <>
-                                            <ImageIcon className="text-slate-500 mb-2 group-hover:text-cyan-500" size={32} />
-                                            <span className="text-xs text-slate-500 group-hover:text-cyan-500">Click to upload image</span>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-xs text-slate-400 mb-1">Caption</label>
-                                <textarea
-                                    value={caption}
-                                    onChange={e => setCaption(e.target.value)}
-                                    className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm focus:border-cyan-500 outline-none h-24"
-                                    placeholder="Write a caption..."
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-xs text-slate-400 mb-1">Location</label>
-                                <input
-                                    type="text"
-                                    value={location}
-                                    onChange={e => setLocation(e.target.value)}
-                                    className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm focus:border-cyan-500 outline-none"
-                                    placeholder="Tokyo, Japan"
-                                />
-                            </div>
-
-                            <div className="pt-4 border-t border-slate-700">
-                                <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1">
-                                    <Lock size={12} /> Admin Password
-                                </label>
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={e => setPassword(e.target.value)}
-                                    className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm focus:border-cyan-500 outline-none"
-                                    placeholder="Enter admin password"
-                                    required
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={isSubmitting}
-                                className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 rounded transition-colors disabled:opacity-50 mt-4"
-                            >
-                                {isSubmitting ? 'Posting...' : 'Share'}
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            )}
+/** 記事カード */
+const PostCard: React.FC<{ post: BlogPost; onClick: () => void }> = ({ post, onClick }) => {
+  const excerpt = post.body.replace(/#{1,6}\s/g, '').replace(/\*\*/g, '').slice(0, 120);
+  return (
+    <article
+      onClick={onClick}
+      className="group cursor-pointer bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-cyan-700 hover:bg-slate-800/60 transition-all duration-200"
+    >
+      {post.imageUrl && (
+        <div className="w-full h-40 rounded-lg overflow-hidden mb-4">
+          <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
         </div>
-    );
+      )}
+      <div className="flex items-center gap-2 mb-2 flex-wrap">
+        <CategoryBadge category={post.category} small />
+        {post.tags?.map(tag => (
+          <span key={tag} className="text-xs text-slate-500">#{tag}</span>
+        ))}
+      </div>
+      <h2 className="text-white font-bold text-base mb-2 group-hover:text-cyan-300 transition-colors line-clamp-2">{post.title}</h2>
+      <p className="text-slate-400 text-sm leading-relaxed line-clamp-3">{excerpt}…</p>
+      <div className="flex items-center gap-1 mt-3 text-xs text-slate-600">
+        <Clock size={11} />
+        <span>{new Date(post.date).toLocaleDateString('ja-JP')}</span>
+      </div>
+    </article>
+  );
+};
+
+/** 記事本文（マークダウン簡易レンダリング） */
+const PostBody: React.FC<{ body: string }> = ({ body }) => {
+  const lines = body.split('\n');
+  return (
+    <div className="prose prose-invert prose-sm max-w-none">
+      {lines.map((line, i) => {
+        if (line.startsWith('# ')) return <h1 key={i} className="text-2xl font-bold text-white mt-6 mb-3">{line.slice(2)}</h1>;
+        if (line.startsWith('## ')) return <h2 key={i} className="text-xl font-bold text-slate-100 mt-5 mb-2">{line.slice(3)}</h2>;
+        if (line.startsWith('### ')) return <h3 key={i} className="text-lg font-semibold text-slate-200 mt-4 mb-2">{line.slice(4)}</h3>;
+        if (line.startsWith('- ')) return <li key={i} className="text-slate-300 ml-4 mb-1 list-disc">{line.slice(2)}</li>;
+        if (line.trim() === '') return <div key={i} className="h-3" />;
+        const bold = line.replace(/\*\*(.+?)\*\*/g, '<strong class="text-white">$1</strong>');
+        return <p key={i} className="text-slate-300 leading-relaxed mb-1" dangerouslySetInnerHTML={{ __html: bold }} />;
+      })}
+    </div>
+  );
+};
+
+// =============================================
+// メインコンポーネント
+// =============================================
+const Blog: React.FC = () => {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [archives, setArchives] = useState<Archive[]>([]);
+  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [activeCategory, setActiveCategory] = useState('すべて');
+  const [activeArchive, setActiveArchive] = useState<{ year?: string; month?: string }>({});
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+
+  // 投稿フォーム
+  const [formTitle, setFormTitle] = useState('');
+  const [formBody, setFormBody] = useState('');
+  const [formCategory, setFormCategory] = useState('労働安全衛生');
+  const [formImageUrl, setFormImageUrl] = useState('');
+  const [formTags, setFormTags] = useState('');
+  const [formPassword, setFormPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const fetchPosts = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (activeCategory !== 'すべて') params.set('category', activeCategory);
+      if (activeArchive.year) params.set('year', activeArchive.year);
+      if (activeArchive.month) params.set('month', activeArchive.month);
+      const res = await fetch(`/api/blog?${params}`);
+      if (res.ok) setPosts(await res.json());
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [activeCategory, activeArchive]);
+
+  const fetchArchives = async () => {
+    try {
+      const res = await fetch('/api/blog/archives');
+      if (res.ok) setArchives(await res.json());
+    } catch (e) { console.error(e); }
+  };
+
+  useEffect(() => { fetchPosts(); }, [fetchPosts]);
+  useEffect(() => { fetchArchives(); }, []);
+
+  const filteredPosts = searchQuery
+    ? posts.filter(p => p.title.includes(searchQuery) || p.body.includes(searchQuery) || p.category.includes(searchQuery))
+    : posts;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/blog', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          password: formPassword,
+          post: {
+            title: formTitle, body: formBody, category: formCategory,
+            imageUrl: formImageUrl || null,
+            tags: formTags.split(',').map(t => t.trim()).filter(Boolean)
+          }
+        })
+      });
+      if (res.ok) {
+        setIsUploadOpen(false);
+        setFormTitle(''); setFormBody(''); setFormCategory('労働安全衛生');
+        setFormImageUrl(''); setFormTags(''); setFormPassword('');
+        fetchPosts(); fetchArchives();
+      } else {
+        alert('投稿に失敗しました。パスワードを確認してください。');
+      }
+    } catch (e) { alert('エラーが発生しました'); }
+    finally { setIsSubmitting(false); }
+  };
+
+  // アーカイブを年ごとにグループ化
+  const archiveByYear = archives.reduce<Record<string, Archive[]>>((acc, a) => {
+    if (!acc[a.year]) acc[a.year] = [];
+    acc[a.year].push(a);
+    return acc;
+  }, {});
+
+  return (
+    <div className="min-h-screen bg-black text-white pt-20 pb-20">
+      <div className="max-w-6xl mx-auto px-4">
+
+        {/* ヘッダー */}
+        <div className="mb-8 border-b border-slate-800 pb-6">
+          <div className="flex items-center gap-3 mb-1">
+            <BookOpen size={22} className="text-cyan-400" />
+            <h1 className="text-2xl font-bold tracking-tight">Blog</h1>
+          </div>
+          <p className="text-slate-500 text-sm">労働安全衛生・AIソリューションに関する最新の考察</p>
+        </div>
+
+        {selectedPost ? (
+          /* ========== 記事詳細ビュー ========== */
+          <div className="max-w-3xl mx-auto">
+            <button onClick={() => setSelectedPost(null)} className="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors mb-6 text-sm">
+              <ArrowLeft size={16} /> 一覧に戻る
+            </button>
+            {selectedPost.imageUrl && (
+              <div className="w-full h-64 rounded-xl overflow-hidden mb-6">
+                <img src={selectedPost.imageUrl} alt={selectedPost.title} className="w-full h-full object-cover" />
+              </div>
+            )}
+            <div className="flex items-center gap-2 mb-3 flex-wrap">
+              <CategoryBadge category={selectedPost.category} />
+              {selectedPost.tags?.map(tag => (
+                <span key={tag} className="text-xs text-slate-500 flex items-center gap-1"><Tag size={10} />#{tag}</span>
+              ))}
+            </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-3 leading-snug">{selectedPost.title}</h1>
+            <div className="flex items-center gap-4 text-xs text-slate-500 mb-8 pb-6 border-b border-slate-800">
+              <span className="flex items-center gap-1"><Calendar size={11} />{new Date(selectedPost.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              <span className="flex items-center gap-1 text-slate-600">太田 真治 / Shinji Ota</span>
+            </div>
+            <PostBody body={selectedPost.body} />
+          </div>
+
+        ) : (
+          /* ========== 一覧ビュー（サイドバー + コンテンツ） ========== */
+          <div className="flex flex-col lg:flex-row gap-8">
+
+            {/* 左サイドバー */}
+            <aside className="lg:w-60 flex-shrink-0">
+              {/* 検索 */}
+              <div className="relative mb-6">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                <input
+                  type="text"
+                  placeholder="記事を検索..."
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-slate-600 focus:border-cyan-600 focus:outline-none"
+                />
+              </div>
+
+              {/* カテゴリ */}
+              <div className="mb-6">
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">カテゴリ</h3>
+                <ul className="space-y-1">
+                  {CATEGORIES.map(cat => (
+                    <li key={cat}>
+                      <button
+                        onClick={() => { setActiveCategory(cat); setActiveArchive({}); setSearchQuery(''); }}
+                        className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${activeCategory === cat && !activeArchive.year ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-400 hover:bg-slate-900 hover:text-white'}`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <ChevronRight size={12} className={activeCategory === cat ? 'text-cyan-400' : 'text-slate-700'} />
+                          {cat}
+                        </span>
+                        {cat !== 'すべて' && (
+                          <span className="text-xs text-slate-600">
+                            {posts.filter(p => cat === 'すべて' || p.category === cat).length}
+                          </span>
+                        )}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* アーカイブ */}
+              {Object.keys(archiveByYear).length > 0 && (
+                <div>
+                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">アーカイブ</h3>
+                  <div className="space-y-3">
+                    {Object.entries(archiveByYear).sort(([a], [b]) => Number(b) - Number(a)).map(([year, months]) => (
+                      <div key={year}>
+                        <div className="text-xs font-bold text-slate-400 px-3 mb-1">{year}年</div>
+                        <ul className="space-y-0.5">
+                          {months.sort((a, b) => Number(b.month) - Number(a.month)).map(arc => (
+                            <li key={arc.month}>
+                              <button
+                                onClick={() => { setActiveArchive({ year, month: arc.month }); setActiveCategory('すべて'); setSearchQuery(''); }}
+                                className={`w-full text-left flex items-center justify-between px-3 py-1.5 rounded-lg text-sm transition-colors ${activeArchive.year === year && activeArchive.month === arc.month ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-500 hover:bg-slate-900 hover:text-white'}`}
+                              >
+                                <span className="flex items-center gap-2">
+                                  <ChevronRight size={11} className="text-slate-700" />
+                                  {MONTH_JP[arc.month]}
+                                </span>
+                                <span className="text-xs text-slate-700">{arc.count}</span>
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </aside>
+
+            {/* メインコンテンツ */}
+            <main className="flex-1 min-w-0">
+              {/* フィルタ表示 */}
+              <div className="flex items-center justify-between mb-5">
+                <div className="text-sm text-slate-400">
+                  {searchQuery ? `"${searchQuery}" の検索結果` : activeArchive.year ? `${activeArchive.year}年${activeArchive.month ? MONTH_JP[activeArchive.month] : ''}` : activeCategory}
+                  <span className="ml-2 text-slate-600">({filteredPosts.length}件)</span>
+                </div>
+                {(searchQuery || activeArchive.year) && (
+                  <button onClick={() => { setSearchQuery(''); setActiveArchive({}); setActiveCategory('すべて'); }} className="text-xs text-slate-600 hover:text-cyan-400 transition-colors">
+                    クリア
+                  </button>
+                )}
+              </div>
+
+              {isLoading ? (
+                <div className="flex justify-center py-20">
+                  <Loader2 size={28} className="animate-spin text-cyan-500" />
+                </div>
+              ) : filteredPosts.length === 0 ? (
+                <div className="text-center py-20 text-slate-600">
+                  <BookOpen size={40} className="mx-auto mb-3 opacity-30" />
+                  <p className="text-sm">記事がありません</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredPosts.map(post => (
+                    <PostCard key={post.id} post={post} onClick={() => setSelectedPost(post)} />
+                  ))}
+                </div>
+              )}
+            </main>
+          </div>
+        )}
+      </div>
+
+      {/* ========== 新規投稿ボタン ========== */}
+      <button
+        onClick={() => setIsUploadOpen(true)}
+        className="fixed bottom-8 right-8 bg-gradient-to-r from-cyan-500 to-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50"
+        title="新規記事を投稿"
+      >
+        <Plus size={22} />
+      </button>
+
+      {/* ========== 投稿モーダル ========== */}
+      {isUploadOpen && (
+        <div className="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-slate-900 rounded-2xl p-6 w-full max-w-xl border border-slate-700 my-4">
+            <div className="flex justify-between items-center mb-5">
+              <h2 className="text-lg font-bold">新規記事を投稿</h2>
+              <button onClick={() => setIsUploadOpen(false)} className="text-slate-400 hover:text-white"><X size={22} /></button>
+            </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs text-slate-400 mb-1">タイトル <span className="text-red-400">*</span></label>
+                <input type="text" value={formTitle} onChange={e => setFormTitle(e.target.value)} required
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-cyan-500 outline-none"
+                  placeholder="記事タイトルを入力" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-400 mb-1">カテゴリ</label>
+                <select value={formCategory} onChange={e => setFormCategory(e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-cyan-500 outline-none">
+                  {CATEGORIES.filter(c => c !== 'すべて').map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-slate-400 mb-1">本文 <span className="text-red-400">*</span></label>
+                <textarea value={formBody} onChange={e => setFormBody(e.target.value)} required rows={10}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-cyan-500 outline-none font-mono"
+                  placeholder="マークダウン記法で記述できます（# 見出し、**太字**、- リストなど）" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-400 mb-1">画像URL（任意）</label>
+                <input type="url" value={formImageUrl} onChange={e => setFormImageUrl(e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-cyan-500 outline-none"
+                  placeholder="https://..." />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-400 mb-1">タグ（カンマ区切り）</label>
+                <input type="text" value={formTags} onChange={e => setFormTags(e.target.value)}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-cyan-500 outline-none"
+                  placeholder="例: リスクアセスメント, ISO45001" />
+              </div>
+              <div className="pt-3 border-t border-slate-700">
+                <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1"><Lock size={11} /> 管理者パスワード</label>
+                <input type="password" value={formPassword} onChange={e => setFormPassword(e.target.value)} required
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-cyan-500 outline-none"
+                  placeholder="パスワードを入力" />
+              </div>
+              <button type="submit" disabled={isSubmitting}
+                className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                {isSubmitting ? <><Loader2 size={16} className="animate-spin" /> 投稿中...</> : '記事を投稿する'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Blog;

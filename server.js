@@ -149,7 +149,7 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// --- Blog API ---
+// --- Blog API (note風リニューアル版) ---
 import fs from 'fs';
 import pg from 'pg';
 const { Pool } = pg;
@@ -164,17 +164,7 @@ if (process.env.DATABASE_URL) {
     connectionString: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false }
   });
-
-  pool.query(`
-    CREATE TABLE IF NOT EXISTS blog_posts (
-      id SERIAL PRIMARY KEY,
-      image_url TEXT NOT NULL,
-      caption TEXT,
-      location TEXT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-  `).then(() => console.log('Blog table initialized'))
-    .catch(err => console.error('DB Init Error:', err));
+  console.log('Blog DB ready (table managed by Supabase migration)');
 } else {
   console.log('Using JSON file for storage');
   if (!fs.existsSync(BLOG_FILE)) {
@@ -182,22 +172,44 @@ if (process.env.DATABASE_URL) {
   }
 }
 
-// Get all blog posts
+// ヘルパー: DB行 → フロントエンド用オブジェクト変換
+const rowToPost = (row) => ({
+  id: row.id.toString(),
+  title: row.title,
+  body: row.body,
+  category: row.category,
+  imageUrl: row.image_url || null,
+  tags: row.tags || [],
+  published: row.published,
+  date: row.created_at,
+  updatedAt: row.updated_at
+});
+
+// GET /api/blog - 記事一覧（カテゴリ・年月フィルタ対応）
 app.get('/api/blog', async (req, res) => {
+  const { category, year, month } = req.query;
   try {
     if (pool) {
-      const result = await pool.query('SELECT * FROM blog_posts ORDER BY created_at DESC');
-      const posts = result.rows.map(row => ({
-        id: row.id.toString(),
-        imageUrl: row.image_url,
-        caption: row.caption,
-        date: row.created_at,
-        location: row.location
-      }));
-      res.json(posts);
+      let query = 'SELECT id, title, body, category, image_url, tags, published, created_at, updated_at FROM blog_posts WHERE published = true';
+      const params = [];
+      if (category && category !== 'すべて') {
+        params.push(category);
+        query += ` AND category = $${params.length}`;
+      }
+      if (year) {
+        params.push(parseInt(year));
+        query += ` AND EXTRACT(YEAR FROM created_at) = $${params.length}`;
+      }
+      if (month) {
+        params.push(parseInt(month));
+        query += ` AND EXTRACT(MONTH FROM created_at) = $${params.length}`;
+      }
+      query += ' ORDER BY created_at DESC';
+      const result = await pool.query(query, params);
+      res.json(result.rows.map(rowToPost));
     } else {
-      const data = fs.readFileSync(BLOG_FILE, 'utf8');
-      const posts = JSON.parse(data);
+      let posts = JSON.parse(fs.readFileSync(BLOG_FILE, 'utf8')).filter(p => p.published !== false);
+      if (category && category !== 'すべて') posts = posts.filter(p => p.category === category);
       posts.sort((a, b) => new Date(b.date) - new Date(a.date));
       res.json(posts);
     }
@@ -207,50 +219,80 @@ app.get('/api/blog', async (req, res) => {
   }
 });
 
-// Create new blog post (Admin only)
+// GET /api/blog/archives - 年月アーカイブ一覧
+app.get('/api/blog/archives', async (req, res) => {
+  try {
+    if (pool) {
+      const result = await pool.query(`
+        SELECT TO_CHAR(created_at, 'YYYY') as year,
+               TO_CHAR(created_at, 'MM') as month,
+               COUNT(*) as count
+        FROM blog_posts
+        WHERE published = true
+        GROUP BY year, month
+        ORDER BY year DESC, month DESC
+      `);
+      res.json(result.rows);
+    } else {
+      const posts = JSON.parse(fs.readFileSync(BLOG_FILE, 'utf8')).filter(p => p.published !== false);
+      const archives = {};
+      posts.forEach(p => {
+        const d = new Date(p.date);
+        const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+        archives[key] = (archives[key] || 0) + 1;
+      });
+      res.json(Object.entries(archives).map(([k, count]) => {
+        const [year, month] = k.split('-');
+        return { year, month, count };
+      }));
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch archives' });
+  }
+});
+
+// GET /api/blog/:id - 記事詳細
+app.get('/api/blog/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (pool) {
+      const result = await pool.query('SELECT * FROM blog_posts WHERE id = $1 AND published = true', [id]);
+      if (result.rows.length === 0) return res.status(404).json({ error: 'Not found' });
+      res.json(rowToPost(result.rows[0]));
+    } else {
+      const posts = JSON.parse(fs.readFileSync(BLOG_FILE, 'utf8'));
+      const post = posts.find(p => p.id === id);
+      if (!post) return res.status(404).json({ error: 'Not found' });
+      res.json(post);
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch post' });
+  }
+});
+
+// POST /api/blog - 新規投稿（管理者のみ）
 app.post('/api/blog', async (req, res) => {
   const { password, post } = req.body;
   const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-
-  if (password !== adminPassword) {
-    return res.status(401).json({ error: 'Unauthorized: Incorrect password' });
-  }
-
-  if (!post || !post.imageUrl) {
-    return res.status(400).json({ error: 'Invalid post data' });
-  }
+  if (password !== adminPassword) return res.status(401).json({ error: 'Unauthorized' });
+  if (!post || !post.title || !post.body) return res.status(400).json({ error: 'title and body are required' });
 
   try {
     if (pool) {
       const result = await pool.query(
-        'INSERT INTO blog_posts (image_url, caption, location) VALUES ($1, $2, $3) RETURNING *',
-        [post.imageUrl, post.caption || '', post.location || '']
+        'INSERT INTO blog_posts (title, body, category, image_url, tags) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+        [post.title, post.body, post.category || 'その他', post.imageUrl || null, post.tags || []]
       );
-      const newPost = result.rows[0];
-      res.json({
-        success: true, post: {
-          id: newPost.id.toString(),
-          imageUrl: newPost.image_url,
-          caption: newPost.caption,
-          date: newPost.created_at,
-          location: newPost.location
-        }
-      });
+      res.json({ success: true, post: rowToPost(result.rows[0]) });
     } else {
-      const data = fs.readFileSync(BLOG_FILE, 'utf8');
-      const posts = JSON.parse(data);
-
+      const posts = JSON.parse(fs.readFileSync(BLOG_FILE, 'utf8'));
       const newPost = {
-        id: Date.now().toString(),
-        imageUrl: post.imageUrl,
-        caption: post.caption || '',
-        date: new Date().toISOString(),
-        location: post.location || ''
+        id: Date.now().toString(), title: post.title, body: post.body,
+        category: post.category || 'その他', imageUrl: post.imageUrl || null,
+        tags: post.tags || [], published: true, date: new Date().toISOString()
       };
-
       posts.push(newPost);
       fs.writeFileSync(BLOG_FILE, JSON.stringify(posts, null, 2));
-
       res.json({ success: true, post: newPost });
     }
   } catch (error) {
@@ -259,29 +301,23 @@ app.post('/api/blog', async (req, res) => {
   }
 });
 
-// Delete blog post (Admin only)
+// DELETE /api/blog/:id - 記事削除（管理者のみ）
 app.delete('/api/blog/:id', async (req, res) => {
   const { password } = req.body;
   const { id } = req.params;
   const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-
-  if (password !== adminPassword) {
-    return res.status(401).json({ error: 'Unauthorized: Incorrect password' });
-  }
+  if (password !== adminPassword) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
     if (pool) {
       await pool.query('DELETE FROM blog_posts WHERE id = $1', [id]);
       res.json({ success: true });
     } else {
-      const data = fs.readFileSync(BLOG_FILE, 'utf8');
-      let posts = JSON.parse(data);
-      posts = posts.filter(post => post.id !== id);
-      fs.writeFileSync(BLOG_FILE, JSON.stringify(posts, null, 2));
+      const posts = JSON.parse(fs.readFileSync(BLOG_FILE, 'utf8'));
+      fs.writeFileSync(BLOG_FILE, JSON.stringify(posts.filter(p => p.id !== id), null, 2));
       res.json({ success: true });
     }
   } catch (error) {
-    console.error('Error deleting blog post:', error);
     res.status(500).json({ error: 'Failed to delete blog post' });
   }
 });
