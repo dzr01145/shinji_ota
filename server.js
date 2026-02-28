@@ -149,28 +149,13 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// --- Blog API (note風リニューアル版) ---
-import fs from 'fs';
-import pg from 'pg';
-const { Pool } = pg;
+// --- Blog API (Supabase JSクライアント版) ---
+import { createClient } from '@supabase/supabase-js';
 
-const BLOG_FILE = path.join(__dirname, 'blog_posts.json');
-let pool;
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://oztfdwbvlarpegozqepn.supabase.co';
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96dGZkd2J2bGFycGVnb3pxZXBuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNjM5MzIsImV4cCI6MjA4NzgzOTkzMn0.nPdKRwaviMZpzHCzbeWaqV4TQVwdUy31m916MvgWgpY';
 
-// Initialize DB or File
-if (process.env.DATABASE_URL) {
-  console.log('Connecting to PostgreSQL...');
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
-  });
-  console.log('Blog DB ready (table managed by Supabase migration)');
-} else {
-  console.log('Using JSON file for storage');
-  if (!fs.existsSync(BLOG_FILE)) {
-    fs.writeFileSync(BLOG_FILE, JSON.stringify([]));
-  }
-}
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ヘルパー: DB行 → フロントエンド用オブジェクト変換
 const rowToPost = (row) => ({
@@ -189,30 +174,22 @@ const rowToPost = (row) => ({
 app.get('/api/blog', async (req, res) => {
   const { category, year, month } = req.query;
   try {
-    if (pool) {
-      let query = 'SELECT id, title, body, category, image_url, tags, published, created_at, updated_at FROM blog_posts WHERE published = true';
-      const params = [];
-      if (category && category !== 'すべて') {
-        params.push(category);
-        query += ` AND category = $${params.length}`;
-      }
-      if (year) {
-        params.push(parseInt(year));
-        query += ` AND EXTRACT(YEAR FROM created_at) = $${params.length}`;
-      }
-      if (month) {
-        params.push(parseInt(month));
-        query += ` AND EXTRACT(MONTH FROM created_at) = $${params.length}`;
-      }
-      query += ' ORDER BY created_at DESC';
-      const result = await pool.query(query, params);
-      res.json(result.rows.map(rowToPost));
-    } else {
-      let posts = JSON.parse(fs.readFileSync(BLOG_FILE, 'utf8')).filter(p => p.published !== false);
-      if (category && category !== 'すべて') posts = posts.filter(p => p.category === category);
-      posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-      res.json(posts);
+    let query = supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('published', true)
+      .order('created_at', { ascending: false });
+
+    if (category && category !== 'すべて') query = query.eq('category', category);
+    if (year) query = query.gte('created_at', `${year}-01-01`).lte('created_at', `${year}-12-31T23:59:59`);
+    if (month && year) {
+      const m = month.padStart(2, '0');
+      query = query.gte('created_at', `${year}-${m}-01`).lte('created_at', `${year}-${m}-31T23:59:59`);
     }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    res.json((data || []).map(rowToPost));
   } catch (error) {
     console.error('Error reading blog posts:', error);
     res.status(500).json({ error: 'Failed to fetch blog posts' });
@@ -222,30 +199,26 @@ app.get('/api/blog', async (req, res) => {
 // GET /api/blog/archives - 年月アーカイブ一覧
 app.get('/api/blog/archives', async (req, res) => {
   try {
-    if (pool) {
-      const result = await pool.query(`
-        SELECT TO_CHAR(created_at, 'YYYY') as year,
-               TO_CHAR(created_at, 'MM') as month,
-               COUNT(*) as count
-        FROM blog_posts
-        WHERE published = true
-        GROUP BY year, month
-        ORDER BY year DESC, month DESC
-      `);
-      res.json(result.rows);
-    } else {
-      const posts = JSON.parse(fs.readFileSync(BLOG_FILE, 'utf8')).filter(p => p.published !== false);
-      const archives = {};
-      posts.forEach(p => {
-        const d = new Date(p.date);
-        const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
-        archives[key] = (archives[key] || 0) + 1;
-      });
-      res.json(Object.entries(archives).map(([k, count]) => {
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .select('created_at')
+      .eq('published', true);
+    if (error) throw error;
+
+    const archives = {};
+    (data || []).forEach(p => {
+      const d = new Date(p.created_at);
+      const year = d.getFullYear().toString();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const key = `${year}-${month}`;
+      archives[key] = (archives[key] || 0) + 1;
+    });
+    res.json(Object.entries(archives)
+      .sort(([a], [b]) => b.localeCompare(a))
+      .map(([k, count]) => {
         const [year, month] = k.split('-');
         return { year, month, count };
       }));
-    }
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch archives' });
   }
@@ -255,16 +228,14 @@ app.get('/api/blog/archives', async (req, res) => {
 app.get('/api/blog/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    if (pool) {
-      const result = await pool.query('SELECT * FROM blog_posts WHERE id = $1 AND published = true', [id]);
-      if (result.rows.length === 0) return res.status(404).json({ error: 'Not found' });
-      res.json(rowToPost(result.rows[0]));
-    } else {
-      const posts = JSON.parse(fs.readFileSync(BLOG_FILE, 'utf8'));
-      const post = posts.find(p => p.id === id);
-      if (!post) return res.status(404).json({ error: 'Not found' });
-      res.json(post);
-    }
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('id', id)
+      .eq('published', true)
+      .single();
+    if (error || !data) return res.status(404).json({ error: 'Not found' });
+    res.json(rowToPost(data));
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch post' });
   }
@@ -278,23 +249,20 @@ app.post('/api/blog', async (req, res) => {
   if (!post || !post.title || !post.body) return res.status(400).json({ error: 'title and body are required' });
 
   try {
-    if (pool) {
-      const result = await pool.query(
-        'INSERT INTO blog_posts (title, body, category, image_url, tags) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-        [post.title, post.body, post.category || 'その他', post.imageUrl || null, post.tags || []]
-      );
-      res.json({ success: true, post: rowToPost(result.rows[0]) });
-    } else {
-      const posts = JSON.parse(fs.readFileSync(BLOG_FILE, 'utf8'));
-      const newPost = {
-        id: Date.now().toString(), title: post.title, body: post.body,
-        category: post.category || 'その他', imageUrl: post.imageUrl || null,
-        tags: post.tags || [], published: true, date: new Date().toISOString()
-      };
-      posts.push(newPost);
-      fs.writeFileSync(BLOG_FILE, JSON.stringify(posts, null, 2));
-      res.json({ success: true, post: newPost });
-    }
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .insert({
+        title: post.title,
+        body: post.body,
+        category: post.category || 'その他',
+        image_url: post.imageUrl || null,
+        tags: post.tags || [],
+        published: true
+      })
+      .select()
+      .single();
+    if (error) throw error;
+    res.json({ success: true, post: rowToPost(data) });
   } catch (error) {
     console.error('Error saving blog post:', error);
     res.status(500).json({ error: 'Failed to save blog post' });
@@ -309,14 +277,12 @@ app.delete('/api/blog/:id', async (req, res) => {
   if (password !== adminPassword) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
-    if (pool) {
-      await pool.query('DELETE FROM blog_posts WHERE id = $1', [id]);
-      res.json({ success: true });
-    } else {
-      const posts = JSON.parse(fs.readFileSync(BLOG_FILE, 'utf8'));
-      fs.writeFileSync(BLOG_FILE, JSON.stringify(posts.filter(p => p.id !== id), null, 2));
-      res.json({ success: true });
-    }
+    const { error } = await supabase
+      .from('blog_posts')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
+    res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete blog post' });
   }
