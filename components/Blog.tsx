@@ -455,26 +455,26 @@ const Blog: React.FC = () => {
         <Plus size={22} />
       </button>
 
-      {/* ========== 画像拡大表示モーダル ========== */}
+      {/* ========== 画像拡大表示モーダル（画面最大） ========== */}
       {expandedImageUrl && (
         <div
           onClick={() => setExpandedImageUrl(null)}
-          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 cursor-pointer group"
+          className="fixed inset-0 bg-black/98 z-50 flex items-center justify-center cursor-pointer"
         >
           <button
             onClick={() => setExpandedImageUrl(null)}
-            className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10"
+            className="absolute top-6 right-6 text-slate-300 hover:text-white transition-colors z-10 p-2"
           >
-            <X size={28} />
+            <X size={32} />
           </button>
           <div
             onClick={(e) => e.stopPropagation()}
-            className="max-w-4xl max-h-[90vh] overflow-auto rounded-xl border border-slate-700"
+            className="w-[98vw] h-[98vh] flex items-center justify-center"
           >
             <img
               src={expandedImageUrl}
               alt="Expanded view"
-              className="w-full h-auto"
+              className="w-full h-full object-contain"
             />
           </div>
         </div>
