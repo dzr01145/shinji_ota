@@ -1,5 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BookOpen, Tag, Calendar, ChevronRight, ArrowLeft, Plus, X, Lock, Loader2, Clock, Search, Sparkles, Image } from 'lucide-react';
+import { BookOpen, Tag, Calendar, ChevronRight, ArrowLeft, Plus, X, Lock, Loader2, Clock, Search, Sparkles, Image, ExternalLink, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react';
+
+// Unsplash候補画像の型
+interface UnsplashCandidate {
+  id: string;
+  imageUrl: string;
+  thumbUrl: string;
+  authorName: string;
+  authorUrl: string;
+  unsplashUrl: string;
+  altDescription: string;
+}
 
 // =============================================
 // 型定義
@@ -153,8 +164,10 @@ const Blog: React.FC = () => {
   const [formTags, setFormTags] = useState('');
   const [formPassword, setFormPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
-  const [generatedImagePrompt, setGeneratedImagePrompt] = useState('');
+  const [isSearchingUnsplash, setIsSearchingUnsplash] = useState(false);
+  const [unsplashCandidates, setUnsplashCandidates] = useState<UnsplashCandidate[]>([]);
+  const [unsplashCursor, setUnsplashCursor] = useState(0);
+  const [imageAttribution, setImageAttribution] = useState<{ authorName: string; authorUrl: string; unsplashUrl: string } | null>(null);
 
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
@@ -186,32 +199,47 @@ const Blog: React.FC = () => {
     ? posts.filter(p => p.title.includes(searchQuery) || p.body.includes(searchQuery) || p.category.includes(searchQuery))
     : posts;
 
-  const handleGenerateImage = async () => {
+  const handleUnsplashSearch = async () => {
     if (!formTitle.trim()) {
-      alert('タイトルを入力してから画像を生成してください。');
+      alert('タイトルを入力してから画像を検索してください。');
       return;
     }
-    setIsGeneratingImage(true);
-    setGeneratedImagePrompt('');
+    setIsSearchingUnsplash(true);
+    setUnsplashCandidates([]);
+    setUnsplashCursor(0);
+    setFormImageUrl('');
+    setImageAttribution(null);
     try {
-      const res = await fetch('/api/generate-image', {
+      const res = await fetch('/api/unsplash-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: formTitle, category: formCategory })
       });
       if (res.ok) {
         const data = await res.json();
-        setFormImageUrl(data.imageUrl);
-        setGeneratedImagePrompt(data.prompt);
+        setUnsplashCandidates(data.candidates || []);
+        if (data.candidates?.length > 0) {
+          const first = data.candidates[0];
+          setFormImageUrl(first.imageUrl);
+          setImageAttribution({ authorName: first.authorName, authorUrl: first.authorUrl, unsplashUrl: first.unsplashUrl });
+        }
       } else {
         const err = await res.json();
-        alert('画像生成に失敗しました: ' + (err.error || '不明なエラー'));
+        alert('画像検索に失敗しました: ' + (err.error || '不明なエラー'));
       }
     } catch (e) {
-      alert('画像生成中にエラーが発生しました');
+      alert('画像検索中にエラーが発生しました');
     } finally {
-      setIsGeneratingImage(false);
+      setIsSearchingUnsplash(false);
     }
+  };
+
+  const selectUnsplashCandidate = (idx: number) => {
+    const c = unsplashCandidates[idx];
+    if (!c) return;
+    setUnsplashCursor(idx);
+    setFormImageUrl(c.imageUrl);
+    setImageAttribution({ authorName: c.authorName, authorUrl: c.authorUrl, unsplashUrl: c.unsplashUrl });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -263,10 +291,10 @@ const Blog: React.FC = () => {
         </div>
 
         {/* ========== サイドバー常時表示レイアウト ========== */}
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
 
-          {/* 左サイドバー（一覧・詳細ともに常時表示） */}
-          <aside className="lg:w-60 flex-shrink-0">
+          {/* 左サイドバー（一覧・詳細ともに常時固定表示） */}
+          <aside className="lg:w-60 flex-shrink-0 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
             {/* 詳細ビュー中は「一覧に戻る」ボタン */}
             {selectedPost && (
               <button
@@ -454,37 +482,63 @@ const Blog: React.FC = () => {
                 <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1">
                   <Image size={11} /> アイキャッチ画像（任意）
                 </label>
-                {/* AI画像生成ボタン */}
+
+                {/* Unsplash 検索ボタン */}
                 <button
                   type="button"
-                  onClick={handleGenerateImage}
-                  disabled={isGeneratingImage || !formTitle.trim()}
-                  className="w-full mb-2 flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold py-2 rounded-lg transition-all"
+                  onClick={handleUnsplashSearch}
+                  disabled={isSearchingUnsplash || !formTitle.trim()}
+                  className="w-full mb-2 flex items-center justify-center gap-2 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-500 hover:to-slate-600 border border-slate-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold py-2 rounded-lg transition-all"
                 >
-                  {isGeneratingImage
-                    ? <><Loader2 size={14} className="animate-spin" /> AI画像を生成中...</>
-                    : <><Sparkles size={14} /> AIでアイキャッチ画像を自動生成</>}
+                  {isSearchingUnsplash
+                    ? <><Loader2 size={14} className="animate-spin" /> Unsplashを検索中...</>
+                    : <><Sparkles size={14} /> Unsplashから関連画像を自動検索</>}
                 </button>
-                {/* 生成済み画像プレビュー */}
-                {formImageUrl && (
-                  <div className="mb-2 rounded-lg overflow-hidden border border-slate-600 relative">
-                    <img src={formImageUrl} alt="プレビュー" className="w-full h-40 object-cover" />
-                    {generatedImagePrompt && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-xs text-slate-300 px-2 py-1 truncate">
-                        AI生成: {generatedImagePrompt}
+
+                {/* Unsplash 候補ピッカー */}
+                {unsplashCandidates.length > 0 && (
+                  <div className="mb-3 bg-slate-800 rounded-lg p-2 border border-slate-600">
+                    <div className="text-xs text-slate-500 mb-2">候補画像（クリックで選択）</div>
+                    <div className="flex gap-1.5 overflow-x-auto pb-1">
+                      {unsplashCandidates.map((c, idx) => (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => selectUnsplashCandidate(idx)}
+                          className={`flex-shrink-0 w-20 h-14 rounded overflow-hidden border-2 transition-all ${unsplashCursor === idx ? 'border-cyan-400 scale-105' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                        >
+                          <img src={c.thumbUrl} alt={c.altDescription} className="w-full h-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
+                    {imageAttribution && (
+                      <div className="mt-1.5 text-xs text-slate-500 flex items-center gap-1">
+                        Photo by{' '}
+                        <a href={imageAttribution.authorUrl + '?utm_source=shinji_ota_blog&utm_medium=referral'} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-cyan-400 underline">{imageAttribution.authorName}</a>
+                        {' '}on{' '}
+                        <a href={imageAttribution.unsplashUrl + '?utm_source=shinji_ota_blog&utm_medium=referral'} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-cyan-400 underline flex items-center gap-0.5">Unsplash <ExternalLink size={9} /></a>
                       </div>
                     )}
+                  </div>
+                )}
+
+                {/* 選択済み画像プレビュー（候補なしで手動URLの場合） */}
+                {formImageUrl && unsplashCandidates.length === 0 && (
+                  <div className="mb-2 rounded-lg overflow-hidden border border-slate-600 relative">
+                    <img src={formImageUrl} alt="プレビュー" className="w-full h-40 object-cover" />
                     <button
                       type="button"
-                      onClick={() => { setFormImageUrl(''); setGeneratedImagePrompt(''); }}
+                      onClick={() => { setFormImageUrl(''); setImageAttribution(null); }}
                       className="absolute top-2 right-2 bg-black/60 hover:bg-black/80 text-white rounded-full p-1 transition"
                     >
                       <X size={12} />
                     </button>
                   </div>
                 )}
+
                 {/* 手動URL入力 */}
-                <input type="url" value={formImageUrl} onChange={e => { setFormImageUrl(e.target.value); setGeneratedImagePrompt(''); }}
+                <input type="url" value={formImageUrl}
+                  onChange={e => { setFormImageUrl(e.target.value); setImageAttribution(null); setUnsplashCandidates([]); }}
                   className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-cyan-500 outline-none"
                   placeholder="または画像URLを直接入力 (https://...)" />
               </div>

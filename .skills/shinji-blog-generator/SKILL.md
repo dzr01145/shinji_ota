@@ -122,10 +122,42 @@ RETURNING id, title, created_at;
 
 **注意**: 本文中のシングルクォート `'` は `''` にエスケープすること。
 
-### Step 7: 完了通知
+### Step 7: NotebookLMに記事を保存
 
-投稿成功後、以下を伝える：
-> 「✅ 記事を投稿しました！`https://www.shinji-ota.com/blog` に反映されています。（記事ID: XXX）」
+Supabase投稿成功後、同じ記事をNotebookLMにもテキストソースとして保存する。
+
+**対象ノートブックID**: `c5f67b8a-625d-473c-ad8d-36141d665fbf`
+（ノートブック名：労働安全衛生・AIソリューションに関する最新の考察）
+
+`mcp__notebooklm-mcp__source_add` を使って以下を実行：
+
+- `notebook_id`: `c5f67b8a-625d-473c-ad8d-36141d665fbf`
+- `source_type`: `"text"`
+- `title`: `"（記事タイトル） [YYYY-MM-DD]"` （今日の日付を付加）
+- `text`: 以下のフォーマットで記事全文を渡す
+
+```markdown
+# （記事タイトル）
+
+**カテゴリ**: （カテゴリ）
+**タグ**: （タグ1, タグ2, タグ3）
+**投稿日**: YYYY-MM-DD
+**著者**: 太田 真治 / Shinji Ota
+**URL**: https://www.shinji-ota.com/blog
+
+---
+
+（本文全文をマークダウンそのまま）
+```
+
+NotebookLM保存に失敗しても、ブログ投稿は成功しているのでエラーはワーニング扱いとし処理を続ける。
+
+### Step 8: 完了通知
+
+両方の保存が完了したら以下を伝える：
+> 「✅ 記事を投稿しました！
+> - **ブログ**: https://www.shinji-ota.com/blog に反映済み（記事ID: XXX）
+> - **NotebookLM**: 『労働安全衛生・AIソリューションに関する最新の考察』にも保存しました 📓」
 
 ## エラーハンドリング
 

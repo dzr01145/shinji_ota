@@ -363,6 +363,65 @@ Output ONLY the prompt text, nothing else.`
   });
 });
 
+// POST /api/unsplash-image - Unsplash から関連画像を検索して返す
+app.post('/api/unsplash-image', async (req, res) => {
+  const { title, category } = req.body;
+  if (!title) return res.status(400).json({ error: 'title is required' });
+
+  const accessKey = process.env.UNSPLASH_ACCESS_KEY;
+  if (!accessKey) {
+    return res.status(503).json({ error: 'UNSPLASH_ACCESS_KEY が設定されていません' });
+  }
+
+  try {
+    // Gemini で日本語タイトルから英語検索キーワードを生成
+    const kwModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    const kwResult = await kwModel.generateContent(
+      `Convert this Japanese blog post title to 3-5 concise English search keywords for finding a professional stock photo on Unsplash.
+Title: "${title}"
+Category: "${category || '労働安全'}"
+Output ONLY the keywords separated by spaces, nothing else. Example: workplace safety industrial machinery`
+    );
+    const keywords = kwResult.response.text().trim();
+    console.log('Unsplash keywords:', keywords);
+
+    // Unsplash 検索 API を呼び出す
+    const unsplashRes = await fetch(
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(keywords)}&per_page=5&orientation=landscape&content_filter=high`,
+      { headers: { Authorization: `Client-ID ${accessKey}` } }
+    );
+
+    if (!unsplashRes.ok) {
+      const errText = await unsplashRes.text();
+      return res.status(500).json({ error: 'Unsplash API error', details: errText });
+    }
+
+    const unsplashData = await unsplashRes.json();
+    const results = unsplashData.results || [];
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: '該当する画像が見つかりませんでした' });
+    }
+
+    // 上位5件を候補として返す
+    const candidates = results.map(photo => ({
+      id: photo.id,
+      imageUrl: photo.urls.regular,          // 表示用 URL (1080px)
+      thumbUrl: photo.urls.small,            // サムネイル (400px)
+      downloadUrl: photo.links.download_location, // Unsplash ダウンロードトリガー用
+      authorName: photo.user.name,
+      authorUrl: photo.user.links.html,
+      unsplashUrl: photo.links.html,
+      altDescription: photo.alt_description || title,
+    }));
+
+    res.json({ candidates, keywords });
+  } catch (err) {
+    console.error('Unsplash image error:', err);
+    res.status(500).json({ error: 'Failed to fetch Unsplash image', details: err.message });
+  }
+});
+
 // Admin Login Check
 app.post('/api/login', (req, res) => {
   const { password } = req.body;
