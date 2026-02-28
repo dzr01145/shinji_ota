@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog プレビュー - shinji-ota.com</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .transition-all { transition: all 0.2s; }
+  .prose h1 { font-size: 1.5rem; font-weight: 700; color: #fff; margin: 1.5rem 0 0.75rem; }
+  .prose h2 { font-size: 1.25rem; font-weight: 700; color: #f1f5f9; margin: 1.25rem 0 0.5rem; }
+  .prose h3 { font-size: 1.1rem; font-weight: 600; color: #e2e8f0; margin: 1rem 0 0.5rem; }
+  .prose p { color: #cbd5e1; line-height: 1.75; margin-bottom: 0.5rem; }
+  .prose li { color: #cbd5e1; margin-left: 1.5rem; margin-bottom: 0.25rem; list-style: disc; }
+  .sidebar-item { cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem; border-radius: 0.5rem; font-size: 0.875rem; transition: all 0.15s; }
+  .sidebar-item:hover { background: #0f172a; color: #fff; }
+  .sidebar-item.active { background: rgba(22, 78, 99, 0.4); color: #67e8f9; }
+  .post-card { cursor: pointer; background: #0f172a; border: 1px solid #1e293b; border-radius: 0.75rem; padding: 1.25rem; transition: all 0.2s; }
+  .post-card:hover { border-color: #0e7490; background: rgba(15, 23, 42, 0.6); }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+  .modal-content { background: #0f172a; border: 1px solid #1e293b; border-radius: 1rem; padding: 1.5rem; width: 100%; max-width: 28rem; }
+  .badge { display: inline-block; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; padding: 0.125rem 0.625rem; border: 1px solid; }
+  .badge-cyan { background: rgba(22,78,99,0.4); color: #67e8f9; border-color: #0e7490; }
+  .badge-purple { background: rgba(88,28,135,0.4); color: #d8b4fe; border-color: #7c3aed; }
+  .badge-amber { background: rgba(120,53,15,0.4); color: #fcd34d; border-color: #d97706; }
+  .badge-slate { background: #1e293b; color: #94a3b8; border-color: #475569; }
+  .fab { position: fixed; bottom: 2rem; right: 2rem; background: linear-gradient(to right, #06b6d4, #2563eb); color: white; padding: 1rem; border-radius: 9999px; box-shadow: 0 4px 24px rgba(6,182,212,0.3); cursor: pointer; transition: transform 0.2s; border: none; font-size: 1.5rem; }
+  .fab:hover { transform: scale(1.1); }
+  textarea, input, select { outline: none; }
+  textarea:focus, input:focus, select:focus { border-color: #0e7490 !important; }
+</style>
+</head>
+<body>
+
+<!-- ナビゲーションバー（ダミー） -->
+<nav style="position:fixed;top:0;left:0;right:0;z-index:40;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);border-bottom:1px solid #1e293b;padding:1rem 2rem;display:flex;align-items:center;justify-between">
+  <span style="font-weight:700;color:#67e8f9;font-size:1.1rem;">shinji-ota.com</span>
+  <div style="display:flex;gap:1.5rem;color:#64748b;font-size:0.875rem;">
+    <span>About</span><span>Skills</span><span style="color:#67e8f9;font-weight:600;">Blog</span><span>Contact</span>
+  </div>
+</nav>
+
+<div style="min-height:100vh;padding:5rem 1rem 5rem;">
+  <div style="max-width:72rem;margin:0 auto;">
+
+    <!-- ヘッダー -->
+    <div style="margin-bottom:2rem;border-bottom:1px solid #1e293b;padding-bottom:1.5rem;">
+      <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.25rem;">
+        <svg width="22" height="22" fill="none" stroke="#67e8f9" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <h1 style="font-size:1.5rem;font-weight:700;">Blog</h1>
+      </div>
+      <p style="color:#475569;font-size:0.875rem;">労働安全衛生・AIソリューションに関する最新の考察</p>
+    </div>
+
+    <!-- メインレイアウト -->
+    <div style="display:flex;gap:2rem;" id="mainLayout">
+
+      <!-- 左サイドバー -->
+      <aside style="width:15rem;flex-shrink:0;">
+
+        <!-- 検索 -->
+        <div style="position:relative;margin-bottom:1.5rem;">
+          <svg width="14" height="14" fill="none" stroke="#64748b" stroke-width="2" viewBox="0 0 24 24" style="position:absolute;left:0.75rem;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="記事を検索..." id="searchInput" oninput="filterPosts()"
+            style="width:100%;background:#0f172a;border:1px solid #334155;border-radius:0.5rem;padding:0.5rem 0.75rem 0.5rem 2.25rem;font-size:0.875rem;color:#fff;box-sizing:border-box;" />
+        </div>
+
+        <!-- カテゴリ -->
+        <div style="margin-bottom:1.5rem;">
+          <h3 style="font-size:0.75rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem;">カテゴリ</h3>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.25rem;" id="categoryList">
+            <li><div class="sidebar-item active" onclick="filterCategory('すべて',this)"><span style="display:flex;align-items:center;gap:0.5rem;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>すべて</span><span style="font-size:0.75rem;color:#475569;">3</span></div></li>
+            <li><div class="sidebar-item" onclick="filterCategory('労働安全衛生',this)"><span style="display:flex;align-items:center;gap:0.5rem;"><svg width="12" height="12" fill="none" stroke="#334155" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>労働安全衛生</span><span style="font-size:0.75rem;color:#334155;">2</span></div></li>
+            <li><div class="sidebar-item" onclick="filterCategory('AIソリューション',this)"><span style="display:flex;align-items:center;gap:0.5rem;"><svg width="12" height="12" fill="none" stroke="#334155" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>AIソリューション</span><span style="font-size:0.75rem;color:#334155;">1</span></div></li>
+            <li><div class="sidebar-item" onclick="filterCategory('コンサルタント視点',this)"><span style="display:flex;align-items:center;gap:0.5rem;"><svg width="12" height="12" fill="none" stroke="#334155" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>コンサルタント視点</span><span style="font-size:0.75rem;color:#334155;">0</span></div></li>
+            <li><div class="sidebar-item" onclick="filterCategory('その他',this)"><span style="display:flex;align-items:center;gap:0.5rem;"><svg width="12" height="12" fill="none" stroke="#334155" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>その他</span><span style="font-size:0.75rem;color:#334155;">0</span></div></li>
+          </ul>
+        </div>
+
+        <!-- アーカイブ -->
+        <div>
+          <h3 style="font-size:0.75rem;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.75rem;">アーカイブ</h3>
+          <div>
+            <div style="font-size:0.75rem;font-weight:700;color:#94a3b8;padding:0 0.75rem;margin-bottom:0.25rem;">2026年</div>
+            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.125rem;">
+              <li><div class="sidebar-item" onclick="filterArchive('2026','02',this)"><span style="display:flex;align-items:center;gap:0.5rem;"><svg width="11" height="11" fill="none" stroke="#334155" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>2月</span><span style="font-size:0.75rem;color:#334155;">3</span></div></li>
+              <li><div class="sidebar-item" onclick="filterArchive('2026','01',this)"><span style="display:flex;align-items:center;gap:0.5rem;"><svg width="11" height="11" fill="none" stroke="#334155" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>1月</span><span style="font-size:0.75rem;color:#334155;">1</span></div></li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+
+      <!-- メインコンテンツ -->
+      <main style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+          <div style="font-size:0.875rem;color:#64748b;">すべて <span style="color:#334155;">(3件)</span></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;" id="postGrid">
+
+          <!-- 記事カード1 -->
+          <div class="post-card" data-category="労働安全衛生" data-title="改正労働安全衛生法2026年施行：企業が今すぐ対応すべき5つのポイント" onclick="showDetail(this)">
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;flex-wrap:wrap;">
+              <span class="badge badge-cyan">労働安全衛生</span>
+              <span style="font-size:0.75rem;color:#475569;">#法改正</span>
+              <span style="font-size:0.75rem;color:#475569;">#リスクアセスメント</span>
+            </div>
+            <h2 style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.5rem;line-height:1.4;" class="line-clamp-2">改正労働安全衛生法2026年施行：企業が今すぐ対応すべき5つのポイント</h2>
+            <p style="font-size:0.875rem;color:#64748b;line-height:1.6;" class="line-clamp-3">2026年に施行される改正労働安全衛生法は、化学物質管理の自律的管理体制への移行を核心に据えた大きな転換点を迎えます。従来の「指定物質のみ対応」から「全ての化学物質のリスク評価」へと...</p>
+            <div style="display:flex;align-items:center;gap:0.25rem;margin-top:0.75rem;font-size:0.75rem;color:#334155;">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              2026年2月28日
+            </div>
+            <div style="display:none;" class="article-body">
+## 改正労働安全衛生法2026年施行
+
+2026年に施行される改正労働安全衛生法は、化学物質管理の自律的管理体制への移行を核心に据えた大きな転換点を迎えます。
+
+### 1. 化学物質の自律的管理
+
+従来の「指定物質のみ対応」から**全ての化学物質のリスク評価**が義務化されます。企業は取り扱う全化学物質について、リスクアセスメントを実施し、結果に基づいたリスク低減措置を講じる必要があります。
+
+### 2. 化学物質管理者の選任義務
+
+一定規模以上の事業場では、化学物質管理者の選任が義務となります。管理者は専門知識を持ち、従業員への教育・訓練を担います。
+
+### 3. 保護具着用管理責任者の設置
+
+化学物質のリスクが高い作業場では、保護具の適切な使用を管理する専任者の設置が求められます。
+
+### 4. リスクアセスメント結果の記録と開示
+
+リスクアセスメントの実施結果を記録し、5年間保存することが義務化。労働者への開示も必要です。
+
+### 5. 外部専門家の活用推進
+
+改正法では、中小企業が外部の専門家（労働安全コンサルタント等）を活用して安全管理を強化することを積極的に推奨しています。
+
+今こそ、自社の化学物質管理体制を見直す絶好の機会です。
+            </div>
+          </div>
+
+          <!-- 記事カード2 -->
+          <div class="post-card" data-category="AIソリューション" data-title="AIが変える労働安全管理：現場データの分析から予測型リスク管理へ" onclick="showDetail(this)">
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;flex-wrap:wrap;">
+              <span class="badge badge-purple">AIソリューション</span>
+              <span style="font-size:0.75rem;color:#475569;">#予測分析</span>
+              <span style="font-size:0.75rem;color:#475569;">#DX</span>
+            </div>
+            <h2 style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.5rem;line-height:1.4;" class="line-clamp-2">AIが変える労働安全管理：現場データの分析から予測型リスク管理へ</h2>
+            <p style="font-size:0.875rem;color:#64748b;line-height:1.6;" class="line-clamp-3">従来の労働安全管理は、事故が起きた後に原因を究明し、再発防止策を講じる「事後対応型」が主流でした。しかし今、AIと IoT センサーの組み合わせにより、事故が起きる前に危険を察知する...</p>
+            <div style="display:flex;align-items:center;gap:0.25rem;margin-top:0.75rem;font-size:0.75rem;color:#334155;">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              2026年2月20日
+            </div>
+            <div style="display:none;" class="article-body">
+## AIが変える労働安全管理
+
+従来の労働安全管理は、事故が起きた後に原因を究明し、再発防止策を講じる「事後対応型」が主流でした。しかし今、AIとIoTセンサーの組み合わせにより、事故が起きる前に危険を察知する**予測型リスク管理**が現実のものとなっています。
+
+### 現場センサーデータの活用
+
+温度・振動・作業者の動作パターンをリアルタイムで収集し、AIが異常パターンを検知します。
+
+### ヒヤリハット情報のAI分析
+
+これまでアナログで管理されていたヒヤリハット報告をAIが自然言語処理で分析し、**リスクの傾向と因果関係**を可視化します。
+
+### 導入事例：製造業A社
+
+月次の労働災害件数が、AI導入後12ヶ月で**67%減少**。特に「はさまれ・巻き込まれ」系の災害が大幅に減少しました。
+
+AIはあくまでツールです。現場の知見と組み合わせてこそ、真の安全文化が醸成されます。
+            </div>
+          </div>
+
+          <!-- 記事カード3 -->
+          <div class="post-card" data-category="労働安全衛生" data-title="高齢労働者の安全対策：身体機能の変化を踏まえたリスクアセスメントの視点" onclick="showDetail(this)">
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;flex-wrap:wrap;">
+              <span class="badge badge-cyan">労働安全衛生</span>
+              <span style="font-size:0.75rem;color:#475569;">#高齢者</span>
+              <span style="font-size:0.75rem;color:#475569;">#RA</span>
+            </div>
+            <h2 style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.5rem;line-height:1.4;" class="line-clamp-2">高齢労働者の安全対策：身体機能の変化を踏まえたリスクアセスメントの視点</h2>
+            <p style="font-size:0.875rem;color:#64748b;line-height:1.6;" class="line-clamp-3">日本の労働市場における高齢者比率は上昇の一途をたどっており、60歳以上の労働者が全体の約20%を超えました。高齢労働者は豊富な経験と技能を持つ一方で、加齢に伴う身体機能の変化が...</p>
+            <div style="display:flex;align-items:center;gap:0.25rem;margin-top:0.75rem;font-size:0.75rem;color:#334155;">
+              <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              2026年2月15日
+            </div>
+            <div style="display:none;" class="article-body">
+## 高齢労働者の安全対策
+
+日本の労働市場における高齢者比率は上昇の一途をたどっており、60歳以上の労働者が全体の約20%を超えました。
+
+### 加齢による身体機能の変化
+
+- **視力・聴力の低下**：危険信号の見落としリスク増加
+- **反応速度の低下**：緊急時の回避行動が遅れる
+- **筋力・バランス能力の低下**：転倒・転落リスクの上昇
+- **疲労回復の遅さ**：連続作業による集中力低下
+
+### リスクアセスメントでの配慮ポイント
+
+高齢者特有のリスクを正確に評価するためには、従来の手法に加えて**個人の身体能力評価**を組み込むことが重要です。
+
+### 環境整備による対策
+
+照明の強化、段差の解消、警告音の音量調整など、作業環境そのものを高齢者に配慮した設計に見直すことで、年齢に関わらず安全に働ける職場が実現します。
+
+経験豊富な高齢労働者の知見を活かしながら、安全な職場環境を共に構築していきましょう。
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- 記事詳細ビュー（非表示） -->
+<div id="detailView" style="display:none;max-width:48rem;margin:0 auto;">
+  <button onclick="backToList()" style="display:flex;align-items:center;gap:0.5rem;color:#64748b;background:none;border:none;cursor:pointer;font-size:0.875rem;margin-bottom:1.5rem;padding:0;" onmouseover="this.style.color='#67e8f9'" onmouseout="this.style.color='#64748b'">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> 一覧に戻る
+  </button>
+  <div id="detailBadge" style="margin-bottom:0.75rem;"></div>
+  <h1 id="detailTitle" style="font-size:1.75rem;font-weight:700;color:#fff;margin-bottom:0.75rem;line-height:1.3;"></h1>
+  <div style="display:flex;align-items:center;gap:1rem;font-size:0.75rem;color:#475569;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #1e293b;">
+    <span id="detailDate"></span>
+    <span style="color:#334155;">太田 真治 / Shinji Ota</span>
+  </div>
+  <div class="prose" id="detailBody"></div>
+</div>
+
+<!-- 投稿ボタン -->
+<button class="fab" onclick="document.getElementById('uploadModal').style.display='flex'" title="新規記事を投稿">＋</button>
+
+<!-- 投稿モーダル -->
+<div id="uploadModal" style="display:none;" class="modal-overlay" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+      <h2 style="font-size:1.125rem;font-weight:700;">新規記事を投稿</h2>
+      <button onclick="document.getElementById('uploadModal').style.display='none'" style="color:#64748b;background:none;border:none;cursor:pointer;font-size:1.25rem;">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div>
+        <label style="display:block;font-size:0.75rem;color:#64748b;margin-bottom:0.25rem;">タイトル <span style="color:#f87171;">*</span></label>
+        <input type="text" placeholder="記事タイトルを入力" style="width:100%;background:#1e293b;border:1px solid #334155;border-radius:0.5rem;padding:0.5rem 0.75rem;font-size:0.875rem;color:#fff;box-sizing:border-box;" />
+      </div>
+      <div>
+        <label style="display:block;font-size:0.75rem;color:#64748b;margin-bottom:0.25rem;">カテゴリ</label>
+        <select style="width:100%;background:#1e293b;border:1px solid #334155;border-radius:0.5rem;padding:0.5rem 0.75rem;font-size:0.875rem;color:#fff;box-sizing:border-box;">
+          <option>労働安全衛生</option><option>AIソリューション</option><option>コンサルタント視点</option><option>その他</option>
+        </select>
+      </div>
+      <div>
+        <label style="display:block;font-size:0.75rem;color:#64748b;margin-bottom:0.25rem;">本文 <span style="color:#f87171;">*</span></label>
+        <textarea rows="8" placeholder="マークダウン記法で記述（# 見出し、**太字**、- リストなど）" style="width:100%;background:#1e293b;border:1px solid #334155;border-radius:0.5rem;padding:0.5rem 0.75rem;font-size:0.875rem;color:#fff;box-sizing:border-box;font-family:monospace;resize:vertical;"></textarea>
+      </div>
+      <div>
+        <label style="display:block;font-size:0.75rem;color:#64748b;margin-bottom:0.25rem;">画像URL（任意）</label>
+        <input type="url" placeholder="https://..." style="width:100%;background:#1e293b;border:1px solid #334155;border-radius:0.5rem;padding:0.5rem 0.75rem;font-size:0.875rem;color:#fff;box-sizing:border-box;" />
+      </div>
+      <div>
+        <label style="display:block;font-size:0.75rem;color:#64748b;margin-bottom:0.25rem;">タグ（カンマ区切り）</label>
+        <input type="text" placeholder="例: リスクアセスメント, ISO45001" style="width:100%;background:#1e293b;border:1px solid #334155;border-radius:0.5rem;padding:0.5rem 0.75rem;font-size:0.875rem;color:#fff;box-sizing:border-box;" />
+      </div>
+      <div style="padding-top:0.75rem;border-top:1px solid #1e293b;">
+        <label style="display:block;font-size:0.75rem;color:#64748b;margin-bottom:0.25rem;">🔒 管理者パスワード</label>
+        <input type="password" placeholder="パスワードを入力" style="width:100%;background:#1e293b;border:1px solid #334155;border-radius:0.5rem;padding:0.5rem 0.75rem;font-size:0.875rem;color:#fff;box-sizing:border-box;" />
+      </div>
+      <button style="width:100%;background:#0e7490;color:#fff;font-weight:700;padding:0.625rem;border-radius:0.5rem;border:none;cursor:pointer;font-size:0.875rem;" onmouseover="this.style.background='#0891b2'" onmouseout="this.style.background='#0e7490'">記事を投稿する</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const BADGE_MAP = {
+  '労働安全衛生': '<span class="badge badge-cyan">労働安全衛生</span>',
+  'AIソリューション': '<span class="badge badge-purple">AIソリューション</span>',
+  'コンサルタント視点': '<span class="badge badge-amber">コンサルタント視点</span>',
+  'その他': '<span class="badge badge-slate">その他</span>',
+};
+
+function showDetail(card) {
+  const title = card.dataset.title;
+  const category = card.dataset.category;
+  const bodyRaw = card.querySelector('.article-body').innerText.trim();
+  const date = card.querySelector('[data-category]~*~*~*')?.innerText || '2026年';
+
+  // マークダウン簡易レンダリング
+  const html = bodyRaw.split('\n').map(line => {
+    if (line.startsWith('## ')) return `<h2>${line.slice(3)}</h2>`;
+    if (line.startsWith('### ')) return `<h3>${line.slice(4)}</h3>`;
+    if (line.startsWith('- ')) return `<li>${line.slice(2)}</li>`;
+    if (line.trim() === '') return '<div style="height:0.5rem"></div>';
+    return `<p>${line.replace(/\*\*(.+?)\*\*/g,'<strong style="color:#fff">$1</strong>')}</p>`;
+  }).join('');
+
+  document.getElementById('detailTitle').textContent = title;
+  document.getElementById('detailBadge').innerHTML = BADGE_MAP[category] || '';
+  document.getElementById('detailBody').innerHTML = html;
+  document.getElementById('detailDate').textContent = card.querySelector('[style*="334155"]').textContent;
+
+  document.getElementById('mainLayout').style.display = 'none';
+  document.querySelector('h1').closest('div').style.display = '';
+  document.getElementById('detailView').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function backToList() {
+  document.getElementById('detailView').style.display = 'none';
+  document.getElementById('mainLayout').style.display = 'flex';
+}
+
+function filterCategory(cat, el) {
+  document.querySelectorAll('#categoryList .sidebar-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  const cards = document.querySelectorAll('.post-card');
+  cards.forEach(card => {
+    card.style.display = (cat === 'すべて' || card.dataset.category === cat) ? '' : 'none';
+  });
+}
+
+function filterArchive(year, month, el) {
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function filterPosts() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.post-card').forEach(card => {
+    const title = card.dataset.title.toLowerCase();
+    card.style.display = (!q || title.includes(q)) ? '' : 'none';
+  });
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('uploadModal')) {
+    document.getElementById('uploadModal').style.display = 'none';
+  }
+}
+</script>
+</body>
+</html>

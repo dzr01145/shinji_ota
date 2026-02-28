@@ -288,6 +288,81 @@ app.delete('/api/blog/:id', async (req, res) => {
   }
 });
 
+// POST /api/generate-image - Gemini Imagen を使った AI 画像生成
+app.post('/api/generate-image', async (req, res) => {
+  const { title, category } = req.body;
+  if (!title) return res.status(400).json({ error: 'title is required' });
+
+  if (!process.env.GEMINI_API_KEY) {
+    return res.status(500).json({ error: 'GEMINI_API_KEY is not configured' });
+  }
+
+  // 日本語タイトルから英語プロンプトを生成
+  const promptModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+  const promptResult = await promptModel.generateContent(
+    `You are an art director. Create a concise English image generation prompt (max 60 words) for a professional blog post hero image.
+Topic: "${title}"
+Category: "${category || 'Safety & Consulting'}"
+Style requirements: photorealistic or high-quality digital illustration, professional, modern, no text or typography in the image, no people's faces shown clearly.
+Output ONLY the prompt text, nothing else.`
+  );
+  const imagePrompt = promptResult.response.text().trim();
+  console.log('Generated image prompt:', imagePrompt);
+
+  // Imagen 3 REST API を呼び出して画像を生成
+  const imagenResponse = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${process.env.GEMINI_API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        instances: [{ prompt: imagePrompt }],
+        parameters: { sampleCount: 1, aspectRatio: '16:9' }
+      })
+    }
+  );
+
+  if (!imagenResponse.ok) {
+    const errText = await imagenResponse.text();
+    console.error('Imagen API error:', errText);
+    return res.status(500).json({ error: 'Image generation failed', details: errText });
+  }
+
+  const imagenData = await imagenResponse.json();
+  const prediction = imagenData.predictions?.[0];
+  if (!prediction?.bytesBase64Encoded) {
+    return res.status(500).json({ error: 'No image returned from Imagen API' });
+  }
+
+  // Base64 → Buffer に変換して Supabase Storage にアップロード
+  const imageBuffer = Buffer.from(prediction.bytesBase64Encoded, 'base64');
+  const mimeType = prediction.mimeType || 'image/png';
+  const ext = mimeType.split('/')[1] || 'png';
+  const fileName = `blog-${Date.now()}.${ext}`;
+
+  const { data: uploadData, error: uploadError } = await supabase.storage
+    .from('blog-images')
+    .upload(fileName, imageBuffer, {
+      contentType: mimeType,
+      upsert: false
+    });
+
+  if (uploadError) {
+    console.error('Supabase upload error:', uploadError);
+    return res.status(500).json({ error: 'Failed to upload image', details: uploadError.message });
+  }
+
+  // 公開 URL を取得
+  const { data: publicUrlData } = supabase.storage
+    .from('blog-images')
+    .getPublicUrl(fileName);
+
+  res.json({
+    imageUrl: publicUrlData.publicUrl,
+    prompt: imagePrompt
+  });
+});
+
 // Admin Login Check
 app.post('/api/login', (req, res) => {
   const { password } = req.body;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { BookOpen, Tag, Calendar, ChevronRight, ArrowLeft, Plus, X, Lock, Loader2, Clock, Search } from 'lucide-react';
+import { BookOpen, Tag, Calendar, ChevronRight, ArrowLeft, Plus, X, Lock, Loader2, Clock, Search, Sparkles, Image } from 'lucide-react';
 
 // =============================================
 // 型定義
@@ -153,6 +153,8 @@ const Blog: React.FC = () => {
   const [formTags, setFormTags] = useState('');
   const [formPassword, setFormPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [generatedImagePrompt, setGeneratedImagePrompt] = useState('');
 
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
@@ -183,6 +185,34 @@ const Blog: React.FC = () => {
   const filteredPosts = searchQuery
     ? posts.filter(p => p.title.includes(searchQuery) || p.body.includes(searchQuery) || p.category.includes(searchQuery))
     : posts;
+
+  const handleGenerateImage = async () => {
+    if (!formTitle.trim()) {
+      alert('タイトルを入力してから画像を生成してください。');
+      return;
+    }
+    setIsGeneratingImage(true);
+    setGeneratedImagePrompt('');
+    try {
+      const res = await fetch('/api/generate-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: formTitle, category: formCategory })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setFormImageUrl(data.imageUrl);
+        setGeneratedImagePrompt(data.prompt);
+      } else {
+        const err = await res.json();
+        alert('画像生成に失敗しました: ' + (err.error || '不明なエラー'));
+      }
+    } catch (e) {
+      alert('画像生成中にエラーが発生しました');
+    } finally {
+      setIsGeneratingImage(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -232,139 +262,155 @@ const Blog: React.FC = () => {
           <p className="text-slate-500 text-sm">労働安全衛生・AIソリューションに関する最新の考察</p>
         </div>
 
-        {selectedPost ? (
-          /* ========== 記事詳細ビュー ========== */
-          <div className="max-w-3xl mx-auto">
-            <button onClick={() => setSelectedPost(null)} className="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors mb-6 text-sm">
-              <ArrowLeft size={16} /> 一覧に戻る
-            </button>
-            {selectedPost.imageUrl && (
-              <div className="w-full h-64 rounded-xl overflow-hidden mb-6">
-                <img src={selectedPost.imageUrl} alt={selectedPost.title} className="w-full h-full object-cover" />
+        {/* ========== サイドバー常時表示レイアウト ========== */}
+        <div className="flex flex-col lg:flex-row gap-8">
+
+          {/* 左サイドバー（一覧・詳細ともに常時表示） */}
+          <aside className="lg:w-60 flex-shrink-0">
+            {/* 詳細ビュー中は「一覧に戻る」ボタン */}
+            {selectedPost && (
+              <button
+                onClick={() => setSelectedPost(null)}
+                className="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors mb-6 text-sm w-full"
+              >
+                <ArrowLeft size={14} /> 一覧に戻る
+              </button>
+            )}
+
+            {/* 検索 */}
+            <div className="relative mb-6">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                type="text"
+                placeholder="記事を検索..."
+                value={searchQuery}
+                onChange={e => { setSearchQuery(e.target.value); setSelectedPost(null); }}
+                className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-slate-600 focus:border-cyan-600 focus:outline-none"
+              />
+            </div>
+
+            {/* カテゴリ */}
+            <div className="mb-6">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">カテゴリ</h3>
+              <ul className="space-y-1">
+                {CATEGORIES.map(cat => (
+                  <li key={cat}>
+                    <button
+                      onClick={() => { setActiveCategory(cat); setActiveArchive({}); setSearchQuery(''); setSelectedPost(null); }}
+                      className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${activeCategory === cat && !activeArchive.year && !selectedPost ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-400 hover:bg-slate-900 hover:text-white'}`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <ChevronRight size={12} className={activeCategory === cat && !selectedPost ? 'text-cyan-400' : 'text-slate-700'} />
+                        {cat}
+                      </span>
+                      {cat !== 'すべて' && (
+                        <span className="text-xs text-slate-600">
+                          {posts.filter(p => p.category === cat).length}
+                        </span>
+                      )}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* アーカイブ */}
+            {Object.keys(archiveByYear).length > 0 && (
+              <div>
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">アーカイブ</h3>
+                <div className="space-y-3">
+                  {Object.entries(archiveByYear).sort(([a], [b]) => Number(b) - Number(a)).map(([year, months]) => (
+                    <div key={year}>
+                      <div className="text-xs font-bold text-slate-400 px-3 mb-1">{year}年</div>
+                      <ul className="space-y-0.5">
+                        {months.sort((a, b) => Number(b.month) - Number(a.month)).map(arc => (
+                          <li key={arc.month}>
+                            <button
+                              onClick={() => { setActiveArchive({ year, month: arc.month }); setActiveCategory('すべて'); setSearchQuery(''); setSelectedPost(null); }}
+                              className={`w-full text-left flex items-center justify-between px-3 py-1.5 rounded-lg text-sm transition-colors ${activeArchive.year === year && activeArchive.month === arc.month ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-500 hover:bg-slate-900 hover:text-white'}`}
+                            >
+                              <span className="flex items-center gap-2">
+                                <ChevronRight size={11} className="text-slate-700" />
+                                {MONTH_JP[arc.month]}
+                              </span>
+                              <span className="text-xs text-slate-700">{arc.count}</span>
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
-            <div className="flex items-center gap-2 mb-3 flex-wrap">
-              <CategoryBadge category={selectedPost.category} />
-              {selectedPost.tags?.map(tag => (
-                <span key={tag} className="text-xs text-slate-500 flex items-center gap-1"><Tag size={10} />#{tag}</span>
-              ))}
-            </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-3 leading-snug">{selectedPost.title}</h1>
-            <div className="flex items-center gap-4 text-xs text-slate-500 mb-8 pb-6 border-b border-slate-800">
-              <span className="flex items-center gap-1"><Calendar size={11} />{new Date(selectedPost.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-              <span className="flex items-center gap-1 text-slate-600">太田 真治 / Shinji Ota</span>
-            </div>
-            <PostBody body={selectedPost.body} />
-          </div>
+          </aside>
 
-        ) : (
-          /* ========== 一覧ビュー（サイドバー + コンテンツ） ========== */
-          <div className="flex flex-col lg:flex-row gap-8">
-
-            {/* 左サイドバー */}
-            <aside className="lg:w-60 flex-shrink-0">
-              {/* 検索 */}
-              <div className="relative mb-6">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-                <input
-                  type="text"
-                  placeholder="記事を検索..."
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-slate-600 focus:border-cyan-600 focus:outline-none"
-                />
-              </div>
-
-              {/* カテゴリ */}
-              <div className="mb-6">
-                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">カテゴリ</h3>
-                <ul className="space-y-1">
-                  {CATEGORIES.map(cat => (
-                    <li key={cat}>
-                      <button
-                        onClick={() => { setActiveCategory(cat); setActiveArchive({}); setSearchQuery(''); }}
-                        className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${activeCategory === cat && !activeArchive.year ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-400 hover:bg-slate-900 hover:text-white'}`}
-                      >
-                        <span className="flex items-center gap-2">
-                          <ChevronRight size={12} className={activeCategory === cat ? 'text-cyan-400' : 'text-slate-700'} />
-                          {cat}
-                        </span>
-                        {cat !== 'すべて' && (
-                          <span className="text-xs text-slate-600">
-                            {posts.filter(p => cat === 'すべて' || p.category === cat).length}
-                          </span>
-                        )}
-                      </button>
-                    </li>
+          {/* メインコンテンツ */}
+          <main className="flex-1 min-w-0">
+            {selectedPost ? (
+              /* ========== 記事詳細ビュー ========== */
+              <div>
+                {/* カテゴリ・タグ */}
+                <div className="flex items-center gap-2 mb-3 flex-wrap">
+                  <CategoryBadge category={selectedPost.category} />
+                  {selectedPost.tags?.map(tag => (
+                    <span key={tag} className="text-xs text-slate-500 flex items-center gap-1"><Tag size={10} />#{tag}</span>
                   ))}
-                </ul>
+                </div>
+                {/* タイトル */}
+                <h1 className="text-2xl md:text-3xl font-bold text-white mb-3 leading-snug">{selectedPost.title}</h1>
+                {/* 日付・著者 */}
+                <div className="flex items-center gap-4 text-xs text-slate-500 mb-6">
+                  <span className="flex items-center gap-1"><Calendar size={11} />{new Date(selectedPost.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                  <span className="flex items-center gap-1 text-slate-600">太田 真治 / Shinji Ota</span>
+                </div>
+                {/* タイトル下のアイキャッチ画像 */}
+                {selectedPost.imageUrl && (
+                  <div className="w-full rounded-xl overflow-hidden mb-8 border border-slate-800">
+                    <img src={selectedPost.imageUrl} alt={selectedPost.title} className="w-full object-cover max-h-80" />
+                  </div>
+                )}
+                <div className="border-t border-slate-800 pt-8">
+                  <PostBody body={selectedPost.body} />
+                </div>
               </div>
 
-              {/* アーカイブ */}
-              {Object.keys(archiveByYear).length > 0 && (
-                <div>
-                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">アーカイブ</h3>
-                  <div className="space-y-3">
-                    {Object.entries(archiveByYear).sort(([a], [b]) => Number(b) - Number(a)).map(([year, months]) => (
-                      <div key={year}>
-                        <div className="text-xs font-bold text-slate-400 px-3 mb-1">{year}年</div>
-                        <ul className="space-y-0.5">
-                          {months.sort((a, b) => Number(b.month) - Number(a.month)).map(arc => (
-                            <li key={arc.month}>
-                              <button
-                                onClick={() => { setActiveArchive({ year, month: arc.month }); setActiveCategory('すべて'); setSearchQuery(''); }}
-                                className={`w-full text-left flex items-center justify-between px-3 py-1.5 rounded-lg text-sm transition-colors ${activeArchive.year === year && activeArchive.month === arc.month ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-500 hover:bg-slate-900 hover:text-white'}`}
-                              >
-                                <span className="flex items-center gap-2">
-                                  <ChevronRight size={11} className="text-slate-700" />
-                                  {MONTH_JP[arc.month]}
-                                </span>
-                                <span className="text-xs text-slate-700">{arc.count}</span>
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+            ) : (
+              /* ========== 一覧ビュー ========== */
+              <div>
+                {/* フィルタ表示 */}
+                <div className="flex items-center justify-between mb-5">
+                  <div className="text-sm text-slate-400">
+                    {searchQuery ? `"${searchQuery}" の検索結果` : activeArchive.year ? `${activeArchive.year}年${activeArchive.month ? MONTH_JP[activeArchive.month] : ''}` : activeCategory}
+                    <span className="ml-2 text-slate-600">({filteredPosts.length}件)</span>
+                  </div>
+                  {(searchQuery || activeArchive.year) && (
+                    <button onClick={() => { setSearchQuery(''); setActiveArchive({}); setActiveCategory('すべて'); }} className="text-xs text-slate-600 hover:text-cyan-400 transition-colors">
+                      クリア
+                    </button>
+                  )}
+                </div>
+
+                {isLoading ? (
+                  <div className="flex justify-center py-20">
+                    <Loader2 size={28} className="animate-spin text-cyan-500" />
+                  </div>
+                ) : filteredPosts.length === 0 ? (
+                  <div className="text-center py-20 text-slate-600">
+                    <BookOpen size={40} className="mx-auto mb-3 opacity-30" />
+                    <p className="text-sm">記事がありません</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {filteredPosts.map(post => (
+                      <PostCard key={post.id} post={post} onClick={() => setSelectedPost(post)} />
                     ))}
                   </div>
-                </div>
-              )}
-            </aside>
-
-            {/* メインコンテンツ */}
-            <main className="flex-1 min-w-0">
-              {/* フィルタ表示 */}
-              <div className="flex items-center justify-between mb-5">
-                <div className="text-sm text-slate-400">
-                  {searchQuery ? `"${searchQuery}" の検索結果` : activeArchive.year ? `${activeArchive.year}年${activeArchive.month ? MONTH_JP[activeArchive.month] : ''}` : activeCategory}
-                  <span className="ml-2 text-slate-600">({filteredPosts.length}件)</span>
-                </div>
-                {(searchQuery || activeArchive.year) && (
-                  <button onClick={() => { setSearchQuery(''); setActiveArchive({}); setActiveCategory('すべて'); }} className="text-xs text-slate-600 hover:text-cyan-400 transition-colors">
-                    クリア
-                  </button>
                 )}
               </div>
-
-              {isLoading ? (
-                <div className="flex justify-center py-20">
-                  <Loader2 size={28} className="animate-spin text-cyan-500" />
-                </div>
-              ) : filteredPosts.length === 0 ? (
-                <div className="text-center py-20 text-slate-600">
-                  <BookOpen size={40} className="mx-auto mb-3 opacity-30" />
-                  <p className="text-sm">記事がありません</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {filteredPosts.map(post => (
-                    <PostCard key={post.id} post={post} onClick={() => setSelectedPost(post)} />
-                  ))}
-                </div>
-              )}
-            </main>
-          </div>
-        )}
+            )}
+          </main>
+        </div>
       </div>
 
       {/* ========== 新規投稿ボタン ========== */}
@@ -405,10 +451,42 @@ const Blog: React.FC = () => {
                   placeholder="マークダウン記法で記述できます（# 見出し、**太字**、- リストなど）" />
               </div>
               <div>
-                <label className="block text-xs text-slate-400 mb-1">画像URL（任意）</label>
-                <input type="url" value={formImageUrl} onChange={e => setFormImageUrl(e.target.value)}
+                <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1">
+                  <Image size={11} /> アイキャッチ画像（任意）
+                </label>
+                {/* AI画像生成ボタン */}
+                <button
+                  type="button"
+                  onClick={handleGenerateImage}
+                  disabled={isGeneratingImage || !formTitle.trim()}
+                  className="w-full mb-2 flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold py-2 rounded-lg transition-all"
+                >
+                  {isGeneratingImage
+                    ? <><Loader2 size={14} className="animate-spin" /> AI画像を生成中...</>
+                    : <><Sparkles size={14} /> AIでアイキャッチ画像を自動生成</>}
+                </button>
+                {/* 生成済み画像プレビュー */}
+                {formImageUrl && (
+                  <div className="mb-2 rounded-lg overflow-hidden border border-slate-600 relative">
+                    <img src={formImageUrl} alt="プレビュー" className="w-full h-40 object-cover" />
+                    {generatedImagePrompt && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-xs text-slate-300 px-2 py-1 truncate">
+                        AI生成: {generatedImagePrompt}
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => { setFormImageUrl(''); setGeneratedImagePrompt(''); }}
+                      className="absolute top-2 right-2 bg-black/60 hover:bg-black/80 text-white rounded-full p-1 transition"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                )}
+                {/* 手動URL入力 */}
+                <input type="url" value={formImageUrl} onChange={e => { setFormImageUrl(e.target.value); setGeneratedImagePrompt(''); }}
                   className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm focus:border-cyan-500 outline-none"
-                  placeholder="https://..." />
+                  placeholder="または画像URLを直接入力 (https://...)" />
               </div>
               <div>
                 <label className="block text-xs text-slate-400 mb-1">タグ（カンマ区切り）</label>
