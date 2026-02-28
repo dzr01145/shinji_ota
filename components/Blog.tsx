@@ -278,11 +278,12 @@ const Blog: React.FC = () => {
   }, {});
 
   return (
-    <div className="min-h-screen bg-black text-white pt-20 pb-20">
-      <div className="max-w-6xl mx-auto px-4">
+    /* 全体: ビューポート高 - ナビ高 を占有して内部でスクロール制御 */
+    <div className="bg-black text-white flex flex-col" style={{ height: 'calc(100vh - 80px)', marginTop: '80px' }}>
+      <div className="max-w-6xl mx-auto px-4 w-full flex flex-col flex-1 min-h-0">
 
-        {/* ヘッダー */}
-        <div className="mb-8 border-b border-slate-800 pb-6">
+        {/* ヘッダー（固定・スクロールしない） */}
+        <div className="mb-6 border-b border-slate-800 pb-5 flex-shrink-0 pt-6">
           <div className="flex items-center gap-3 mb-1">
             <BookOpen size={22} className="text-cyan-400" />
             <h1 className="text-2xl font-bold tracking-tight">Blog</h1>
@@ -290,11 +291,11 @@ const Blog: React.FC = () => {
           <p className="text-slate-500 text-sm">労働安全衛生・AIソリューションに関する最新の考察</p>
         </div>
 
-        {/* ========== サイドバー常時表示レイアウト ========== */}
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+        {/* ========== 2カラムレイアウト: 左固定・右スクロール ========== */}
+        <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0">
 
-          {/* 左サイドバー（一覧・詳細ともに常時固定表示） */}
-          <aside className="lg:w-60 flex-shrink-0 lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
+          {/* 左サイドバー: overflow-y-auto で内部スクロール、高さは親に追従 */}
+          <aside className="lg:w-60 flex-shrink-0 lg:overflow-y-auto lg:pb-6">
             {/* 詳細ビュー中は「一覧に戻る」ボタン */}
             {selectedPost && (
               <button
@@ -374,7 +375,7 @@ const Blog: React.FC = () => {
           </aside>
 
           {/* メインコンテンツ */}
-          <main className="flex-1 min-w-0">
+          <main className="flex-1 min-w-0 lg:overflow-y-auto lg:pb-6">
             {selectedPost ? (
               /* ========== 記事詳細ビュー ========== */
               <div>
