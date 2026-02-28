@@ -155,6 +155,7 @@ const Blog: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [expandedImageUrl, setExpandedImageUrl] = useState<string | null>(null);
 
   // 投稿フォーム
   const [formTitle, setFormTitle] = useState('');
@@ -393,10 +394,13 @@ const Blog: React.FC = () => {
                   <span className="flex items-center gap-1"><Calendar size={11} />{new Date(selectedPost.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                   <span className="flex items-center gap-1 text-slate-600">太田 真治 / Shinji Ota</span>
                 </div>
-                {/* タイトル下のアイキャッチ画像 */}
+                {/* タイトル下のアイキャッチ画像（クリック拡大対応） */}
                 {selectedPost.imageUrl && (
-                  <div className="w-full rounded-xl overflow-hidden mb-8 border border-slate-800">
-                    <img src={selectedPost.imageUrl} alt={selectedPost.title} className="w-full object-cover max-h-80" />
+                  <div
+                    onClick={() => setExpandedImageUrl(selectedPost.imageUrl!)}
+                    className="w-full rounded-xl overflow-hidden mb-8 border border-slate-800 cursor-pointer hover:border-cyan-600 hover:shadow-lg hover:shadow-cyan-600/20 transition-all duration-200"
+                  >
+                    <img src={selectedPost.imageUrl} alt={selectedPost.title} className="w-full h-auto object-contain" />
                   </div>
                 )}
                 <div className="border-t border-slate-800 pt-8">
@@ -450,6 +454,31 @@ const Blog: React.FC = () => {
       >
         <Plus size={22} />
       </button>
+
+      {/* ========== 画像拡大表示モーダル ========== */}
+      {expandedImageUrl && (
+        <div
+          onClick={() => setExpandedImageUrl(null)}
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 cursor-pointer group"
+        >
+          <button
+            onClick={() => setExpandedImageUrl(null)}
+            className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors z-10"
+          >
+            <X size={28} />
+          </button>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="max-w-4xl max-h-[90vh] overflow-auto rounded-xl border border-slate-700"
+          >
+            <img
+              src={expandedImageUrl}
+              alt="Expanded view"
+              className="w-full h-auto"
+            />
+          </div>
+        </div>
+      )}
 
       {/* ========== 投稿モーダル ========== */}
       {isUploadOpen && (
