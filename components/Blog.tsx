@@ -76,19 +76,57 @@ const PostCard: React.FC<{ post: BlogPost; onClick: () => void }> = ({ post, onC
   );
 };
 
+/** インライン要素（太字・リンク）をパースしてReact要素に変換 */
+const parseInline = (text: string): React.ReactNode[] => {
+  const parts: React.ReactNode[] = [];
+  // [text](url) と **bold** を同時にパース
+  const regex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)|\*\*(.+?)\*\*/g;
+  let last = 0;
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > last) parts.push(text.slice(last, match.index));
+    if (match[1] && match[2]) {
+      // リンク
+      parts.push(
+        <a key={match.index} href={match[2]} target="_blank" rel="noopener noreferrer"
+          className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2 break-all">
+          {match[1]}
+        </a>
+      );
+    } else if (match[3]) {
+      // 太字
+      parts.push(<strong key={match.index} className="text-white font-bold">{match[3]}</strong>);
+    }
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+};
+
 /** 記事本文（マークダウン簡易レンダリング） */
 const PostBody: React.FC<{ body: string }> = ({ body }) => {
   const lines = body.split('\n');
   return (
     <div className="prose prose-invert prose-sm max-w-none">
       {lines.map((line, i) => {
-        if (line.startsWith('# ')) return <h1 key={i} className="text-2xl font-bold text-white mt-6 mb-3">{line.slice(2)}</h1>;
-        if (line.startsWith('## ')) return <h2 key={i} className="text-xl font-bold text-slate-100 mt-5 mb-2">{line.slice(3)}</h2>;
+        if (line.startsWith('# '))  return <h1 key={i} className="text-2xl font-bold text-white mt-6 mb-3">{line.slice(2)}</h1>;
+        if (line.startsWith('## ')) return <h2 key={i} className="text-xl font-bold text-slate-100 mt-5 mb-2 border-b border-slate-800 pb-1">{line.slice(3)}</h2>;
         if (line.startsWith('### ')) return <h3 key={i} className="text-lg font-semibold text-slate-200 mt-4 mb-2">{line.slice(4)}</h3>;
-        if (line.startsWith('- ')) return <li key={i} className="text-slate-300 ml-4 mb-1 list-disc">{line.slice(2)}</li>;
+        if (line.startsWith('---')) return <hr key={i} className="border-slate-700 my-6" />;
+        if (line.startsWith('- ')) {
+          // リスト項目もリンク・太字対応
+          return (
+            <li key={i} className="text-slate-300 ml-5 mb-2 list-disc leading-relaxed">
+              {parseInline(line.slice(2))}
+            </li>
+          );
+        }
         if (line.trim() === '') return <div key={i} className="h-3" />;
-        const bold = line.replace(/\*\*(.+?)\*\*/g, '<strong class="text-white">$1</strong>');
-        return <p key={i} className="text-slate-300 leading-relaxed mb-1" dangerouslySetInnerHTML={{ __html: bold }} />;
+        return (
+          <p key={i} className="text-slate-300 leading-relaxed mb-2">
+            {parseInline(line)}
+          </p>
+        );
       })}
     </div>
   );
@@ -332,7 +370,7 @@ const Blog: React.FC = () => {
       {/* ========== 新規投稿ボタン ========== */}
       <button
         onClick={() => setIsUploadOpen(true)}
-        className="fixed bottom-8 right-8 bg-gradient-to-r from-cyan-500 to-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50"
+        className="fixed bottom-8 left-8 bg-gradient-to-r from-cyan-500 to-blue-600 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-transform z-50"
         title="新規記事を投稿"
       >
         <Plus size={22} />
