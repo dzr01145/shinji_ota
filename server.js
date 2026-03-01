@@ -18,11 +18,14 @@ app.use(express.json({ limit: '50mb' }));
 
 // Basic Authentication Middleware
 const auth = (req, res, next) => {
-  const user = basicAuth(req);
   const validUser = process.env.VITE_AUTH_USER;
   const validPassword = process.env.VITE_AUTH_PASSWORD;
 
-  if (!user || !validUser || !validPassword || user.name !== validUser || user.pass !== validPassword) {
+  // 環境変数が未設定の場合はローカル開発モードとしてスキップ
+  if (!validUser || !validPassword) return next();
+
+  const user = basicAuth(req);
+  if (!user || user.name !== validUser || user.pass !== validPassword) {
     res.set('WWW-Authenticate', 'Basic realm="Portfolio Area"');
     return res.status(401).send('Authentication required.');
   }
