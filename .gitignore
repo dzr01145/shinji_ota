@@ -22,4 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-unnamed (1).png
+# 名称未設定ファイル
+unnamed*
