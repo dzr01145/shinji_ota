@@ -53,7 +53,7 @@ const MONTH_JP: Record<string, string> = {
 
 /** カテゴリバッジ */
 const CategoryBadge: React.FC<{ category: string; small?: boolean }> = ({ category, small }) => (
-  <span className={`inline-block border rounded-full font-medium ${small ? 'text-[18px] px-2 py-0.5' : 'text-[18px] px-3 py-1'} ${CATEGORY_COLORS[category] || CATEGORY_COLORS['その他']}`}>
+  <span className={`inline-block border rounded-full font-medium ${small ? 'text-[14px] px-2 py-0.5' : 'text-[14px] px-3 py-1'} ${CATEGORY_COLORS[category] || CATEGORY_COLORS['その他']}`}>
     {category}
   </span>
 );
@@ -74,12 +74,12 @@ const PostCard: React.FC<{ post: BlogPost; onClick: () => void }> = ({ post, onC
       <div className="flex items-center gap-2 mb-2 flex-wrap">
         <CategoryBadge category={post.category} small />
         {post.tags?.map(tag => (
-          <span key={tag} className="text-[18px] text-slate-500">#{tag}</span>
+          <span key={tag} className="text-[14px] text-slate-500">#{tag}</span>
         ))}
       </div>
-      <h2 className="text-white font-bold text-[24px] mb-2 group-hover:text-cyan-300 transition-colors line-clamp-2">{post.title}</h2>
-      <p className="text-slate-400 text-[21px] leading-relaxed line-clamp-3">{excerpt}…</p>
-      <div className="flex items-center gap-1 mt-3 text-[18px] text-slate-600">
+      <h2 className="text-white font-bold text-[19px] mb-2 group-hover:text-cyan-300 transition-colors line-clamp-2">{post.title}</h2>
+      <p className="text-slate-400 text-[17px] leading-relaxed line-clamp-3">{excerpt}…</p>
+      <div className="flex items-center gap-1 mt-3 text-[14px] text-slate-600">
         <Clock size={11} />
         <span>{new Date(post.date).toLocaleDateString('ja-JP')}</span>
       </div>
@@ -120,9 +120,9 @@ const PostBody: React.FC<{ body: string }> = ({ body }) => {
   return (
     <div className="prose prose-invert prose-sm max-w-none">
       {lines.map((line, i) => {
-        if (line.startsWith('# '))  return <h1 key={i} className="text-[36px] font-bold text-white mt-6 mb-3">{line.slice(2)}</h1>;
-        if (line.startsWith('## ')) return <h2 key={i} className="text-[30px] font-bold text-slate-100 mt-5 mb-2 border-b border-slate-800 pb-1">{line.slice(3)}</h2>;
-        if (line.startsWith('### ')) return <h3 key={i} className="text-[27px] font-semibold text-slate-200 mt-4 mb-2">{line.slice(4)}</h3>;
+        if (line.startsWith('# '))  return <h1 key={i} className="text-[29px] font-bold text-white mt-6 mb-3">{line.slice(2)}</h1>;
+        if (line.startsWith('## ')) return <h2 key={i} className="text-[24px] font-bold text-slate-100 mt-5 mb-2 border-b border-slate-800 pb-1">{line.slice(3)}</h2>;
+        if (line.startsWith('### ')) return <h3 key={i} className="text-[22px] font-semibold text-slate-200 mt-4 mb-2">{line.slice(4)}</h3>;
         if (line.startsWith('---')) return <hr key={i} className="border-slate-700 my-6" />;
         if (line.startsWith('- ')) {
           // リスト項目もリンク・太字対応
@@ -287,9 +287,9 @@ const Blog: React.FC = () => {
         <div className="mb-6 border-b border-slate-800 pb-5 flex-shrink-0 pt-6">
           <div className="flex items-center gap-3 mb-1">
             <BookOpen size={22} className="text-cyan-400" />
-            <h1 className="text-[36px] font-bold tracking-tight">Blog</h1>
+            <h1 className="text-[29px] font-bold tracking-tight">Blog</h1>
           </div>
-          <p className="text-slate-500 text-[21px]">労働安全衛生・AIソリューションに関する最新の考察</p>
+          <p className="text-slate-500 text-[17px]">労働安全衛生・AIソリューションに関する最新の考察</p>
         </div>
 
         {/* ========== 2カラムレイアウト: 左固定・右スクロール ========== */}
@@ -301,7 +301,7 @@ const Blog: React.FC = () => {
             {selectedPost && (
               <button
                 onClick={() => setSelectedPost(null)}
-                className="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors mb-6 text-[21px] w-full"
+                className="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors mb-6 text-[17px] w-full"
               >
                 <ArrowLeft size={14} /> 一覧に戻る
               </button>
@@ -315,26 +315,26 @@ const Blog: React.FC = () => {
                 placeholder="記事を検索..."
                 value={searchQuery}
                 onChange={e => { setSearchQuery(e.target.value); setSelectedPost(null); }}
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-[21px] text-white placeholder-slate-600 focus:border-cyan-600 focus:outline-none"
+                className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-[17px] text-white placeholder-slate-600 focus:border-cyan-600 focus:outline-none"
               />
             </div>
 
             {/* カテゴリ */}
             <div className="mb-6">
-              <h3 className="text-[18px] font-bold text-slate-500 uppercase tracking-widest mb-3">カテゴリ</h3>
+              <h3 className="text-[14px] font-bold text-slate-500 uppercase tracking-widest mb-3">カテゴリ</h3>
               <ul className="space-y-1">
                 {CATEGORIES.map(cat => (
                   <li key={cat}>
                     <button
                       onClick={() => { setActiveCategory(cat); setActiveArchive({}); setSearchQuery(''); setSelectedPost(null); }}
-                      className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg text-[21px] transition-colors ${activeCategory === cat && !activeArchive.year && !selectedPost ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-400 hover:bg-slate-900 hover:text-white'}`}
+                      className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg text-[17px] transition-colors ${activeCategory === cat && !activeArchive.year && !selectedPost ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-400 hover:bg-slate-900 hover:text-white'}`}
                     >
                       <span className="flex items-center gap-2">
                         <ChevronRight size={12} className={activeCategory === cat && !selectedPost ? 'text-cyan-400' : 'text-slate-700'} />
                         {cat}
                       </span>
                       {cat !== 'すべて' && (
-                        <span className="text-[18px] text-slate-600">
+                        <span className="text-[14px] text-slate-600">
                           {posts.filter(p => p.category === cat).length}
                         </span>
                       )}
@@ -347,23 +347,23 @@ const Blog: React.FC = () => {
             {/* アーカイブ */}
             {Object.keys(archiveByYear).length > 0 && (
               <div>
-                <h3 className="text-[18px] font-bold text-slate-500 uppercase tracking-widest mb-3">アーカイブ</h3>
+                <h3 className="text-[14px] font-bold text-slate-500 uppercase tracking-widest mb-3">アーカイブ</h3>
                 <div className="space-y-3">
                   {Object.entries(archiveByYear).sort(([a], [b]) => Number(b) - Number(a)).map(([year, months]) => (
                     <div key={year}>
-                      <div className="text-[18px] font-bold text-slate-400 px-3 mb-1">{year}年</div>
+                      <div className="text-[14px] font-bold text-slate-400 px-3 mb-1">{year}年</div>
                       <ul className="space-y-0.5">
                         {months.sort((a, b) => Number(b.month) - Number(a.month)).map(arc => (
                           <li key={arc.month}>
                             <button
                               onClick={() => { setActiveArchive({ year, month: arc.month }); setActiveCategory('すべて'); setSearchQuery(''); setSelectedPost(null); }}
-                              className={`w-full text-left flex items-center justify-between px-3 py-1.5 rounded-lg text-[21px] transition-colors ${activeArchive.year === year && activeArchive.month === arc.month ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-500 hover:bg-slate-900 hover:text-white'}`}
+                              className={`w-full text-left flex items-center justify-between px-3 py-1.5 rounded-lg text-[17px] transition-colors ${activeArchive.year === year && activeArchive.month === arc.month ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-500 hover:bg-slate-900 hover:text-white'}`}
                             >
                               <span className="flex items-center gap-2">
                                 <ChevronRight size={11} className="text-slate-700" />
                                 {MONTH_JP[arc.month]}
                               </span>
-                              <span className="text-[18px] text-slate-700">{arc.count}</span>
+                              <span className="text-[14px] text-slate-700">{arc.count}</span>
                             </button>
                           </li>
                         ))}
@@ -384,13 +384,13 @@ const Blog: React.FC = () => {
                 <div className="flex items-center gap-2 mb-3 flex-wrap">
                   <CategoryBadge category={selectedPost.category} />
                   {selectedPost.tags?.map(tag => (
-                    <span key={tag} className="text-[18px] text-slate-500 flex items-center gap-1"><Tag size={10} />#{tag}</span>
+                    <span key={tag} className="text-[14px] text-slate-500 flex items-center gap-1"><Tag size={10} />#{tag}</span>
                   ))}
                 </div>
                 {/* タイトル */}
-                <h1 className="text-[36px] md:text-[45px] font-bold text-white mb-3 leading-snug">{selectedPost.title}</h1>
+                <h1 className="text-[29px] md:text-[36px] font-bold text-white mb-3 leading-snug">{selectedPost.title}</h1>
                 {/* 日付・著者 */}
-                <div className="flex items-center gap-4 text-[18px] text-slate-500 mb-6">
+                <div className="flex items-center gap-4 text-[14px] text-slate-500 mb-6">
                   <span className="flex items-center gap-1"><Calendar size={11} />{new Date(selectedPost.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                   <span className="flex items-center gap-1 text-slate-600">太田 真治 / Shinji Ota</span>
                 </div>
@@ -413,12 +413,12 @@ const Blog: React.FC = () => {
               <div>
                 {/* フィルタ表示 */}
                 <div className="flex items-center justify-between mb-5">
-                  <div className="text-[21px] text-slate-400">
+                  <div className="text-[17px] text-slate-400">
                     {searchQuery ? `"${searchQuery}" の検索結果` : activeArchive.year ? `${activeArchive.year}年${activeArchive.month ? MONTH_JP[activeArchive.month] : ''}` : activeCategory}
                     <span className="ml-2 text-slate-600">({filteredPosts.length}件)</span>
                   </div>
                   {(searchQuery || activeArchive.year) && (
-                    <button onClick={() => { setSearchQuery(''); setActiveArchive({}); setActiveCategory('すべて'); }} className="text-[18px] text-slate-600 hover:text-cyan-400 transition-colors">
+                    <button onClick={() => { setSearchQuery(''); setActiveArchive({}); setActiveCategory('すべて'); }} className="text-[14px] text-slate-600 hover:text-cyan-400 transition-colors">
                       クリア
                     </button>
                   )}
@@ -431,7 +431,7 @@ const Blog: React.FC = () => {
                 ) : filteredPosts.length === 0 ? (
                   <div className="text-center py-20 text-slate-600">
                     <BookOpen size={40} className="mx-auto mb-3 opacity-30" />
-                    <p className="text-[21px]">記事がありません</p>
+                    <p className="text-[17px]">記事がありません</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -485,31 +485,31 @@ const Blog: React.FC = () => {
         <div className="fixed inset-0 bg-black/85 z-50 flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-slate-900 rounded-2xl p-6 w-full max-w-xl border border-slate-700 my-4">
             <div className="flex justify-between items-center mb-5">
-              <h2 className="text-[27px] font-bold">新規記事を投稿</h2>
+              <h2 className="text-[22px] font-bold">新規記事を投稿</h2>
               <button onClick={() => setIsUploadOpen(false)} className="text-slate-400 hover:text-white"><X size={22} /></button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-[18px] text-slate-400 mb-1">タイトル <span className="text-red-400">*</span></label>
+                <label className="block text-[14px] text-slate-400 mb-1">タイトル <span className="text-red-400">*</span></label>
                 <input type="text" value={formTitle} onChange={e => setFormTitle(e.target.value)} required
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[21px] focus:border-cyan-500 outline-none"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[17px] focus:border-cyan-500 outline-none"
                   placeholder="記事タイトルを入力" />
               </div>
               <div>
-                <label className="block text-[18px] text-slate-400 mb-1">カテゴリ</label>
+                <label className="block text-[14px] text-slate-400 mb-1">カテゴリ</label>
                 <select value={formCategory} onChange={e => setFormCategory(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[21px] focus:border-cyan-500 outline-none">
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[17px] focus:border-cyan-500 outline-none">
                   {CATEGORIES.filter(c => c !== 'すべて').map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-[18px] text-slate-400 mb-1">本文 <span className="text-red-400">*</span></label>
+                <label className="block text-[14px] text-slate-400 mb-1">本文 <span className="text-red-400">*</span></label>
                 <textarea value={formBody} onChange={e => setFormBody(e.target.value)} required rows={10}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[21px] focus:border-cyan-500 outline-none font-mono"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[17px] focus:border-cyan-500 outline-none font-mono"
                   placeholder="マークダウン記法で記述できます（# 見出し、**太字**、- リストなど）" />
               </div>
               <div>
-                <label className="block text-[18px] text-slate-400 mb-1 flex items-center gap-1">
+                <label className="block text-[14px] text-slate-400 mb-1 flex items-center gap-1">
                   <Image size={11} /> アイキャッチ画像（任意）
                 </label>
 
@@ -518,7 +518,7 @@ const Blog: React.FC = () => {
                   type="button"
                   onClick={handleUnsplashSearch}
                   disabled={isSearchingUnsplash || !formTitle.trim()}
-                  className="w-full mb-2 flex items-center justify-center gap-2 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-500 hover:to-slate-600 border border-slate-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-[21px] font-semibold py-2 rounded-lg transition-all"
+                  className="w-full mb-2 flex items-center justify-center gap-2 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-500 hover:to-slate-600 border border-slate-500 disabled:opacity-50 disabled:cursor-not-allowed text-white text-[17px] font-semibold py-2 rounded-lg transition-all"
                 >
                   {isSearchingUnsplash
                     ? <><Loader2 size={14} className="animate-spin" /> Unsplashを検索中...</>
@@ -528,7 +528,7 @@ const Blog: React.FC = () => {
                 {/* Unsplash 候補ピッカー */}
                 {unsplashCandidates.length > 0 && (
                   <div className="mb-3 bg-slate-800 rounded-lg p-2 border border-slate-600">
-                    <div className="text-[18px] text-slate-500 mb-2">候補画像（クリックで選択）</div>
+                    <div className="text-[14px] text-slate-500 mb-2">候補画像（クリックで選択）</div>
                     <div className="flex gap-1.5 overflow-x-auto pb-1">
                       {unsplashCandidates.map((c, idx) => (
                         <button
@@ -542,7 +542,7 @@ const Blog: React.FC = () => {
                       ))}
                     </div>
                     {imageAttribution && (
-                      <div className="mt-1.5 text-[18px] text-slate-500 flex items-center gap-1">
+                      <div className="mt-1.5 text-[14px] text-slate-500 flex items-center gap-1">
                         Photo by{' '}
                         <a href={imageAttribution.authorUrl + '?utm_source=shinji_ota_blog&utm_medium=referral'} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-cyan-400 underline">{imageAttribution.authorName}</a>
                         {' '}on{' '}
@@ -569,19 +569,19 @@ const Blog: React.FC = () => {
                 {/* 手動URL入力 */}
                 <input type="url" value={formImageUrl}
                   onChange={e => { setFormImageUrl(e.target.value); setImageAttribution(null); setUnsplashCandidates([]); }}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[21px] focus:border-cyan-500 outline-none"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[17px] focus:border-cyan-500 outline-none"
                   placeholder="または画像URLを直接入力 (https://...)" />
               </div>
               <div>
-                <label className="block text-[18px] text-slate-400 mb-1">タグ（カンマ区切り）</label>
+                <label className="block text-[14px] text-slate-400 mb-1">タグ（カンマ区切り）</label>
                 <input type="text" value={formTags} onChange={e => setFormTags(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[21px] focus:border-cyan-500 outline-none"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[17px] focus:border-cyan-500 outline-none"
                   placeholder="例: リスクアセスメント, ISO45001" />
               </div>
               <div className="pt-3 border-t border-slate-700">
-                <label className="block text-[18px] text-slate-400 mb-1 flex items-center gap-1"><Lock size={11} /> 管理者パスワード</label>
+                <label className="block text-[14px] text-slate-400 mb-1 flex items-center gap-1"><Lock size={11} /> 管理者パスワード</label>
                 <input type="password" value={formPassword} onChange={e => setFormPassword(e.target.value)} required
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[21px] focus:border-cyan-500 outline-none"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-[17px] focus:border-cyan-500 outline-none"
                   placeholder="パスワードを入力" />
               </div>
               <button type="submit" disabled={isSubmitting}
