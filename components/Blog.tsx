@@ -43,8 +43,8 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 const MONTH_JP: Record<string, string> = {
-  '01':'1月','02':'2月','03':'3月','04':'4月','05':'5月','06':'6月',
-  '07':'7月','08':'8月','09':'9月','10':'10月','11':'11月','12':'12月'
+  '01': '1月', '02': '2月', '03': '3月', '04': '4月', '05': '5月', '06': '6月',
+  '07': '7月', '08': '8月', '09': '9月', '10': '10月', '11': '11月', '12': '12月'
 };
 
 // =============================================
@@ -66,11 +66,6 @@ const PostCard: React.FC<{ post: BlogPost; onClick: () => void }> = ({ post, onC
       onClick={onClick}
       className="group cursor-pointer bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-cyan-700 hover:bg-slate-800/60 transition-all duration-200"
     >
-      {post.imageUrl && (
-        <div className="w-full h-40 rounded-lg overflow-hidden mb-4">
-          <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-        </div>
-      )}
       <div className="flex items-center gap-2 mb-2 flex-wrap">
         <CategoryBadge category={post.category} small />
         {post.tags?.map(tag => (
@@ -79,10 +74,15 @@ const PostCard: React.FC<{ post: BlogPost; onClick: () => void }> = ({ post, onC
       </div>
       <h2 className="text-white font-bold text-[19px] mb-2 group-hover:text-cyan-300 transition-colors line-clamp-2">{post.title}</h2>
       <p className="text-slate-400 text-[17px] leading-relaxed line-clamp-3">{excerpt}…</p>
-      <div className="flex items-center gap-1 mt-3 text-[14px] text-slate-600">
+      <div className="flex items-center gap-1 mt-3 mb-3 text-[14px] text-slate-600">
         <Clock size={11} />
         <span>{new Date(post.date).toLocaleDateString('ja-JP')}</span>
       </div>
+      {post.imageUrl && (
+        <div className="w-full h-40 rounded-lg overflow-hidden">
+          <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+        </div>
+      )}
     </article>
   );
 };
@@ -120,21 +120,21 @@ const PostBody: React.FC<{ body: string }> = ({ body }) => {
   return (
     <div className="prose prose-invert prose-sm max-w-none">
       {lines.map((line, i) => {
-        if (line.startsWith('# '))  return <h1 key={i} className="text-[29px] font-bold text-white mt-6 mb-3">{line.slice(2)}</h1>;
+        if (line.startsWith('# ')) return <h1 key={i} className="text-[29px] font-bold text-white mt-6 mb-3">{line.slice(2)}</h1>;
         if (line.startsWith('## ')) return <h2 key={i} className="text-[24px] font-bold text-slate-100 mt-5 mb-2 border-b border-slate-800 pb-1">{line.slice(3)}</h2>;
         if (line.startsWith('### ')) return <h3 key={i} className="text-[22px] font-semibold text-slate-200 mt-4 mb-2">{line.slice(4)}</h3>;
         if (line.startsWith('---')) return <hr key={i} className="border-slate-700 my-6" />;
         if (line.startsWith('- ')) {
           // リスト項目もリンク・太字対応
           return (
-            <li key={i} className="text-slate-300 ml-5 mb-2 list-disc leading-relaxed">
+            <li key={i} className="text-slate-300 text-[19px] ml-5 mb-2 list-disc leading-relaxed">
               {parseInline(line.slice(2))}
             </li>
           );
         }
         if (line.trim() === '') return <div key={i} className="h-3" />;
         return (
-          <p key={i} className="text-slate-300 leading-relaxed mb-2">
+          <p key={i} className="text-slate-300 text-[19px] leading-relaxed mb-2">
             {parseInline(line)}
           </p>
         );
@@ -388,7 +388,7 @@ const Blog: React.FC = () => {
                   ))}
                 </div>
                 {/* タイトル */}
-                <h1 className="text-[29px] md:text-[36px] font-bold text-white mb-3 leading-snug">{selectedPost.title}</h1>
+                <h1 className="text-[22px] md:text-[24px] font-bold text-white mb-3 leading-snug">{selectedPost.title}</h1>
                 {/* 日付・著者 */}
                 <div className="flex items-center gap-4 text-[14px] text-slate-500 mb-6">
                   <span className="flex items-center gap-1"><Calendar size={11} />{new Date(selectedPost.date).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
