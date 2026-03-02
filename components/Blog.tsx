@@ -173,18 +173,14 @@ const Blog: React.FC = () => {
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (activeCategory !== 'すべて') params.set('category', activeCategory);
-      if (activeArchive.year) params.set('year', activeArchive.year);
-      if (activeArchive.month) params.set('month', activeArchive.month);
-      const res = await fetch(`/api/blog?${params}`);
+      const res = await fetch(`/api/blog`);
       if (res.ok) setPosts(await res.json());
     } catch (e) {
       console.error(e);
     } finally {
       setIsLoading(false);
     }
-  }, [activeCategory, activeArchive]);
+  }, []);
 
   const fetchArchives = async () => {
     try {
@@ -196,9 +192,28 @@ const Blog: React.FC = () => {
   useEffect(() => { fetchPosts(); }, [fetchPosts]);
   useEffect(() => { fetchArchives(); }, []);
 
-  const filteredPosts = searchQuery
-    ? posts.filter(p => p.title.includes(searchQuery) || p.body.includes(searchQuery) || p.category.includes(searchQuery))
-    : posts;
+  const filteredPosts = posts.filter(p => {
+    if (activeCategory !== 'すべて' && p.category !== activeCategory) return false;
+
+    if (activeArchive.year) {
+      const d = new Date(p.date);
+      const postYear = d.getFullYear().toString();
+      if (postYear !== activeArchive.year) return false;
+      if (activeArchive.month) {
+        const postMonth = String(d.getMonth() + 1).padStart(2, '0');
+        if (postMonth !== activeArchive.month) return false;
+      }
+    }
+
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      return p.title.toLowerCase().includes(q) ||
+        p.body.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q);
+    }
+
+    return true;
+  });
 
   const handleUnsplashSearch = async () => {
     if (!formTitle.trim()) {
