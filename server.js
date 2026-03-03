@@ -186,8 +186,15 @@ app.get('/api/blog', async (req, res) => {
     if (category && category !== 'すべて') query = query.eq('category', category);
     if (year) query = query.gte('created_at', `${year}-01-01`).lte('created_at', `${year}-12-31T23:59:59`);
     if (month && year) {
-      const m = month.padStart(2, '0');
-      query = query.gte('created_at', `${year}-${m}-01`).lte('created_at', `${year}-${m}-31T23:59:59`);
+      const m = parseInt(month, 10);
+      const y = parseInt(year, 10);
+      const nextMonth = m === 12 ? 1 : m + 1;
+      const nextYear = m === 12 ? y + 1 : y;
+
+      const startDate = `${y}-${String(m).padStart(2, '0')}-01T00:00:00`;
+      const endDate = `${nextYear}-${String(nextMonth).padStart(2, '0')}-01T00:00:00`;
+
+      query = query.gte('created_at', startDate).lt('created_at', endDate);
     }
 
     const { data, error } = await query;
