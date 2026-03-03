@@ -218,8 +218,10 @@ app.get('/api/blog/archives', async (req, res) => {
     const archives = {};
     (data || []).forEach(p => {
       const d = new Date(p.created_at);
-      const year = d.getFullYear().toString();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
+      // JST (UTC+9) に強制変換して年・月を取得
+      const jstDate = new Date(d.getTime() + 9 * 60 * 60 * 1000);
+      const year = jstDate.getUTCFullYear().toString();
+      const month = String(jstDate.getUTCMonth() + 1).padStart(2, '0');
       const key = `${year}-${month}`;
       archives[key] = (archives[key] || 0) + 1;
     });

@@ -197,10 +197,12 @@ const Blog: React.FC = () => {
 
     if (activeArchive.year) {
       const d = new Date(p.date);
-      const postYear = d.getFullYear().toString();
+      // JST (UTC+9) に強制変換して年・月を取得
+      const jstDate = new Date(d.getTime() + 9 * 60 * 60 * 1000);
+      const postYear = jstDate.getUTCFullYear().toString();
       if (postYear !== activeArchive.year) return false;
       if (activeArchive.month) {
-        const postMonth = String(d.getMonth() + 1).padStart(2, '0');
+        const postMonth = String(jstDate.getUTCMonth() + 1).padStart(2, '0');
         if (postMonth !== activeArchive.month) return false;
       }
     }
