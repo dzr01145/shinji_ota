@@ -181,10 +181,26 @@ Supabase成功後、`mcp_notebooklm-mcp_source_add` で保存する：
 - **text**: タイトル、カテゴリ、タグ、投稿日、著者（太田 真治）、URL、本文を含めたマークダウン
 - **wait**: `true`
 
+### Step 7.5: 記事アイキャッチ画像の生成と最適化（NotebookLM）
+
+記事の内容に合わせて、NotebookLMで専用のアイキャッチ画像を自動生成し、ブログ用に最適化して保存する。
+
+1. **生成の実行**: `mcp_notebooklm-mcp_studio_create` を呼び出す。
+   - `artifact_type`: `"infographic"`
+   - `notebook_id`: `c5f67b8a-625d-473c-ad8d-36141d665fbf`
+   - `orientation`: `"landscape"`
+   - `focus_prompt`: 記事の要約＋「かわいくて親しみやすい、すっきりとした手描き風のベクターイラスト。人間と未来的なロボットが共に助け合っている。テキストラベル：『（記事タイトルの一言）』」などを含める。
+2. **完了待ち**: `mcp_notebooklm-mcp_studio_status` でステータスを監視する（数分かかる場合がある）。
+3. **画像のダウンロードと最適化**: 
+   - `mcp_notebooklm-mcp_download_artifact` で指定パス（例: `public/images/xxxx.png`）にダウンロード。
+   - PowerShellまたはNode.jsを用いて画像を **16:9比率にクロップし、500KB以下のJPG** に変換する。
+   - 変換後、画像をGitHubにpushし（`git add ... && git commit ... && git push`）、CDNのURLを取得する。
+4. **記事への画像紐付け**: Supabaseの対象記事（`id`指定）に対し、生成した画像のCDN URLを `PATCH` 送信して `image_url` を更新する。
+
 ### Step 8: 結果の確認と完了通知
 
 **成功時:**
-> 「✅ 記事を投稿しました！
+> 「✅ 記事とアイキャッチ画像を投稿しました！
 > - **ブログ**: https://www.shinji-ota.com/blog に反映済み（記事ID: XXX）
 > - **NotebookLM**: 保存済み 📓」
 
@@ -196,13 +212,13 @@ Supabase成功後、`mcp_notebooklm-mcp_source_add` で保存する：
 
 - **サーバー未起動**: `$env:PORT=3001; node server.js` で起動してから再試行
 - **Supabase失敗**: エラーを表示し、再試行するか確認
-- **NotebookLMのみ失敗**: ブログ投稿は完了として扱い、ワーニングのみ表示
+- **NotebookLMのみ失敗（ノート保存や画像生成）**: ブログ投稿のテキスト自体は完了として扱い、画像失敗時はデフォルトを適用してワーニングのみ表示
 - **ユーザーが「やめる」「キャンセル」**: 投稿を実行せずに終了
 
 ## 注意事項
 
 - **投稿前に必ずユーザーの明示的な承認を得ること**（Step 5でOKをもらう前に投稿しない）
 - 著作権に注意：Web検索結果を直接コピーせず、必ず自分の言葉で再構成する
-- 画像URLはユーザーが別途提供した場合のみ設定する（デフォルトはNULL）
+- NotebookLMの画像生成には数分かかるため、ユーザーに「画像生成中で数分かかります」と伝えてから待機すること
 - **URLを捏造・推測して参考資料に記載することは厳禁**。必ず `read_url_content` で実在確認する
 - `search_web` が返すURLは一時的リダイレクト（`vertexaisearch.cloud.google.com`）の可能性が高い。記事には使用しない
