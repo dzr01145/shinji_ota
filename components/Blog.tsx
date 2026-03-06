@@ -61,12 +61,13 @@ const CategoryBadge: React.FC<{ category: string; small?: boolean }> = ({ catego
 /** 記事カード */
 const PostCard: React.FC<{ post: BlogPost; onClick: () => void }> = ({ post, onClick }) => {
   const excerpt = post.body
-    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '') // 画像リンクを除去
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // リンクをテキストのみに変換
+    .replace(/!\[.*?\]\(.*?\)/g, '') // 画像リンクを除去 (non-greedy)
+    .replace(/\[([^\]]+)\]\(.*?\)/g, '$1') // リンクをテキストのみに変換
     .replace(/#{1,6}\s/g, '') // 見出し記号を除去
-    .replace(/\*\*/g, '') // 太字記号を除去
+    .replace(/(\*|_){1,2}([^*_]+)\1/g, '$2') // 太字・斜体を除去
     .replace(/https?:\/\/[^\s]+/g, '') // むき出しのURLを除去
-    .replace(/\n+/g, ' ') // 改行をスペースに変換
+    .replace(/\r?\n+/g, ' ') // 改行をスペースに変換
+    .replace(/\s+/g, ' ') // 連続するスペースを詰める
     .trim()
     .slice(0, 120);
   return (
