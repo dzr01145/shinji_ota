@@ -365,7 +365,14 @@ const Blog: React.FC = () => {
                 {CATEGORIES.map(cat => (
                   <li key={cat}>
                     <button
-                      onClick={() => { setActiveCategory(cat); setActiveArchive({}); setSearchQuery(''); setSelectedPost(null); }}
+                      onClick={() => {
+                        setActiveCategory(cat);
+                        setActiveArchive({});
+                        setSearchQuery('');
+                        setSelectedPost(null);
+                        document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                       className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg text-[17px] transition-colors ${activeCategory === cat && !activeArchive.year && !selectedPost ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-400 hover:bg-slate-900 hover:text-white'}`}
                     >
                       <span className="flex items-center gap-2">
