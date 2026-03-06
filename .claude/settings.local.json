@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/user/.claude/**)",
+      "Bash(python3:*)",
+      "WebFetch(domain:www.mhlw.go.jp)",
+      "WebFetch(domain:www.no-harassment.mhlw.go.jp)",
+      "WebFetch(domain:mscompass.ms-ins.com)",
+      "Bash(ls:*)",
+      "Bash(printenv:*)",
+      "Bash(# Check if server is actually running on 3001 as node process with env vars ps aux | grep -i \"\"node\\\\|server\"\" | grep -v grep | head -5 || tasklist /fi \"\"imagename eq node.exe\"\")",
+      "Bash(tasklist:*)",
+      "mcp__claude_ai_Supabase__execute_sql"
+    ],
+    "additionalDirectories": [
+      "c:\\tmp"
+    ]
+  }
+}

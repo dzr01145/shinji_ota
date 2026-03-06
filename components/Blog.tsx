@@ -60,7 +60,15 @@ const CategoryBadge: React.FC<{ category: string; small?: boolean }> = ({ catego
 
 /** 記事カード */
 const PostCard: React.FC<{ post: BlogPost; onClick: () => void }> = ({ post, onClick }) => {
-  const excerpt = post.body.replace(/#{1,6}\s/g, '').replace(/\*\*/g, '').slice(0, 120);
+  const excerpt = post.body
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '') // 画像リンクを除去
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // リンクをテキストのみに変換
+    .replace(/#{1,6}\s/g, '') // 見出し記号を除去
+    .replace(/\*\*/g, '') // 太字記号を除去
+    .replace(/https?:\/\/[^\s]+/g, '') // むき出しのURLを除去
+    .replace(/\n+/g, ' ') // 改行をスペースに変換
+    .trim()
+    .slice(0, 120);
   return (
     <article
       onClick={onClick}
@@ -88,7 +96,7 @@ const PostCard: React.FC<{ post: BlogPost; onClick: () => void }> = ({ post, onC
 };
 
 /** インライン要素（太字・リンク）をパースしてReact要素に変換 */
-const parseInline = (text: string): React.ReactNode[] => {
+const parseInline = (text: string, inReferenceSection: boolean = false): React.ReactNode[] => {
   const parts: React.ReactNode[] = [];
   // [text](url) と **bold** を同時にパース
   const regex = /\[([^\]]+)\]\((https?:\/\/[^\)]+)\)|\*\*(.+?)\*\*/g;
@@ -97,10 +105,15 @@ const parseInline = (text: string): React.ReactNode[] => {
   while ((match = regex.exec(text)) !== null) {
     if (match.index > last) parts.push(text.slice(last, match.index));
     if (match[1] && match[2]) {
-      // リンク
+      // リンク: 参考資料セクションの場合はリンク切れ防止のためタイトル検索URLにする
+      const href = inReferenceSection
+        ? `https://duckduckgo.com/?q=${encodeURIComponent(match[1])}`
+        : match[2];
+
       parts.push(
-        <a key={match.index} href={match[2]} target="_blank" rel="noopener noreferrer"
-          className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2 break-all">
+        <a key={match.index} href={href} target="_blank" rel="noopener noreferrer"
+          className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2 break-all"
+          title={inReferenceSection ? "リンク切れ対策のため、ニュースタイトルで検索します" : undefined}>
           {match[1]}
         </a>
       );
@@ -117,25 +130,33 @@ const parseInline = (text: string): React.ReactNode[] => {
 /** 記事本文（マークダウン簡易レンダリング） */
 const PostBody: React.FC<{ body: string }> = ({ body }) => {
   const lines = body.split('\n');
+  let inReferenceSection = false;
+
   return (
     <div className="prose prose-invert prose-sm max-w-none">
       {lines.map((line, i) => {
-        if (line.startsWith('# ')) return <h1 key={i} className="text-[29px] font-bold text-white mt-6 mb-3">{line.slice(2)}</h1>;
-        if (line.startsWith('## ')) return <h2 key={i} className="text-[24px] font-bold text-slate-100 mt-5 mb-2 border-b border-slate-800 pb-1">{line.slice(3)}</h2>;
+        if (line.startsWith('# ')) {
+          inReferenceSection = false;
+          return <h1 key={i} className="text-[29px] font-bold text-white mt-6 mb-3">{line.slice(2)}</h1>;
+        }
+        if (line.startsWith('## ')) {
+          inReferenceSection = line.includes('参考資料') || line.includes('参考');
+          return <h2 key={i} className="text-[24px] font-bold text-slate-100 mt-5 mb-2 border-b border-slate-800 pb-1">{line.slice(3)}</h2>;
+        }
         if (line.startsWith('### ')) return <h3 key={i} className="text-[22px] font-semibold text-slate-200 mt-4 mb-2">{line.slice(4)}</h3>;
         if (line.startsWith('---')) return <hr key={i} className="border-slate-700 my-6" />;
         if (line.startsWith('- ')) {
           // リスト項目もリンク・太字対応
           return (
             <li key={i} className="text-slate-300 text-[19px] ml-5 mb-2 list-disc leading-relaxed">
-              {parseInline(line.slice(2))}
+              {parseInline(line.slice(2), inReferenceSection)}
             </li>
           );
         }
         if (line.trim() === '') return <div key={i} className="h-3" />;
         return (
           <p key={i} className="text-slate-300 text-[19px] leading-relaxed mb-2">
-            {parseInline(line)}
+            {parseInline(line, inReferenceSection)}
           </p>
         );
       })}

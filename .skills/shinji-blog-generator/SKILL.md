@@ -25,8 +25,10 @@ shinji-ota.com のブログに記事を生成・投稿するスキル。
 
 ## NotebookLM 接続情報
 
+- **MCPサーバー**: `notebooklm-mcp-server`（`~/.claude.json` に設定済み）
+- **認証**: `notebooklm-mcp-server auth` で実行済み（`~/.notebooklm-mcp/auth.json`）
 - **ブログ保存先ノートブックID**: `c5f67b8a-625d-473c-ad8d-36141d665fbf`
-- **ツール**: `mcp_notebooklm-mcp_source_add` (source_type: text)
+- **ツール**: `mcp__notebooklm-mcp-server__notebook_add_text`
 
 ## カテゴリ一覧
 
@@ -39,15 +41,19 @@ shinji-ota.com のブログに記事を生成・投稿するスキル。
 
 ## 実行フロー
 
-### Step 1: トピックの決定
+### Step 1: ニュース・トピックの収集と決定
 
-ユーザーが特定トピックを指定していれば使う。指定がなければ：
-- `search_web` で以下を検索する（2〜3件）
-  - `"労働安全衛生 最新 2026"` または `"労働災害 対策 最新"`
-  - `"AI 安全管理 ソリューション 2026"` または `"職場安全 DX 事例"`
-- 検索結果から最も旬なトピックを1つ選び、ユーザーに一言確認する
+ユーザーが特定トピックを指定していればそれを使う。指定がない、または「ニュース」「最新情報」を求められた場合は、以下の手順で**osh-news-hub**スキルを利用して最新のOSH情報を収集する。
 
-例：「**『化学物質の自律的管理』に関する記事**を生成しようと思います。よろしいですか？」
+1. **ニュースの収集（オーケストレーターとして実行）**:
+   以下のコマンドを実行して、直近（例: 7日間）のニュース・公的機関情報を一括取得する。
+   ```bash
+   python C:\Users\user\Documents\GitHub\osh_news_picks\osh-news-hub\scripts\fetch_all_sources.py /tmp/osh-latest-news.json --days 7
+   ```
+2. **情報の選定**:
+   取得した `/tmp/osh-latest-news.json` の中身を確認し（`view_file` または jq 相当の処理）、**最も重要・注目すべきニュースや法改正情報**を1〜2つピックアップする。
+3. **ユーザーへの確認**:
+   選定したニュースをもとに、「**〇〇に関するニュース（出典: △△）**をもとに記事を生成しようと思います。よろしいですか？」と一言確認する。（すでにユーザーから特定のニュースやトピックの指示がある場合はスキップしてよい）
 
 ### Step 2: Deep Research による一次ソース収集 ★重要★
 
@@ -55,16 +61,19 @@ shinji-ota.com のブログに記事を生成・投稿するスキル。
 
 #### 方法A: NotebookLM Deep Research（推奨）
 
-1. `mcp_notebooklm-mcp_research_start` でリサーチを開始する
-   - `mode`: `fast` または `deep`
-   - `source`: `web`
-   - `query`: トピックに関連するキーワード
-2. `mcp_notebooklm-mcp_research_status` で完了を待つ
-3. `mcp_notebooklm-mcp_research_import` でソースをインポート
-4. `mcp_notebooklm-mcp_notebook_query` でインポートされたソースに対して質問し、統計データ・事故事例・法令情報・出典URLを取得
+MCPサーバー: `notebooklm-mcp-server`
 
-**注意**: MCP APIの `research_start` が `"Failed to start research"` エラーを返す場合がある。
-その場合は**方法B**に切り替える。
+1. `mcp__notebooklm-mcp-server__research_start` でリサーチを開始する
+   - `notebook_id`: `c5f67b8a-625d-473c-ad8d-36141d665fbf`
+   - `query`: トピックに関連するキーワード（日本語可）
+   - `source`: `"web"`
+2. `mcp__notebooklm-mcp-server__research_poll` で完了を待つ（`research_id` を渡す）
+3. `mcp__notebooklm-mcp-server__research_import` でソースをインポート（`research_id` を渡す）
+4. `mcp__notebooklm-mcp-server__notebook_query` でインポートされたソースに対して質問し、統計データ・事故事例・法令情報・出典URLを取得
+   - `notebook_id`: `c5f67b8a-625d-473c-ad8d-36141d665fbf`
+   - `query`: 質問文
+
+**注意**: `research_start` が失敗した場合は**方法B**または**方法C**に切り替える。
 
 #### 方法B: ブラウザ経由 Deep Research（方法A失敗時のフォールバック）
 
@@ -117,7 +126,7 @@ shinji-ota.com のブログに記事を生成・投稿するスキル。
 ...
 
 ## 参考資料
-- [ページタイトル | サイト名](実在確認済みURL)
+- [ページタイトル | サイト名](https://duckduckgo.com/?q=ページタイトル)
   この記事では〜を解説しています。
 ```
 
@@ -127,10 +136,10 @@ shinji-ota.com のブログに記事を生成・投稿するスキル。
 - 冒頭で読者の課題感に触れる
 - 具体的な数字・事例・法令名を含める
 - 末尾に「まとめ」または行動を促す一文
-- **本文末尾に必ず `## 参考資料` セクションを設け、Step 2.5で実在確認済みのURLのみを記載する**
+- **本文末尾に必ず `## 参考資料` セクションを設ける。ニュースリンクはリンク切れになりやすいため、元のURLではなく `https://duckduckgo.com/?q=ページタイトル` のような検索URLを使用する**
 - `*italic*` 記法はブログレンダラー未対応のため使用しない（代わりに `**太字**` を使う）
 - 参考資料は以下の**3行セット形式**で記述する：
-  1. `[ページタイトル | サイト名・出どころ](URL)` のハイパーリンク
+  1. `[ページタイトル | サイト名・出どころ](https://duckduckgo.com/?q=ページタイトル)` のハイパーリンク
   2. 改行して `  この記事では、〜（記事の内容を1〜2文で解説）。` を追記
 
 ### Step 4: プレビュー表示
@@ -173,29 +182,36 @@ node -e "const fs=require('fs');const body=fs.readFileSync('/tmp/blog_post.json'
 
 ### Step 7: NotebookLMに保存
 
-Supabase成功後、`mcp_notebooklm-mcp_source_add` で保存する：
+Supabase成功後、`mcp__notebooklm-mcp-server__notebook_add_text` で保存する：
 
 - **notebook_id**: `c5f67b8a-625d-473c-ad8d-36141d665fbf`
-- **source_type**: `text`
 - **title**: `（記事タイトル） [YYYY-MM-DD]`
 - **text**: タイトル、カテゴリ、タグ、投稿日、著者（太田 真治）、URL、本文を含めたマークダウン
-- **wait**: `true`
 
-### Step 7.5: 記事アイキャッチ画像の生成と最適化（NotebookLM）
+### Step 7.5: 記事アイキャッチ画像の生成と最適化
 
-記事の内容に合わせて、NotebookLMで専用のアイキャッチ画像を自動生成し、ブログ用に最適化して保存する。
+⚠️ **現状（2026-03）**: `notebooklm-mcp-server` にはインフォグラフィック生成ツールが存在しない。利用可能なStudioツールは `audio_overview_create`（音声）と `mind_map_generate`（マインドマップJSON）のみ。
 
-1. **生成の実行**: `mcp_notebooklm-mcp_studio_create` を呼び出す。
-   - `artifact_type`: `"infographic"`
-   - `notebook_id`: `c5f67b8a-625d-473c-ad8d-36141d665fbf`
-   - `orientation`: `"landscape"`
-   - `focus_prompt`: 記事の要約＋「かわいくて親しみやすい、すっきりとした手描き風のベクターイラスト。人間と未来的なロボットが共に助け合っている。テキストラベル：『（記事タイトルの一言）』」などを含める。
-2. **完了待ち**: `mcp_notebooklm-mcp_studio_status` でステータスを監視する（数分かかる場合がある）。
-3. **画像のダウンロードと最適化**: 
-   - `mcp_notebooklm-mcp_download_artifact` で指定パス（例: `public/images/xxxx.png`）にダウンロード。
-   - PowerShellまたはNode.jsを用いて画像を **16:9比率にクロップし、500KB以下のJPG** に変換する。
-   - 変換後、画像をGitHubにpushし（`git add ... && git commit ... && git push`）、CDNのURLを取得する。
-4. **記事への画像紐付け**: Supabaseの対象記事（`id`指定）に対し、生成した画像のCDN URLを `PATCH` 送信して `image_url` を更新する。
+#### 画像生成手順（手動フロー）
+
+1. **NotebookLMブラウザで生成**（手動）:
+   - [https://notebooklm.google.com/notebook/c5f67b8a-625d-473c-ad8d-36141d665fbf](https://notebooklm.google.com/notebook/c5f67b8a-625d-473c-ad8d-36141d665fbf) を開く
+   - Studio → インフォグラフィック生成
+   - 生成完了後、画像をダウンロードして `public/images/<slug>.jpg` に保存
+
+2. **画像の最適化とGitHubプッシュ**（Claude Code自動化）:
+   - PowerShellまたはNode.jsで **16:9比率にクロップし、500KB以下のJPG** に変換
+   - `git add public/images/<slug>.jpg && git commit -m "add: <タイトル>のアイキャッチ画像" && git push`
+   - CDN URL: `https://cdn.jsdelivr.net/gh/dzr01145/shinji_ota@main/public/images/<slug>.jpg`
+
+3. **記事への画像紐付け**:
+   - Supabase MCPで直接UPDATE:
+     ```sql
+     UPDATE public.blog_posts SET image_url = '<CDN URL>' WHERE id = <記事ID>;
+     ```
+
+#### フォールバック（画像生成ができない場合）
+既存の近いテーマの画像（`public/images/` 内）を一時的に設定し、ユーザーに手動生成を案内する。
 
 ### Step 8: 結果の確認と完了通知
 
