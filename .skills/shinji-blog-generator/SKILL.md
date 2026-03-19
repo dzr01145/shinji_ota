@@ -190,28 +190,31 @@ Supabase成功後、`mcp__notebooklm-mcp-server__notebook_add_text` で保存す
 
 ### Step 7.5: 記事アイキャッチ画像の生成と最適化
 
-⚠️ **現状（2026-03）**: `notebooklm-mcp-server` にはインフォグラフィック生成ツールが存在しない。利用可能なStudioツールは `audio_overview_create`（音声）と `mind_map_generate`（マインドマップJSON）のみ。
+⚠️ **重要**: ブログ記事のアイキャッチ画像には、**必ずNotebookLM MCPの `studio_create` を使用してください**。エージェントが持つ通常の `generate_image` ツールを使用して別の画像を生成することは**絶対に禁止**されています（NotebookLM以外では画像を作らないこと）。
 
-#### 画像生成手順（手動フロー）
+NotebookLM MCPを使用して、専用のインフォグラフィック画像を生成します。Googleの認証と自動ダウンロード制限があるため、**生成後はユーザーに手動で画像を保存してもらうフロー**となります。
 
-1. **NotebookLMブラウザで生成**（手動）:
-   - [https://notebooklm.google.com/notebook/c5f67b8a-625d-473c-ad8d-36141d665fbf](https://notebooklm.google.com/notebook/c5f67b8a-625d-473c-ad8d-36141d665fbf) を開く
-   - Studio → インフォグラフィック生成
-   - 生成完了後、画像をダウンロードして `public/images/<slug>.jpg` に保存
+1. **インフォグラフィック生成の指示**:
+   - `mcp__notebooklm-mcp-server__studio_create` を実行（`artifact_type="infographic"`, `orientation="landscape"`）。
+   - **プロンプト指定（重要）**: 「[記事テーマ]に関するインフォグラフィック。**テキストラベルは一切含めないか、できるだけ文字を少なくしてください（英語・日本語問わず）。**かわいくて親しみやすい、すっきりとした手描き風のベクターイラスト」とする。タッチ・トーンは変更しない。
 
-2. **画像の最適化とGitHubプッシュ**（Claude Code自動化）:
-   - PowerShellまたはNode.jsで **16:9比率にクロップし、500KB以下のJPG** に変換
-   - `git add public/images/<slug>.jpg && git commit -m "add: <タイトル>のアイキャッチ画像" && git push`
-   - CDN URL: `https://cdn.jsdelivr.net/gh/dzr01145/shinji_ota@main/public/images/<slug>.jpg`
+2. **ステータスポーリング**:
+   - `mcp__notebooklm-mcp-server__studio_status` を実行し、`status: completed` となるのを待つ。
 
-3. **記事への画像紐付け**:
-   - Supabase MCPで直接UPDATE:
-     ```sql
-     UPDATE public.blog_posts SET image_url = '<CDN URL>' WHERE id = <記事ID>;
-     ```
+3. **ユーザーへのダウンロード・保存の依頼**:
+   - 画像生成が完了したら、取得した `url` を添えてユーザーに以下のメッセージを**必ず**出します：
+     > 「画像が作成できました！Googleセキュリティの制限により自動保存ができないため、お手数ですが以下のリンクをクリックして画像を直接ダウンロードし、指定の場所に保存してください。
+     > - **保存先**: `c:\Users\user\Documents\GitHub\shinji_ota\public\images\post-<slug>.png`
+     > - **画像リンク**: [ここをクリックして画像を表示](取得した生成画像のURL)
+     > 保存が完了しましたら、教えてください。その後のプッシュ処理を再開します。」
 
-#### フォールバック（画像生成ができない場合）
-既存の近いテーマの画像（`public/images/` 内）を一時的に設定し、ユーザーに手動生成を案内する。
+4. **画像のGitHubプッシュ**:
+   - ユーザーから保存完了の合図を受け取ったら、以下を実行してプッシュする。
+   - `git add public/images/post-<slug>.png && git commit -m "add: <タイトル>のアイキャッチ画像" && git push`
+   - CDN URLは必ず中継サーバーのキャッシュを回避するため raw リンクを使用する: `https://raw.githubusercontent.com/dzr01145/shinji_ota/main/public/images/post-<slug>.png`
+
+5. **記事への画像紐付け**:
+   - Supabaseへアクセスし、対象記事レコードの `image_url` に上記の raw URLを設定する。
 
 ### Step 8: 結果の確認と完了通知
 
