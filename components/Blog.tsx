@@ -232,6 +232,7 @@ const Blog: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [expandedImageUrl, setExpandedImageUrl] = useState<string | null>(null);
+  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({ '労働安全衛生': true });
 
   // 投稿フォーム
   const [formTitle, setFormTitle] = useState('');
@@ -424,13 +425,74 @@ const Blog: React.FC = () => {
     return acc;
   }, {});
 
+  const postsByCategory = CATEGORIES.reduce<Record<string, BlogPost[]>>((acc, category) => {
+    if (category !== 'すべて') {
+      acc[category] = posts.filter((post) => post.category === category);
+    }
+    return acc;
+  }, {});
+
+  const scrollContentTop = (smooth: boolean = true) => {
+    requestAnimationFrame(() => {
+      contentRef.current?.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+    });
+  };
+
+  const clearPostHash = () => {
+    if (window.location.hash.startsWith('#post-')) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  };
+
+  const showList = () => {
+    clearPostHash();
+    setSelectedPost(null);
+    scrollContentTop();
+  };
+
+  const selectCategory = (category: string) => {
+    clearPostHash();
+    setActiveCategory(category);
+    setActiveArchive({});
+    setSearchQuery('');
+    setSelectedPost(null);
+    setExpandedCategories((current) => ({
+      ...current,
+      ...(category === 'すべて' ? {} : { [category]: true })
+    }));
+    scrollContentTop();
+  };
+
+  const toggleCategory = (category: string) => {
+    clearPostHash();
+    setActiveCategory(category);
+    setActiveArchive({});
+    setSearchQuery('');
+    setSelectedPost(null);
+    if (category !== 'すべて') {
+      const willOpen = !expandedCategories[category];
+      setExpandedCategories((current) => ({
+        ...current,
+        [category]: willOpen
+      }));
+    }
+    scrollContentTop();
+  };
+
+  const selectArchive = (year: string, month: string) => {
+    clearPostHash();
+    setActiveArchive({ year, month });
+    setActiveCategory('すべて');
+    setSearchQuery('');
+    setSelectedPost(null);
+    scrollContentTop();
+  };
+
   const openPost = (post: BlogPost) => {
     listScrollTopRef.current = contentRef.current?.scrollTop ?? 0;
     setSelectedPost(post);
     window.history.pushState({ blogPostId: post.id }, '', `${window.location.pathname}#post-${encodeURIComponent(post.id)}`);
-    requestAnimationFrame(() => {
-      contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    scrollContentTop();
   };
 
   const closePost = () => {
@@ -438,26 +500,15 @@ const Blog: React.FC = () => {
       window.history.back();
       return;
     }
-    setSelectedPost(null);
-    requestAnimationFrame(() => {
-      contentRef.current?.scrollTo({ top: listScrollTopRef.current, behavior: 'smooth' });
-    });
-  };
-
-  const handleContentWheel = (event: React.WheelEvent<HTMLElement>) => {
-    const content = contentRef.current;
-    if (!content || content.scrollHeight <= content.clientHeight) return;
-    content.scrollTop += event.deltaY;
-    event.preventDefault();
+    showList();
   };
 
   return (
-    /* 全体: ビューポート高 - ナビ高 を占有して内部でスクロール制御 */
-    <div className="bg-black text-white flex flex-col" style={{ height: 'calc(100vh - 80px)', marginTop: '80px' }}>
-      <div className="max-w-6xl mx-auto px-4 w-full flex flex-col flex-1 min-h-0">
+    <div className="fixed inset-x-0 bottom-0 top-20 overflow-hidden bg-black text-white">
+      <div className="mx-auto flex h-full w-full max-w-6xl flex-col px-4">
 
         {/* ヘッダー（固定・スクロールしない） */}
-        <div className="mb-6 border-b border-slate-800 pb-5 flex-shrink-0 pt-6">
+        <div className="flex-shrink-0 border-b border-slate-800 pb-5 pt-6">
           <div className="flex items-center gap-3 mb-1">
             <BookOpen size={22} className="text-cyan-400" />
             <h1 className="text-[29px] font-bold tracking-tight">Blog</h1>
@@ -466,10 +517,10 @@ const Blog: React.FC = () => {
         </div>
 
         {/* ========== 2カラムレイアウト: 左固定・右スクロール ========== */}
-        <div className="flex flex-col lg:flex-row gap-8 flex-1 min-h-0">
+        <div className="flex min-h-0 flex-1 flex-col gap-8 overflow-hidden pt-6 lg:flex-row">
 
-          {/* 左サイドバー: overflow-y-auto で内部スクロール、高さは親に追従 */}
-          <aside className="lg:w-60 flex-shrink-0 lg:overflow-y-auto lg:pb-6">
+          {/* 左サイドバー: 固定表示。項目が増えた場合だけ左内でスクロール */}
+          <aside className="flex-shrink-0 overflow-y-auto pb-6 pr-1 lg:w-60">
             {/* 詳細ビュー中は「一覧に戻る」ボタン */}
             {selectedPost && (
               <button
@@ -487,7 +538,7 @@ const Blog: React.FC = () => {
                 type="text"
                 placeholder="記事を検索..."
                 value={searchQuery}
-                onChange={e => { setSearchQuery(e.target.value); setSelectedPost(null); }}
+                onChange={e => { clearPostHash(); setSearchQuery(e.target.value); setSelectedPost(null); scrollContentTop(); }}
                 className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-9 pr-3 py-2 text-[17px] text-white placeholder-slate-600 focus:border-cyan-600 focus:outline-none"
               />
             </div>
@@ -499,18 +550,11 @@ const Blog: React.FC = () => {
                 {CATEGORIES.map(cat => (
                   <li key={cat}>
                     <button
-                      onClick={() => {
-                        setActiveCategory(cat);
-                        setActiveArchive({});
-                        setSearchQuery('');
-                        setSelectedPost(null);
-                        document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }}
+                      onClick={() => toggleCategory(cat)}
                       className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-lg text-[17px] transition-colors ${activeCategory === cat && !activeArchive.year && !selectedPost ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-400 hover:bg-slate-900 hover:text-white'}`}
                     >
                       <span className="flex items-center gap-2">
-                        <ChevronRight size={12} className={activeCategory === cat && !selectedPost ? 'text-cyan-400' : 'text-slate-700'} />
+                        <ChevronRight size={12} className={`transition-transform ${cat !== 'すべて' && expandedCategories[cat] ? 'rotate-90 text-cyan-400' : activeCategory === cat && !selectedPost ? 'text-cyan-400' : 'text-slate-700'}`} />
                         {cat}
                       </span>
                       {cat !== 'すべて' && (
@@ -519,6 +563,26 @@ const Blog: React.FC = () => {
                         </span>
                       )}
                     </button>
+                    {cat !== 'すべて' && expandedCategories[cat] && (
+                      <ul className="mt-1 space-y-1 border-l border-slate-800/80 pl-3">
+                        {postsByCategory[cat].slice(0, 12).map((post) => (
+                          <li key={post.id}>
+                            <button
+                              onClick={() => openPost(post)}
+                              className="w-full rounded-md px-2 py-1.5 text-left text-[13px] leading-snug text-slate-500 transition-colors hover:bg-slate-900 hover:text-cyan-300"
+                              title={post.title}
+                            >
+                              {post.title}
+                            </button>
+                          </li>
+                        ))}
+                        {postsByCategory[cat].length > 12 && (
+                          <li className="px-2 py-1 text-[12px] text-slate-700">
+                            ほか {postsByCategory[cat].length - 12} 件
+                          </li>
+                        )}
+                      </ul>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -536,7 +600,7 @@ const Blog: React.FC = () => {
                         {months.sort((a, b) => Number(b.month) - Number(a.month)).map(arc => (
                           <li key={arc.month}>
                             <button
-                              onClick={() => { setActiveArchive({ year, month: arc.month }); setActiveCategory('すべて'); setSearchQuery(''); setSelectedPost(null); }}
+                              onClick={() => selectArchive(year, arc.month)}
                               className={`w-full text-left flex items-center justify-between px-3 py-1.5 rounded-lg text-[17px] transition-colors ${activeArchive.year === year && activeArchive.month === arc.month ? 'bg-cyan-900/40 text-cyan-300' : 'text-slate-500 hover:bg-slate-900 hover:text-white'}`}
                             >
                               <span className="flex items-center gap-2">
@@ -556,7 +620,7 @@ const Blog: React.FC = () => {
           </aside>
 
           {/* メインコンテンツ */}
-          <main ref={contentRef} onWheel={handleContentWheel} className="flex-1 min-w-0 overflow-y-auto overscroll-contain lg:pb-6">
+          <main ref={contentRef} className="min-h-0 flex-1 overflow-y-scroll overscroll-contain pb-6 pr-1">
             {selectedPost ? (
               /* ========== 記事詳細ビュー ========== */
               <div>
