@@ -260,7 +260,7 @@ export const PERSONAL_PROFILE_DEEP = {
       titleEn: "Key points for building ISO 45001 and obtaining certification",
       meta: "労働安全衛生レベルの維持および継続的な向上",
       metaEn: "Maintaining and continuously improving occupational safety and health performance",
-      url: "https://www.sompo-rc.co.jp/columns/view/40"
+      url: "https://www.sompo-rc.co.jp/columns/view/11"
     }
   ],
   sourceLinks: [
