@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { BookOpen, Tag, Calendar, ChevronRight, ArrowLeft, Plus, X, Lock, Loader2, Clock, Search, Sparkles, Image, ExternalLink, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
 
 // Unsplash候補画像の型
 interface UnsplashCandidate {
@@ -45,6 +46,59 @@ const CATEGORY_COLORS: Record<string, string> = {
 const MONTH_JP: Record<string, string> = {
   '01': '1月', '02': '2月', '03': '3月', '04': '4月', '05': '5月', '06': '6月',
   '07': '7月', '08': '8月', '09': '9月', '10': '10月', '11': '11月', '12': '12月'
+};
+
+const PUBLIC_SUPABASE_URL = 'https://oztfdwbvlarpegozqepn.supabase.co';
+const PUBLIC_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96dGZkd2J2bGFycGVnb3pxZXBuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNjM5MzIsImV4cCI6MjA4NzgzOTkzMn0.nPdKRwaviMZpzHCzbeWaqV4TQVwdUy31m916MvgWgpY';
+const publicSupabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
+
+const rowToPost = (row: any): BlogPost => ({
+  id: row.id.toString(),
+  title: row.title,
+  body: row.body,
+  category: row.category,
+  imageUrl: row.image_url || null,
+  tags: row.tags || [],
+  published: row.published,
+  date: row.created_at,
+  updatedAt: row.updated_at,
+});
+
+const fetchPublicPosts = async (): Promise<BlogPost[]> => {
+  const { data, error } = await publicSupabase
+    .from('blog_posts')
+    .select('*')
+    .eq('published', true)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return (data || []).map(rowToPost);
+};
+
+const fetchPublicArchives = async (): Promise<Archive[]> => {
+  const { data, error } = await publicSupabase
+    .from('blog_posts')
+    .select('created_at')
+    .eq('published', true);
+
+  if (error) throw error;
+
+  const archives: Record<string, number> = {};
+  (data || []).forEach((post) => {
+    const date = new Date(post.created_at);
+    const jstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+    const year = jstDate.getUTCFullYear().toString();
+    const month = String(jstDate.getUTCMonth() + 1).padStart(2, '0');
+    const key = `${year}-${month}`;
+    archives[key] = (archives[key] || 0) + 1;
+  });
+
+  return Object.entries(archives)
+    .sort(([a], [b]) => b.localeCompare(a))
+    .map(([key, count]) => {
+      const [year, month] = key.split('-');
+      return { year, month, count };
+    });
 };
 
 // =============================================
@@ -194,12 +248,23 @@ const Blog: React.FC = () => {
 
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
+    let loadedFromApi = false;
     try {
       const res = await fetch(`/api/blog`);
-      if (res.ok) setPosts(await res.json());
+      if (res.ok) {
+        setPosts(await res.json());
+        loadedFromApi = true;
+      }
     } catch (e) {
       console.error(e);
     } finally {
+      if (!loadedFromApi) {
+        try {
+          setPosts(await fetchPublicPosts());
+        } catch (fallbackError) {
+          console.error(fallbackError);
+        }
+      }
       setIsLoading(false);
     }
   }, []);
@@ -207,8 +272,19 @@ const Blog: React.FC = () => {
   const fetchArchives = async () => {
     try {
       const res = await fetch('/api/blog/archives');
-      if (res.ok) setArchives(await res.json());
-    } catch (e) { console.error(e); }
+      if (res.ok) {
+        setArchives(await res.json());
+        return;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
+    try {
+      setArchives(await fetchPublicArchives());
+    } catch (fallbackError) {
+      console.error(fallbackError);
+    }
   };
 
   useEffect(() => { fetchPosts(); }, [fetchPosts]);
