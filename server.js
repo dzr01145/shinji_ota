@@ -173,8 +173,8 @@ if (pgPoolOptions && !/localhost|127\.0\.0\.1/.test(DATABASE_URL)) {
 const pgPool = pgPoolOptions ? new Pool(pgPoolOptions) : null;
 
 const requireBlogStore = (res) => {
-  if (supabase || pgPool) return false;
-  res.status(503).json({ error: 'Blog service is not configured' });
+  if (supabase) return false;
+  res.status(503).json({ error: 'Supabase blog service is not configured' });
   return true;
 };
 

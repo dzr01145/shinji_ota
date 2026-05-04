@@ -6,4 +6,3 @@
 *.ico binary
 .env -diff
 .env.* -diff
-server.js -diff
