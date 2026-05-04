@@ -155,10 +155,20 @@ app.post('/api/chat', async (req, res) => {
 // --- Blog API (Supabase JSクライアント版) ---
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://oztfdwbvlarpegozqepn.supabase.co';
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im96dGZkd2J2bGFycGVnb3pxZXBuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNjM5MzIsImV4cCI6MjA4NzgzOTkzMn0.nPdKRwaviMZpzHCzbeWaqV4TQVwdUy31m916MvgWgpY';
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = SUPABASE_URL && SUPABASE_ANON_KEY
+  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
+const requireSupabase = (res) => {
+  if (supabase) return false;
+  res.status(503).json({ error: 'Blog service is not configured' });
+  return true;
+};
+
+const getAdminPassword = () => process.env.ADMIN_PASSWORD;
 
 // ヘルパー: DB行 → フロントエンド用オブジェクト変換
 const rowToPost = (row) => ({
@@ -177,6 +187,7 @@ const rowToPost = (row) => ({
 app.get('/api/blog', async (req, res) => {
   const { category, year, month } = req.query;
   try {
+    if (requireSupabase(res)) return;
     let query = supabase
       .from('blog_posts')
       .select('*')
@@ -209,6 +220,7 @@ app.get('/api/blog', async (req, res) => {
 // GET /api/blog/archives - 年月アーカイブ一覧
 app.get('/api/blog/archives', async (req, res) => {
   try {
+    if (requireSupabase(res)) return;
     const { data, error } = await supabase
       .from('blog_posts')
       .select('created_at')
@@ -240,6 +252,7 @@ app.get('/api/blog/archives', async (req, res) => {
 app.get('/api/blog/:id', async (req, res) => {
   const { id } = req.params;
   try {
+    if (requireSupabase(res)) return;
     const { data, error } = await supabase
       .from('blog_posts')
       .select('*')
@@ -256,11 +269,13 @@ app.get('/api/blog/:id', async (req, res) => {
 // POST /api/blog - 新規投稿（管理者のみ）
 app.post('/api/blog', async (req, res) => {
   const { password, post } = req.body;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminPassword = getAdminPassword();
+  if (!adminPassword) return res.status(503).json({ error: 'Admin password is not configured' });
   if (password !== adminPassword) return res.status(401).json({ error: 'Unauthorized' });
   if (!post || !post.title || !post.body) return res.status(400).json({ error: 'title and body are required' });
 
   try {
+    if (requireSupabase(res)) return;
     const { data, error } = await supabase
       .from('blog_posts')
       .insert({
@@ -285,10 +300,12 @@ app.post('/api/blog', async (req, res) => {
 app.delete('/api/blog/:id', async (req, res) => {
   const { password } = req.body;
   const { id } = req.params;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminPassword = getAdminPassword();
+  if (!adminPassword) return res.status(503).json({ error: 'Admin password is not configured' });
   if (password !== adminPassword) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
+    if (requireSupabase(res)) return;
     const { error } = await supabase
       .from('blog_posts')
       .delete()
@@ -351,6 +368,8 @@ Output ONLY the prompt text, nothing else.`
   const mimeType = prediction.mimeType || 'image/png';
   const ext = mimeType.split('/')[1] || 'png';
   const fileName = `blog-${Date.now()}.${ext}`;
+
+  if (requireSupabase(res)) return;
 
   const { data: uploadData, error: uploadError } = await supabase.storage
     .from('blog-images')
@@ -437,7 +456,8 @@ Output ONLY the keywords separated by spaces, nothing else. Example: workplace s
 // Admin Login Check
 app.post('/api/login', (req, res) => {
   const { password } = req.body;
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminPassword = getAdminPassword();
+  if (!adminPassword) return res.status(503).json({ error: 'Admin password is not configured' });
 
   if (password === adminPassword) {
     res.json({ success: true });

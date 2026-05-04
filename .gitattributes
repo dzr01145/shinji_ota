@@ -4,3 +4,6 @@
 *.gif binary
 *.webp binary
 *.ico binary
+.env -diff
+.env.* -diff
+server.js -diff
