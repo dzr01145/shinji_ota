@@ -39,14 +39,14 @@ const RevisedProfile: React.FC = () => {
     <main className="min-h-screen bg-[#07080a] text-zinc-200 antialiased">
       <nav className="fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 md:block" aria-label="Section navigation">
         <div className="relative py-2">
-          <div className="absolute left-[5px] top-0 h-full w-px bg-white/12 transition-colors hover:bg-white/25" />
+          <div className="absolute left-[5px] top-0 h-full w-px bg-white/22 transition-colors hover:bg-cyan-300/45" />
           <div className="relative flex flex-col gap-5">
             {sectionNav.map((item) => (
-              <a key={item.href} href={item.href} className="group flex items-center gap-3">
-                <span className="h-[11px] w-[11px] rounded-full border border-white/25 bg-[#07080a] transition-colors group-hover:border-white/90 group-hover:bg-white" />
-                <span className="flex translate-x-0.5 flex-col whitespace-nowrap font-light text-zinc-500/70 opacity-60 transition-all group-hover:translate-x-0 group-hover:text-zinc-100 group-hover:opacity-100">
+              <a key={item.href} href={item.href} className="group flex items-center gap-3 focus-visible:outline-none">
+                <span className="h-[11px] w-[11px] rounded-full border border-white/45 bg-[#07080a] transition-all group-hover:border-cyan-300 group-hover:bg-cyan-300 group-hover:shadow-[0_0_0_4px_rgba(103,232,249,0.14)] group-focus-visible:border-cyan-300 group-focus-visible:bg-cyan-300" />
+                <span className="flex translate-x-0.5 flex-col whitespace-nowrap font-light text-zinc-300/85 opacity-85 transition-all group-hover:translate-x-0 group-hover:text-white group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:text-white group-focus-visible:opacity-100">
                   <span className="text-[12px] tracking-[0.14em]">{item.ja}</span>
-                  <span className="mt-0.5 text-[9px] uppercase tracking-[0.22em] text-zinc-600 group-hover:text-zinc-400">{item.label}</span>
+                  <span className="mt-0.5 text-[9px] uppercase tracking-[0.22em] text-zinc-500/95 group-hover:text-cyan-300 group-focus-visible:text-cyan-300">{item.label}</span>
                 </span>
               </a>
             ))}
