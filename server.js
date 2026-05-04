@@ -154,17 +154,33 @@ app.post('/api/chat', async (req, res) => {
 
 // --- Blog API (Supabase JSクライアント版) ---
 import { createClient } from '@supabase/supabase-js';
+import pg from 'pg';
+
+const { Pool } = pg;
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const DATABASE_URL = process.env.DATABASE_URL;
 
 const supabase = SUPABASE_URL && SUPABASE_ANON_KEY
   ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : null;
 
+const pgPoolOptions = DATABASE_URL ? { connectionString: DATABASE_URL } : null;
+if (pgPoolOptions && !/localhost|127\.0\.0\.1/.test(DATABASE_URL)) {
+  pgPoolOptions.ssl = { rejectUnauthorized: false };
+}
+const pgPool = pgPoolOptions ? new Pool(pgPoolOptions) : null;
+
+const requireBlogStore = (res) => {
+  if (supabase || pgPool) return false;
+  res.status(503).json({ error: 'Blog service is not configured' });
+  return true;
+};
+
 const requireSupabase = (res) => {
   if (supabase) return false;
-  res.status(503).json({ error: 'Blog service is not configured' });
+  res.status(503).json({ error: 'Supabase storage is not configured' });
   return true;
 };
 
@@ -183,11 +199,8 @@ const rowToPost = (row) => ({
   updatedAt: row.updated_at
 });
 
-// GET /api/blog - 記事一覧（カテゴリ・年月フィルタ対応）
-app.get('/api/blog', async (req, res) => {
-  const { category, year, month } = req.query;
-  try {
-    if (requireSupabase(res)) return;
+const fetchBlogPosts = async ({ category, year, month }) => {
+  if (supabase) {
     let query = supabase
       .from('blog_posts')
       .select('*')
@@ -210,6 +223,82 @@ app.get('/api/blog', async (req, res) => {
 
     const { data, error } = await query;
     if (error) throw error;
+    return data || [];
+  }
+
+  const where = ['published = true'];
+  const params = [];
+
+  if (category && category !== 'すべて') {
+    params.push(category);
+    where.push(`category = $${params.length}`);
+  }
+  if (year) {
+    params.push(`${year}-01-01`);
+    where.push(`created_at >= $${params.length}`);
+    params.push(`${year}-12-31T23:59:59`);
+    where.push(`created_at <= $${params.length}`);
+  }
+  if (month && year) {
+    const m = parseInt(month, 10);
+    const y = parseInt(year, 10);
+    const nextMonth = m === 12 ? 1 : m + 1;
+    const nextYear = m === 12 ? y + 1 : y;
+
+    params.push(`${y}-${String(m).padStart(2, '0')}-01T00:00:00`);
+    where.push(`created_at >= $${params.length}`);
+    params.push(`${nextYear}-${String(nextMonth).padStart(2, '0')}-01T00:00:00`);
+    where.push(`created_at < $${params.length}`);
+  }
+
+  const { rows } = await pgPool.query(
+    `select * from blog_posts where ${where.join(' and ')} order by created_at desc`,
+    params
+  );
+  return rows;
+};
+
+const fetchBlogArchives = async () => {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .select('created_at')
+      .eq('published', true);
+    if (error) throw error;
+    return data || [];
+  }
+
+  const { rows } = await pgPool.query(
+    'select created_at from blog_posts where published = true'
+  );
+  return rows;
+};
+
+const fetchBlogPostById = async (id) => {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('id', id)
+      .eq('published', true)
+      .single();
+    if (error) return null;
+    return data;
+  }
+
+  const { rows } = await pgPool.query(
+    'select * from blog_posts where id = $1 and published = true limit 1',
+    [id]
+  );
+  return rows[0] || null;
+};
+
+// GET /api/blog - 記事一覧（カテゴリ・年月フィルタ対応）
+app.get('/api/blog', async (req, res) => {
+  const { category, year, month } = req.query;
+  try {
+    if (requireBlogStore(res)) return;
+    const data = await fetchBlogPosts({ category, year, month });
     res.json((data || []).map(rowToPost));
   } catch (error) {
     console.error('Error reading blog posts:', error);
@@ -220,12 +309,8 @@ app.get('/api/blog', async (req, res) => {
 // GET /api/blog/archives - 年月アーカイブ一覧
 app.get('/api/blog/archives', async (req, res) => {
   try {
-    if (requireSupabase(res)) return;
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .select('created_at')
-      .eq('published', true);
-    if (error) throw error;
+    if (requireBlogStore(res)) return;
+    const data = await fetchBlogArchives();
 
     const archives = {};
     (data || []).forEach(p => {
@@ -252,14 +337,9 @@ app.get('/api/blog/archives', async (req, res) => {
 app.get('/api/blog/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    if (requireSupabase(res)) return;
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('id', id)
-      .eq('published', true)
-      .single();
-    if (error || !data) return res.status(404).json({ error: 'Not found' });
+    if (requireBlogStore(res)) return;
+    const data = await fetchBlogPostById(id);
+    if (!data) return res.status(404).json({ error: 'Not found' });
     res.json(rowToPost(data));
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch post' });
