@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { BookOpen, Tag, Calendar, ChevronRight, ArrowLeft, Plus, X, Lock, Loader2, Clock, Search, Sparkles, Image, ExternalLink, ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 
@@ -245,6 +245,8 @@ const Blog: React.FC = () => {
   const [unsplashCandidates, setUnsplashCandidates] = useState<UnsplashCandidate[]>([]);
   const [unsplashCursor, setUnsplashCursor] = useState(0);
   const [imageAttribution, setImageAttribution] = useState<{ authorName: string; authorUrl: string; unsplashUrl: string } | null>(null);
+  const contentRef = useRef<HTMLElement | null>(null);
+  const listScrollTopRef = useRef(0);
 
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
@@ -289,6 +291,35 @@ const Blog: React.FC = () => {
 
   useEffect(() => { fetchPosts(); }, [fetchPosts]);
   useEffect(() => { fetchArchives(); }, []);
+
+  useEffect(() => {
+    const syncPostFromHash = () => {
+      const match = window.location.hash.match(/^#post-(.+)$/);
+      if (!match) {
+        setSelectedPost(null);
+        requestAnimationFrame(() => {
+          contentRef.current?.scrollTo({ top: listScrollTopRef.current });
+        });
+        return;
+      }
+
+      const post = posts.find((p) => p.id === decodeURIComponent(match[1]));
+      if (post) {
+        setSelectedPost(post);
+        requestAnimationFrame(() => {
+          contentRef.current?.scrollTo({ top: 0 });
+        });
+      }
+    };
+
+    syncPostFromHash();
+    window.addEventListener('popstate', syncPostFromHash);
+    window.addEventListener('hashchange', syncPostFromHash);
+    return () => {
+      window.removeEventListener('popstate', syncPostFromHash);
+      window.removeEventListener('hashchange', syncPostFromHash);
+    };
+  }, [posts]);
 
   const filteredPosts = posts.filter(p => {
     if (activeCategory !== 'すべて' && p.category !== activeCategory) return false;
@@ -393,6 +424,33 @@ const Blog: React.FC = () => {
     return acc;
   }, {});
 
+  const openPost = (post: BlogPost) => {
+    listScrollTopRef.current = contentRef.current?.scrollTop ?? 0;
+    setSelectedPost(post);
+    window.history.pushState({ blogPostId: post.id }, '', `${window.location.pathname}#post-${encodeURIComponent(post.id)}`);
+    requestAnimationFrame(() => {
+      contentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  };
+
+  const closePost = () => {
+    if (window.location.hash.startsWith('#post-')) {
+      window.history.back();
+      return;
+    }
+    setSelectedPost(null);
+    requestAnimationFrame(() => {
+      contentRef.current?.scrollTo({ top: listScrollTopRef.current, behavior: 'smooth' });
+    });
+  };
+
+  const handleContentWheel = (event: React.WheelEvent<HTMLElement>) => {
+    const content = contentRef.current;
+    if (!content || content.scrollHeight <= content.clientHeight) return;
+    content.scrollTop += event.deltaY;
+    event.preventDefault();
+  };
+
   return (
     /* 全体: ビューポート高 - ナビ高 を占有して内部でスクロール制御 */
     <div className="bg-black text-white flex flex-col" style={{ height: 'calc(100vh - 80px)', marginTop: '80px' }}>
@@ -415,7 +473,7 @@ const Blog: React.FC = () => {
             {/* 詳細ビュー中は「一覧に戻る」ボタン */}
             {selectedPost && (
               <button
-                onClick={() => setSelectedPost(null)}
+                onClick={closePost}
                 className="flex items-center gap-2 text-slate-400 hover:text-cyan-400 transition-colors mb-6 text-[17px] w-full"
               >
                 <ArrowLeft size={14} /> 一覧に戻る
@@ -498,7 +556,7 @@ const Blog: React.FC = () => {
           </aside>
 
           {/* メインコンテンツ */}
-          <main className="flex-1 min-w-0 lg:overflow-y-auto lg:pb-6">
+          <main ref={contentRef} onWheel={handleContentWheel} className="flex-1 min-w-0 overflow-y-auto overscroll-contain lg:pb-6">
             {selectedPost ? (
               /* ========== 記事詳細ビュー ========== */
               <div>
@@ -558,7 +616,7 @@ const Blog: React.FC = () => {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {filteredPosts.map(post => (
-                      <PostCard key={post.id} post={post} onClick={() => setSelectedPost(post)} />
+                      <PostCard key={post.id} post={post} onClick={() => openPost(post)} />
                     ))}
                   </div>
                 )}
