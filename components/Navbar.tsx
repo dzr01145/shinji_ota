@@ -28,12 +28,35 @@ const Navbar: React.FC = () => {
       return;
     }
 
+    const reviseAnchorMap: Record<string, string> = {
+      '#about': '#profile-detail',
+      '#experience': '#career',
+      '#skills': '#domains',
+      '#projects': '#projects',
+      '#contact': '#contact'
+    };
+
+    if ((location.pathname === '/' || location.pathname === '/revise') && href.startsWith('#')) {
+      const targetHref = reviseAnchorMap[href] || href;
+      const targetId = targetHref.replace('#', '');
+      const element = document.getElementById(targetId);
+
+      if (element) {
+        const headerOffset = 100;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      }
+      return;
+    }
+
     // In-page anchor link
-    if (location.pathname !== '/') {
+    if (location.pathname !== '/old') {
       navigate('/');
       // Wait for navigation to complete before scrolling
       setTimeout(() => {
-        const targetId = href.replace('#', '');
+        const targetHref = reviseAnchorMap[href] || href;
+        const targetId = targetHref.replace('#', '');
         const element = document.getElementById(targetId);
         if (element) {
           const headerOffset = 100;
@@ -45,7 +68,7 @@ const Navbar: React.FC = () => {
       return;
     }
 
-    // Already on home page
+    // Already on old home page
     const targetId = href.replace('#', '');
     const element = document.getElementById(targetId);
 
@@ -62,13 +85,18 @@ const Navbar: React.FC = () => {
   };
 
   const navLinks = [
-    { name: 'プロフィール', href: '#about' },
-    { name: '経歴', href: '#experience' },
-    { name: 'スキル', href: '#skills' },
-    { name: '実績', href: '#projects' },
+    { name: 'REVISE', href: '/' },
+    { name: 'OLD', href: '/old' },
     { name: 'AI Tools', href: '/ai-tools' },
     { name: 'Blog', href: '/blog' },
   ];
+
+  const isActiveLink = (href: string) => {
+    if (href === '/') {
+      return location.pathname === '/' || location.pathname === '/revise';
+    }
+    return location.pathname === href;
+  };
 
   return (
     <nav
@@ -103,11 +131,11 @@ const Navbar: React.FC = () => {
               key={link.name}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className={`text-sm font-medium transition-colors relative group cursor-pointer ${location.pathname === link.href ? 'text-cyan-400' : 'text-slate-400 hover:text-white'
+              className={`text-sm font-medium transition-colors relative group cursor-pointer ${isActiveLink(link.href) ? 'text-cyan-400' : 'text-slate-400 hover:text-white'
                 }`}
             >
               <span className="relative z-10">{link.name}</span>
-              <span className={`absolute bottom-[-4px] left-0 h-[2px] bg-cyan-500 transition-all duration-300 ${location.pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'
+              <span className={`absolute bottom-[-4px] left-0 h-[2px] bg-cyan-500 transition-all duration-300 ${isActiveLink(link.href) ? 'w-full' : 'w-0 group-hover:w-full'
                 }`}></span>
             </a>
           ))}
@@ -137,7 +165,7 @@ const Navbar: React.FC = () => {
               key={link.name}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className={`text-xl font-medium py-3 border-b border-slate-900 cursor-pointer ${location.pathname === link.href ? 'text-cyan-400' : 'text-slate-300 hover:text-cyan-400'
+              className={`text-xl font-medium py-3 border-b border-slate-900 cursor-pointer ${isActiveLink(link.href) ? 'text-cyan-400' : 'text-slate-300 hover:text-cyan-400'
                 }`}
             >
               {link.name}

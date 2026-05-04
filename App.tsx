@@ -11,6 +11,7 @@ import ScrollObserver from './components/ScrollObserver';
 import AIPlayground from './components/AIPlayground';
 import Blog from './components/Blog';
 import PrivacyPolicy from './components/PrivacyPolicy';
+import RevisedProfile from './components/RevisedProfile';
 
 const Home: React.FC = () => (
   <ScrollObserver>
@@ -38,10 +39,12 @@ const App: React.FC = () => {
       <div className="bg-slate-950 text-slate-200 selection:bg-cyan-500/30 selection:text-cyan-100 min-h-screen overflow-x-hidden">
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<RevisedProfile />} />
+          <Route path="/old" element={<Home />} />
           <Route path="/ai-tools" element={<AIPlayground />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/revise" element={<RevisedProfile />} />
         </Routes>
         <AIChat />
       </div>
