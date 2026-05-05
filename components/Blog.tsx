@@ -127,17 +127,17 @@ const PostCard: React.FC<{ post: BlogPost; onClick: () => void }> = ({ post, onC
   return (
     <article
       onClick={onClick}
-      className="group cursor-pointer bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-cyan-700 hover:bg-slate-800/60 transition-all duration-200"
+      className="group flex h-full cursor-pointer flex-col bg-slate-900 border border-slate-800 rounded-xl p-5 hover:border-cyan-700 hover:bg-slate-800/60 transition-all duration-200"
     >
-      <div className="flex items-center gap-2 mb-2 flex-wrap">
+      <div className="mb-1.5 flex min-h-[42px] items-start gap-1.5 flex-wrap content-start">
         <CategoryBadge category={post.category} small />
         {post.tags?.map(tag => (
           <span key={tag} className="text-[12px] text-slate-500">#{tag}</span>
         ))}
       </div>
-      <h2 className="text-white font-bold text-[19px] mb-2 group-hover:text-cyan-300 transition-colors line-clamp-2">{post.title}</h2>
-      <p className="text-slate-400 text-[15px] leading-relaxed line-clamp-3">{excerpt}…</p>
-      <div className="flex items-center gap-1 mt-3 mb-3 text-[12px] text-slate-600">
+      <h2 className="mb-1.5 min-h-[50px] text-white font-bold text-[19px] leading-snug group-hover:text-cyan-300 transition-colors line-clamp-2">{post.title}</h2>
+      <p className="min-h-[62px] text-slate-400 text-[15px] leading-normal line-clamp-3">{excerpt}…</p>
+      <div className="flex items-center gap-1 mt-2 mb-2.5 text-[12px] text-slate-600">
         <Clock size={11} />
         <span>{new Date(post.date).toLocaleDateString('ja-JP')}</span>
       </div>
