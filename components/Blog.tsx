@@ -142,7 +142,7 @@ const PostCard: React.FC<{ post: BlogPost; onClick: () => void }> = ({ post, onC
         <span>{new Date(post.date).toLocaleDateString('ja-JP')}</span>
       </div>
       {post.imageUrl && (
-        <div className="w-full h-40 rounded-lg overflow-hidden">
+        <div className="w-full h-36 rounded-lg overflow-hidden">
           <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
         </div>
       )}
@@ -678,7 +678,7 @@ const Blog: React.FC = () => {
                     <p className="text-[17px]">記事がありません</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                     {filteredPosts.map(post => (
                       <PostCard key={post.id} post={post} onClick={() => openPost(post)} />
                     ))}
