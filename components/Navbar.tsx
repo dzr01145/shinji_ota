@@ -158,7 +158,8 @@ const Navbar: React.FC = () => {
                     }`}></span>
                 </a>
                 {topMenuOpen && (
-                  <div className="absolute left-1/2 top-full mt-4 w-48 -translate-x-1/2 border border-white/10 bg-[#050505]/95 p-2 shadow-2xl shadow-black/40 backdrop-blur-md">
+                  <div className="absolute left-1/2 top-full w-48 -translate-x-1/2 pt-4">
+                    <div className="border border-white/10 bg-[#050505]/95 p-2 shadow-2xl shadow-black/40 backdrop-blur-md">
                     {topSections.map((section) => (
                       <a
                         key={section.href}
@@ -170,6 +171,7 @@ const Navbar: React.FC = () => {
                         <span className="text-[9px] uppercase tracking-[0.18em] text-slate-600 group-hover:text-cyan-300">{section.label}</span>
                       </a>
                     ))}
+                    </div>
                   </div>
                 )}
               </div>
