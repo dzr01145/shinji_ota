@@ -7,6 +7,7 @@ const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [topMenuOpen, setTopMenuOpen] = useState(false);
+  const [aiMenuOpen, setAiMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -22,11 +23,25 @@ const Navbar: React.FC = () => {
     e.preventDefault();
     setMobileMenuOpen(false);
     setTopMenuOpen(false);
+    setAiMenuOpen(false);
 
     // External link or different page route
     if (href.startsWith('/')) {
+      const [path, hash] = href.split('#');
       navigate(href);
-      window.scrollTo(0, 0);
+      if (hash) {
+        setTimeout(() => {
+          const element = document.getElementById(hash);
+          if (element) {
+            const headerOffset = 100;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+          }
+        }, path === location.pathname ? 0 : 120);
+      } else {
+        window.scrollTo(0, 0);
+      }
       return;
     }
 
@@ -103,6 +118,14 @@ const Navbar: React.FC = () => {
     { name: 'お問い合わせ', label: 'Contact', href: '#contact' }
   ];
 
+  const aiSections = [
+    { name: 'ポータル', label: 'Portal', href: '/ai-tools#portal' },
+    { name: '専門AIチャット', label: 'Chat', href: '/ai-tools#ai-chat' },
+    { name: '安全管理・RA', label: 'Risk', href: '/ai-tools#risk-assessment' },
+    { name: 'MS・PDCA', label: 'PDCA', href: '/ai-tools#management-system' },
+    { name: 'ナレッジ支援', label: 'Knowledge', href: '/ai-tools#knowledge-support' }
+  ];
+
   const isActiveLink = (href: string) => {
     if (href === '/') {
       return location.pathname === '/' || location.pathname === '/revise';
@@ -175,6 +198,42 @@ const Navbar: React.FC = () => {
                   </div>
                 )}
               </div>
+            ) : link.href === '/ai-tools' ? (
+              <div
+                key={link.name}
+                className="relative"
+                onMouseEnter={() => setAiMenuOpen(true)}
+                onMouseLeave={() => setAiMenuOpen(false)}
+              >
+                <a
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`text-sm font-medium transition-colors relative group cursor-pointer inline-flex items-center gap-1.5 ${isActiveLink(link.href) ? 'text-cyan-400' : 'text-slate-400 hover:text-white'
+                    }`}
+                >
+                  <span className="relative z-10">{link.name}</span>
+                  <ChevronDown size={13} className={`transition-transform ${aiMenuOpen ? 'rotate-180' : ''}`} />
+                  <span className={`absolute bottom-[-4px] left-0 h-[2px] bg-cyan-500 transition-all duration-300 ${isActiveLink(link.href) ? 'w-full' : 'w-0 group-hover:w-full'
+                    }`}></span>
+                </a>
+                {aiMenuOpen && (
+                  <div className="absolute left-1/2 top-full w-56 -translate-x-1/2 pt-4">
+                    <div className="border border-white/10 bg-[#050505]/95 p-2 shadow-2xl shadow-black/40 backdrop-blur-md">
+                      {aiSections.map((section) => (
+                        <a
+                          key={section.href}
+                          href={section.href}
+                          onClick={(e) => handleNavClick(e, section.href)}
+                          className="group flex items-center justify-between rounded px-3 py-2 text-left transition-colors hover:bg-cyan-950/40"
+                        >
+                          <span className="text-[12px] font-light text-slate-300 group-hover:text-white">{section.name}</span>
+                          <span className="text-[9px] uppercase tracking-[0.18em] text-slate-600 group-hover:text-cyan-300">{section.label}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             ) : (
               <a
                 key={link.name}
@@ -231,6 +290,31 @@ const Navbar: React.FC = () => {
                 </a>
                 <div className="grid grid-cols-2 gap-2">
                   {topSections.map((section) => (
+                    <a
+                      key={section.href}
+                      href={section.href}
+                      onClick={(e) => handleNavClick(e, section.href)}
+                      className="rounded border border-slate-900 bg-slate-950/70 px-3 py-2"
+                    >
+                      <span className="block text-[13px] text-slate-200">{section.name}</span>
+                      <span className="block text-[9px] uppercase tracking-[0.16em] text-slate-600">{section.label}</span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : link.href === '/ai-tools' ? (
+              <div key={link.name} className="border-b border-slate-900 pb-3">
+                <a
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`flex items-center justify-between text-xl font-medium py-3 cursor-pointer ${isActiveLink(link.href) ? 'text-cyan-400' : 'text-slate-300 hover:text-cyan-400'
+                    }`}
+                >
+                  {link.name}
+                  <ChevronDown size={16} className="text-slate-500" />
+                </a>
+                <div className="grid grid-cols-2 gap-2">
+                  {aiSections.map((section) => (
                     <a
                       key={section.href}
                       href={section.href}

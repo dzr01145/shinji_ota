@@ -32,7 +32,7 @@ const AIPlayground: React.FC = () => {
                 </div>
 
                 {/* Featured Portal Section */}
-                <section className="mb-20 relative">
+                <section id="portal" className="mb-20 relative scroll-mt-28">
                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-3xl rounded-3xl -z-10"></div>
                     <div className="relative overflow-hidden rounded-2xl border border-slate-700 group hover:border-cyan-400/50 transition-all duration-500">
 
@@ -77,7 +77,7 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* 1. Specialized AI Chat & Legal Consultation */}
-                <section className="mb-20">
+                <section id="ai-chat" className="mb-20 scroll-mt-28">
                     <div className="flex items-center gap-4 mb-8">
                         <div className="h-px flex-1 bg-slate-800"></div>
                         <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
@@ -125,7 +125,7 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* 2. Safety Management & Risk Assessment */}
-                <section className="mb-20">
+                <section id="risk-assessment" className="mb-20 scroll-mt-28">
                     <div className="flex items-center gap-4 mb-8">
                         <div className="h-px flex-1 bg-slate-800"></div>
                         <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
@@ -193,7 +193,7 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* 3. Management Systems & PDCA */}
-                <section className="mb-20">
+                <section id="management-system" className="mb-20 scroll-mt-28">
                     <div className="flex items-center gap-4 mb-8">
                         <div className="h-px flex-1 bg-slate-800"></div>
                         <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
@@ -233,7 +233,7 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* 4. Knowledge Transfer & Operational Support */}
-                <section className="mb-20">
+                <section id="knowledge-support" className="mb-20 scroll-mt-28">
                     <div className="flex items-center gap-4 mb-8">
                         <div className="h-px flex-1 bg-slate-800"></div>
                         <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
