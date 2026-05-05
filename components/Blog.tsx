@@ -107,7 +107,7 @@ const fetchPublicArchives = async (): Promise<Archive[]> => {
 
 /** カテゴリバッジ */
 const CategoryBadge: React.FC<{ category: string; small?: boolean }> = ({ category, small }) => (
-  <span className={`inline-block border rounded-full font-medium ${small ? 'text-[14px] px-2 py-0.5' : 'text-[14px] px-3 py-1'} ${CATEGORY_COLORS[category] || CATEGORY_COLORS['その他']}`}>
+  <span className={`inline-block border rounded-full font-medium ${small ? 'text-[12px] px-2 py-0.5' : 'text-[14px] px-3 py-1'} ${CATEGORY_COLORS[category] || CATEGORY_COLORS['その他']}`}>
     {category}
   </span>
 );
@@ -132,12 +132,12 @@ const PostCard: React.FC<{ post: BlogPost; onClick: () => void }> = ({ post, onC
       <div className="flex items-center gap-2 mb-2 flex-wrap">
         <CategoryBadge category={post.category} small />
         {post.tags?.map(tag => (
-          <span key={tag} className="text-[14px] text-slate-500">#{tag}</span>
+          <span key={tag} className="text-[12px] text-slate-500">#{tag}</span>
         ))}
       </div>
       <h2 className="text-white font-bold text-[19px] mb-2 group-hover:text-cyan-300 transition-colors line-clamp-2">{post.title}</h2>
-      <p className="text-slate-400 text-[17px] leading-relaxed line-clamp-3">{excerpt}…</p>
-      <div className="flex items-center gap-1 mt-3 mb-3 text-[14px] text-slate-600">
+      <p className="text-slate-400 text-[15px] leading-relaxed line-clamp-3">{excerpt}…</p>
+      <div className="flex items-center gap-1 mt-3 mb-3 text-[12px] text-slate-600">
         <Clock size={11} />
         <span>{new Date(post.date).toLocaleDateString('ja-JP')}</span>
       </div>
