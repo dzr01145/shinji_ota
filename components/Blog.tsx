@@ -504,8 +504,8 @@ const Blog: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 top-20 overflow-hidden bg-black text-white">
-      <div className="mx-auto flex h-full w-full max-w-6xl flex-col px-4">
+    <div className="min-h-screen bg-black pt-20 text-white lg:fixed lg:inset-x-0 lg:bottom-0 lg:top-20 lg:min-h-0 lg:overflow-hidden lg:pt-0">
+      <div className="mx-auto flex w-full max-w-6xl flex-col px-4 lg:h-full">
 
         {/* ヘッダー（固定・スクロールしない） */}
         <div className="flex-shrink-0 border-b border-slate-800 pb-5 pt-6">
@@ -517,10 +517,10 @@ const Blog: React.FC = () => {
         </div>
 
         {/* ========== 2カラムレイアウト: 左固定・右スクロール ========== */}
-        <div className="flex min-h-0 flex-1 flex-col gap-8 overflow-hidden pt-6 lg:flex-row">
+        <div className="flex flex-1 flex-col gap-8 overflow-visible pt-6 lg:min-h-0 lg:overflow-hidden lg:flex-row">
 
           {/* 左サイドバー: 固定表示。項目が増えた場合だけ左内でスクロール */}
-          <aside className="flex-shrink-0 overflow-y-auto pb-6 pr-1 lg:w-60">
+          <aside className="max-h-[45vh] flex-shrink-0 overflow-y-auto border-b border-slate-900 pb-6 pr-1 lg:max-h-none lg:w-60 lg:border-b-0">
             {/* 詳細ビュー中は「一覧に戻る」ボタン */}
             {selectedPost && (
               <button
@@ -620,7 +620,7 @@ const Blog: React.FC = () => {
           </aside>
 
           {/* メインコンテンツ */}
-          <main ref={contentRef} className="min-h-0 flex-1 overflow-y-scroll overscroll-contain pb-6 pr-1">
+          <main ref={contentRef} className="min-h-0 flex-1 overflow-visible pb-10 pr-1 lg:overflow-y-scroll lg:overscroll-contain lg:pb-6">
             {selectedPost ? (
               /* ========== 記事詳細ビュー ========== */
               <div>
