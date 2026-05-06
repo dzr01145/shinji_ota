@@ -777,11 +777,15 @@ const Blog: React.FC = () => {
           className="fixed inset-0 bg-black/98 z-50 flex items-center justify-center cursor-pointer overflow-hidden"
         >
           <button
+            type="button"
+            onPointerDown={(event) => event.stopPropagation()}
+            onMouseDown={(event) => event.stopPropagation()}
             onClick={(event) => {
+              event.preventDefault();
               event.stopPropagation();
               closeExpandedImage();
             }}
-            className="absolute top-6 right-6 text-slate-300 hover:text-cyan-300 transition-colors z-10 p-2"
+            className="fixed top-6 right-6 z-[10001] rounded-full bg-black/40 p-2 text-slate-200 transition-colors hover:bg-cyan-950/70 hover:text-cyan-300"
             aria-label="画像を閉じる"
           >
             <X size={32} />
@@ -793,7 +797,7 @@ const Blog: React.FC = () => {
             onClick={(e) => e.stopPropagation()}
             onMouseDown={handleExpandedImageMouseDown}
             onDoubleClick={resetExpandedImageZoom}
-            className={`w-[98vw] h-[98vh] flex items-center justify-center ${isExpandedImageDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+            className={`relative z-0 w-[98vw] h-[98vh] flex items-center justify-center ${isExpandedImageDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
           >
             <img
               src={expandedImageUrl}
