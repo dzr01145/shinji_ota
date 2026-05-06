@@ -776,28 +776,30 @@ const Blog: React.FC = () => {
           onMouseLeave={() => setIsExpandedImageDragging(false)}
           className="fixed inset-0 bg-black/98 z-50 flex items-center justify-center cursor-pointer overflow-hidden"
         >
-          <button
-            type="button"
-            onPointerDownCapture={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              closeExpandedImage();
-            }}
-            onMouseDownCapture={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              closeExpandedImage();
-            }}
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              closeExpandedImage();
-            }}
-            className="fixed top-6 right-6 z-[10001] rounded-full bg-black/70 p-3 text-slate-100 ring-1 ring-white/20 transition-colors hover:bg-cyan-950/80 hover:text-cyan-300"
-            aria-label="画像を閉じる"
-          >
-            <X size={32} />
-          </button>
+          <div className="pointer-events-none absolute inset-x-0 top-24 z-[10001] flex justify-end px-6 sm:px-10">
+            <button
+              type="button"
+              onPointerDownCapture={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                closeExpandedImage();
+              }}
+              onMouseDownCapture={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                closeExpandedImage();
+              }}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                closeExpandedImage();
+              }}
+              className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full bg-black/75 text-slate-100 ring-1 ring-white/20 backdrop-blur-sm transition-colors hover:bg-cyan-950/85 hover:text-cyan-300"
+              aria-label="画像を閉じる"
+            >
+              <X size={30} />
+            </button>
+          </div>
           <div className="pointer-events-none absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-center text-[11px] uppercase tracking-[0.18em] text-white/55">
             Wheel to zoom / Drag to pan / Esc to close
           </div>
