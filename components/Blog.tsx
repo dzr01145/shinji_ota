@@ -232,6 +232,9 @@ const Blog: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [expandedImageUrl, setExpandedImageUrl] = useState<string | null>(null);
+  const [expandedImageScale, setExpandedImageScale] = useState(1);
+  const [expandedImageOffset, setExpandedImageOffset] = useState({ x: 0, y: 0 });
+  const [isExpandedImageDragging, setIsExpandedImageDragging] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({ '労働安全衛生': true });
 
   // 投稿フォーム
@@ -248,6 +251,7 @@ const Blog: React.FC = () => {
   const [imageAttribution, setImageAttribution] = useState<{ authorName: string; authorUrl: string; unsplashUrl: string } | null>(null);
   const contentRef = useRef<HTMLElement | null>(null);
   const listScrollTopRef = useRef(0);
+  const dragStartRef = useRef({ x: 0, y: 0 });
 
   const fetchPosts = useCallback(async () => {
     setIsLoading(true);
@@ -321,6 +325,23 @@ const Blog: React.FC = () => {
       window.removeEventListener('hashchange', syncPostFromHash);
     };
   }, [posts]);
+
+  useEffect(() => {
+    if (!expandedImageUrl) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeExpandedImage();
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [expandedImageUrl]);
 
   const filteredPosts = posts.filter(p => {
     if (activeCategory !== 'すべて' && p.category !== activeCategory) return false;
@@ -503,6 +524,52 @@ const Blog: React.FC = () => {
     showList();
   };
 
+  const openExpandedImage = (imageUrl: string) => {
+    setExpandedImageUrl(imageUrl);
+    setExpandedImageScale(1);
+    setExpandedImageOffset({ x: 0, y: 0 });
+    setIsExpandedImageDragging(false);
+  };
+
+  const closeExpandedImage = () => {
+    setExpandedImageUrl(null);
+    setExpandedImageScale(1);
+    setExpandedImageOffset({ x: 0, y: 0 });
+    setIsExpandedImageDragging(false);
+  };
+
+  const handleExpandedImageWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const direction = event.deltaY < 0 ? 1 : -1;
+    setExpandedImageScale((current) => {
+      const next = current + direction * 0.12 * current;
+      return Math.max(0.5, Math.min(next, 5));
+    });
+  };
+
+  const handleExpandedImageMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsExpandedImageDragging(true);
+    dragStartRef.current = {
+      x: event.clientX - expandedImageOffset.x,
+      y: event.clientY - expandedImageOffset.y
+    };
+  };
+
+  const handleExpandedImageMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!isExpandedImageDragging) return;
+    event.preventDefault();
+    setExpandedImageOffset({
+      x: event.clientX - dragStartRef.current.x,
+      y: event.clientY - dragStartRef.current.y
+    });
+  };
+
+  const resetExpandedImageZoom = () => {
+    setExpandedImageScale(1);
+    setExpandedImageOffset({ x: 0, y: 0 });
+  };
+
   return (
     <div className="min-h-screen bg-black pt-20 text-white lg:fixed lg:inset-x-0 lg:bottom-0 lg:top-20 lg:min-h-0 lg:overflow-hidden lg:pt-0">
       <div className="mx-auto flex w-full max-w-6xl flex-col px-4 lg:h-full">
@@ -641,7 +708,7 @@ const Blog: React.FC = () => {
                 {/* タイトル下のアイキャッチ画像（クリック拡大対応） */}
                 {selectedPost.imageUrl && (
                   <div
-                    onClick={() => setExpandedImageUrl(selectedPost.imageUrl!)}
+                    onClick={() => openExpandedImage(selectedPost.imageUrl!)}
                     className="w-full rounded-xl overflow-hidden mb-8 border border-slate-800 cursor-pointer hover:border-cyan-600 hover:shadow-lg hover:shadow-cyan-600/20 transition-all duration-200"
                   >
                     <img src={selectedPost.imageUrl} alt={selectedPost.title} className="w-full h-auto object-contain" />
@@ -702,23 +769,38 @@ const Blog: React.FC = () => {
       {/* ========== 画像拡大表示モーダル（画面最大） ========== */}
       {expandedImageUrl && (
         <div
-          onClick={() => setExpandedImageUrl(null)}
-          className="fixed inset-0 bg-black/98 z-50 flex items-center justify-center cursor-pointer"
+          onClick={closeExpandedImage}
+          onWheel={handleExpandedImageWheel}
+          onMouseMove={handleExpandedImageMouseMove}
+          onMouseUp={() => setIsExpandedImageDragging(false)}
+          onMouseLeave={() => setIsExpandedImageDragging(false)}
+          className="fixed inset-0 bg-black/98 z-50 flex items-center justify-center cursor-pointer overflow-hidden"
         >
           <button
-            onClick={() => setExpandedImageUrl(null)}
-            className="absolute top-6 right-6 text-slate-300 hover:text-white transition-colors z-10 p-2"
+            onClick={(event) => {
+              event.stopPropagation();
+              closeExpandedImage();
+            }}
+            className="absolute top-6 right-6 text-slate-300 hover:text-cyan-300 transition-colors z-10 p-2"
+            aria-label="画像を閉じる"
           >
             <X size={32} />
           </button>
+          <div className="pointer-events-none absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-center text-[11px] uppercase tracking-[0.18em] text-white/55">
+            Wheel to zoom / Drag to pan / Esc to close
+          </div>
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-[98vw] h-[98vh] flex items-center justify-center"
+            onMouseDown={handleExpandedImageMouseDown}
+            onDoubleClick={resetExpandedImageZoom}
+            className={`w-[98vw] h-[98vh] flex items-center justify-center ${isExpandedImageDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
           >
             <img
               src={expandedImageUrl}
               alt="Expanded view"
-              className="w-full h-full object-contain"
+              className="max-h-[92vh] max-w-[92vw] object-contain shadow-2xl shadow-black transition-transform duration-75"
+              style={{ transform: `translate(${expandedImageOffset.x}px, ${expandedImageOffset.y}px) scale(${expandedImageScale})` }}
+              draggable={false}
             />
           </div>
         </div>
