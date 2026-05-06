@@ -778,14 +778,22 @@ const Blog: React.FC = () => {
         >
           <button
             type="button"
-            onPointerDown={(event) => event.stopPropagation()}
-            onMouseDown={(event) => event.stopPropagation()}
+            onPointerDownCapture={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              closeExpandedImage();
+            }}
+            onMouseDownCapture={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              closeExpandedImage();
+            }}
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
               closeExpandedImage();
             }}
-            className="fixed top-6 right-6 z-[10001] rounded-full bg-black/40 p-2 text-slate-200 transition-colors hover:bg-cyan-950/70 hover:text-cyan-300"
+            className="fixed top-6 right-6 z-[10001] rounded-full bg-black/70 p-3 text-slate-100 ring-1 ring-white/20 transition-colors hover:bg-cyan-950/80 hover:text-cyan-300"
             aria-label="画像を閉じる"
           >
             <X size={32} />
