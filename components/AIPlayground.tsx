@@ -13,7 +13,8 @@ import {
     Calendar,
     FileSpreadsheet,
     Brain,
-    Newspaper
+    Newspaper,
+    Languages
 } from 'lucide-react';
 
 const AIPlayground: React.FC = () => {
@@ -268,6 +269,15 @@ const AIPlayground: React.FC = () => {
                             buttonText="アプリを開く"
                             features={["ストーリー構成案の自動提案", "Gemini 3.0 Pro Image生成", "PowerPoint (pptx) 出力"]}
                             imageUrl="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2000&auto=format&fit=crop"
+                        />
+                        <ToolCard
+                            icon={<Languages className="w-8 h-8 text-cyan-400" />}
+                            title="リアルタイム音声翻訳"
+                            description="スマホのマイクやPC Chromeのタブ音声を使い、日本語と英語を自動判定して翻訳。海外動画、会議、現場での説明確認を支援します。"
+                            link="https://api-translator3-mobile.onrender.com/"
+                            buttonText="翻訳アプリを開く"
+                            features={["日本語・英語の自動判定", "スマホPWA対応", "PC Chromeタブ音声翻訳"]}
+                            imageUrl="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2000&auto=format&fit=crop"
                         />
                     </div>
                 </section>
