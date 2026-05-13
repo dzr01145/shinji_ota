@@ -118,10 +118,10 @@ const RevisedProfile: React.FC = () => {
               {PERSONAL_INFO.name}
             </h2>
             <p className="mt-2 text-3xl font-light tracking-tight text-white md:text-4xl">{PERSONAL_INFO.jaName}</p>
-            <p className="mt-6 max-w-xl text-sm font-light leading-7 text-zinc-400">
+            <p className="mt-6 max-w-xl text-sm font-light leading-7 text-white">
               {PERSONAL_PROFILE_DEEP.currentRole.organization} / {PERSONAL_PROFILE_DEEP.currentRole.department}
               <br />
-              <span className="text-zinc-200">{PERSONAL_PROFILE_DEEP.currentRole.position}</span>
+              <span className="text-white">{PERSONAL_PROFILE_DEEP.currentRole.position}</span>
             </p>
             <p className="mt-2 max-w-xl text-xs font-light leading-6 text-zinc-600">
               {PERSONAL_PROFILE_DEEP.currentRole.organizationEn} / {PERSONAL_PROFILE_DEEP.currentRole.departmentEn}
