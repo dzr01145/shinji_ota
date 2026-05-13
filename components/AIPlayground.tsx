@@ -18,11 +18,37 @@ import {
 } from 'lucide-react';
 
 const AIPlayground: React.FC = () => {
+    const sectionNav = [
+        { href: '#ai-tools-top', label: 'Top', ja: 'トップ' },
+        { href: '#portal', label: 'Portal', ja: 'ポータル' },
+        { href: '#ai-chat', label: 'Chat', ja: '専門AI' },
+        { href: '#risk-assessment', label: 'Risk', ja: '安全管理' },
+        { href: '#management-system', label: 'PDCA', ja: 'MS・PDCA' },
+        { href: '#knowledge-support', label: 'Knowledge', ja: 'ナレッジ' }
+    ];
+
     return (
         <div className="min-h-screen bg-slate-950 text-slate-200 pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+            <nav className="fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 md:block" aria-label="AI tools section navigation">
+                <div className="relative py-2">
+                    <div className="absolute left-[5px] top-0 h-full w-px bg-white/22 transition-colors hover:bg-cyan-300/45" />
+                    <div className="relative flex flex-col gap-5">
+                        {sectionNav.map((item) => (
+                            <a key={item.href} href={item.href} className="group flex items-center gap-3 focus-visible:outline-none">
+                                <span className="h-[11px] w-[11px] rounded-full border border-white/45 bg-slate-950 transition-all group-hover:border-cyan-300 group-hover:bg-cyan-300 group-hover:shadow-[0_0_0_4px_rgba(103,232,249,0.14)] group-focus-visible:border-cyan-300 group-focus-visible:bg-cyan-300" />
+                                <span className="flex translate-x-0.5 flex-col whitespace-nowrap font-light text-slate-300/85 opacity-85 transition-all group-hover:translate-x-0 group-hover:text-white group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:text-white group-focus-visible:opacity-100">
+                                    <span className="text-[12px] tracking-[0.14em]">{item.ja}</span>
+                                    <span className="mt-0.5 text-[9px] uppercase tracking-[0.22em] text-slate-500/95 group-hover:text-cyan-300 group-focus-visible:text-cyan-300">{item.label}</span>
+                                </span>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            </nav>
+
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
-                <div className="text-center mb-12">
+                <div id="ai-tools-top" className="text-center mb-12 scroll-mt-28">
                     <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-6">
                         Safety Solutions & AI Tools
                     </h1>
