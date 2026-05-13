@@ -121,7 +121,7 @@ const AIPlayground: React.FC = () => {
                 {/* 1. Specialized AI Chat & Legal Consultation */}
                 <section id="ai-chat" className="scroll-mt-28 border-b border-white/10 py-20">
                     <SectionHeading title="専門AIチャット・法令相談" subtitle="Specialized AI consultation" />
-                    <div className="grid items-start gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid auto-rows-fr gap-4 md:grid-cols-2 lg:grid-cols-3">
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
                             title="労働安全衛生チャット"
@@ -163,7 +163,7 @@ const AIPlayground: React.FC = () => {
                 {/* 2. Safety Management & Risk Assessment */}
                 <section id="risk-assessment" className="scroll-mt-28 border-b border-white/10 py-20">
                     <SectionHeading title="安全管理・リスクアセスメント" subtitle="Safety management and risk assessment" />
-                    <div className="grid items-start gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid auto-rows-fr gap-4 md:grid-cols-2 lg:grid-cols-3">
                         <ToolCard
                             icon={<Camera className="w-8 h-8 text-cyan-400" />}
                             title="安全パトロール支援"
@@ -225,7 +225,7 @@ const AIPlayground: React.FC = () => {
                 {/* 3. Management Systems & PDCA */}
                 <section id="management-system" className="scroll-mt-28 border-b border-white/10 py-20">
                     <SectionHeading title="マネジメントシステム・PDCA" subtitle="Management system and PDCA" />
-                    <div className="grid items-start gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid auto-rows-fr gap-4 md:grid-cols-2 lg:grid-cols-3">
                         <ToolCard
                             icon={<ClipboardCheck className="w-8 h-8 text-cyan-400" />}
                             title="鉱山保安MS診断レポート"
@@ -259,7 +259,7 @@ const AIPlayground: React.FC = () => {
                 {/* 4. Knowledge Transfer & Operational Support */}
                 <section id="knowledge-support" className="scroll-mt-28 py-20">
                     <SectionHeading title="ナレッジ継承・業務支援" subtitle="Knowledge transfer and operational support" />
-                    <div className="grid items-start gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid auto-rows-fr gap-4 md:grid-cols-2 lg:grid-cols-3">
                         <ToolCard
                             icon={<Newspaper className="w-8 h-8 text-cyan-400" />}
                             title="OSHニュースクリッピング・エージェント"
@@ -321,7 +321,7 @@ const ToolCard: React.FC<{
     features?: string[];
     imageUrl?: string;
 }> = ({ icon, title, description, link, buttonText, badge, features, imageUrl }) => (
-    <article className="group relative flex flex-col overflow-hidden border border-white/10 bg-[#0b0c0f] transition-colors duration-500 hover:border-white/35">
+    <article className="group relative flex h-[420px] flex-col overflow-hidden border border-white/10 bg-[#0b0c0f] transition-colors duration-500 hover:border-white/35">
         {imageUrl && (
             <div className="relative h-24 overflow-hidden border-b border-white/10 bg-black">
                 <img
@@ -333,7 +333,7 @@ const ToolCard: React.FC<{
             </div>
         )}
 
-        <div className="relative flex flex-col p-4">
+        <div className="relative flex h-full flex-col p-4">
             {badge && (
                 <span className="absolute right-4 top-4 border border-cyan-300/45 px-2.5 py-1 text-[10px] font-light uppercase tracking-[0.22em] text-cyan-200">
                     {badge}
@@ -344,8 +344,8 @@ const ToolCard: React.FC<{
                 {icon}
             </div>
 
-            <h3 className="mb-2 text-lg font-light leading-6 text-white">{title}</h3>
-            <p className="mb-3 text-sm font-light leading-6 text-zinc-400">{description}</p>
+            <h3 className="mb-2 line-clamp-2 text-lg font-light leading-6 text-white">{title}</h3>
+            <p className="mb-3 line-clamp-3 text-sm font-light leading-6 text-zinc-400">{description}</p>
 
             {features && (
                 <ul className="mb-3 space-y-1.5 border-t border-white/10 pt-3">
