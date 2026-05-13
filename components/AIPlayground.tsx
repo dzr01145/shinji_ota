@@ -321,7 +321,10 @@ const ToolCard: React.FC<{
     features?: string[];
     imageUrl?: string;
 }> = ({ icon, title, description, link, buttonText, badge, features, imageUrl }) => (
-    <article className="group relative flex h-[420px] flex-col overflow-hidden border border-white/10 bg-[#0b0c0f] transition-colors duration-500 hover:border-white/35">
+    <article
+        className="group relative flex flex-col overflow-hidden border border-white/10 bg-[#0b0c0f] transition-colors duration-500 hover:border-white/35"
+        style={{ height: 420, minHeight: 420, maxHeight: 420 }}
+    >
         {imageUrl && (
             <div className="relative h-24 overflow-hidden border-b border-white/10 bg-black">
                 <img
