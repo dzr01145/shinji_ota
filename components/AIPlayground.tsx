@@ -74,7 +74,7 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* Featured Portal Section */}
-                <section id="portal" className="scroll-mt-28 border-b border-white/10 py-20">
+                <section id="portal" className="scroll-mt-28 border-b border-white/10 py-16 md:py-20">
                     <div className="group relative overflow-hidden border border-white/10 bg-black transition-colors duration-500 hover:border-white/35">
                         <div className="absolute inset-0">
                             <img
@@ -113,9 +113,9 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* 1. Specialized AI Chat & Legal Consultation */}
-                <section id="ai-chat" className="scroll-mt-28 border-b border-white/10 py-20">
+                <section id="ai-chat" className="scroll-mt-28 border-b border-white/10 py-16 md:py-20">
                     <SectionHeading title="専門AIチャット・法令相談" subtitle="Specialized AI consultation" />
-                    <div className="grid auto-rows-fr gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-8 md:auto-rows-fr md:grid-cols-2 md:gap-4 lg:grid-cols-3">
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
                             title="労働安全衛生チャット"
@@ -155,9 +155,9 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* 2. Safety Management & Risk Assessment */}
-                <section id="risk-assessment" className="scroll-mt-28 border-b border-white/10 py-20">
+                <section id="risk-assessment" className="scroll-mt-28 border-b border-white/10 py-16 md:py-20">
                     <SectionHeading title="安全管理・リスクアセスメント" subtitle="Safety management and risk assessment" />
-                    <div className="grid auto-rows-fr gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-8 md:auto-rows-fr md:grid-cols-2 md:gap-4 lg:grid-cols-3">
                         <ToolCard
                             icon={<Camera className="w-8 h-8 text-cyan-400" />}
                             title="安全パトロール支援"
@@ -217,9 +217,9 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* 3. Management Systems & PDCA */}
-                <section id="management-system" className="scroll-mt-28 border-b border-white/10 py-20">
+                <section id="management-system" className="scroll-mt-28 border-b border-white/10 py-16 md:py-20">
                     <SectionHeading title="マネジメントシステム・PDCA" subtitle="Management system and PDCA" />
-                    <div className="grid auto-rows-fr gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-8 md:auto-rows-fr md:grid-cols-2 md:gap-4 lg:grid-cols-3">
                         <ToolCard
                             icon={<ClipboardCheck className="w-8 h-8 text-cyan-400" />}
                             title="鉱山保安MS診断レポート"
@@ -251,9 +251,9 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* 4. Knowledge Transfer & Operational Support */}
-                <section id="knowledge-support" className="scroll-mt-28 py-20">
+                <section id="knowledge-support" className="scroll-mt-28 py-16 md:py-20">
                     <SectionHeading title="ナレッジ継承・業務支援" subtitle="Knowledge transfer and operational support" />
-                    <div className="grid auto-rows-fr gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-8 md:auto-rows-fr md:grid-cols-2 md:gap-4 lg:grid-cols-3">
                         <ToolCard
                             icon={<Newspaper className="w-8 h-8 text-cyan-400" />}
                             title="OSHニュースクリッピング・エージェント"
@@ -298,7 +298,7 @@ const AIPlayground: React.FC = () => {
 };
 
 const SectionHeading: React.FC<{ title: string; subtitle: string }> = ({ title, subtitle }) => (
-    <div className="mb-10">
+    <div className="mb-12 md:mb-10">
         <p className="text-[11px] font-light uppercase tracking-[0.42em] text-zinc-500">{subtitle}</p>
         <h2 className="mt-4 text-3xl font-light tracking-tight text-white md:text-4xl">{title}</h2>
     </div>
@@ -316,8 +316,7 @@ const ToolCard: React.FC<{
     imageUrl?: string;
 }> = ({ icon, title, description, link, buttonText, badge, features, imageUrl }) => (
     <article
-        className="group relative flex flex-col overflow-hidden border border-white/10 bg-[#0b0c0f] transition-colors duration-500 hover:border-white/35"
-        style={{ height: 420, minHeight: 420, maxHeight: 420 }}
+        className="group relative flex min-h-[460px] flex-col overflow-hidden border border-white/10 bg-[#0b0c0f] transition-colors duration-500 hover:border-white/35 md:h-[420px] md:min-h-[420px] md:max-h-[420px]"
     >
         {imageUrl && (
             <div className="relative h-24 overflow-hidden border-b border-white/10 bg-black">
