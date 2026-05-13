@@ -101,12 +101,12 @@ const RevisedProfile: React.FC = () => {
               <img
                 src="/profile_image.jpg"
                 alt="Business profile"
-                className="absolute inset-0 h-full w-full object-cover object-[50%_38%] brightness-[0.68] contrast-[0.92] saturate-[0.90] transition-opacity duration-700 group-hover:opacity-0"
+                className="absolute inset-0 h-full w-full object-cover object-[50%_26%] brightness-[0.68] contrast-[0.92] saturate-[0.90] transition-opacity duration-700 group-hover:opacity-0"
               />
               <img
                 src="/profile_image2.jpg"
                 alt="Field profile"
-                className="absolute inset-0 h-full w-full object-cover object-[50%_36%] brightness-[0.82] contrast-[0.94] saturate-[0.94] opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+                className="absolute inset-0 h-full w-full object-cover object-[50%_24%] brightness-[0.82] contrast-[0.94] saturate-[0.94] opacity-0 transition-opacity duration-700 group-hover:opacity-100"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10" />
             </div>
