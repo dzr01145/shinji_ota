@@ -48,7 +48,7 @@ const AIPlayground: React.FC = () => {
 
             <div className="mx-auto max-w-7xl px-6 pb-24 pt-28 md:pl-40 lg:pl-44">
                 <section id="ai-tools-top" className="scroll-mt-28 border-b border-white/10 pb-16">
-                    <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
+                    <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
                         <div>
                             <p className="text-[11px] font-light uppercase tracking-[0.48em] text-zinc-500">
                                 Safety Solutions / AI Tools
@@ -69,12 +69,6 @@ const AIPlayground: React.FC = () => {
                                 className="aspect-[16/9] w-full object-cover opacity-88 brightness-[0.72] contrast-[0.92] saturate-[0.88]"
                             />
                             <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-black/25 to-[#07080a]/72" />
-                            <div className="absolute bottom-6 left-6 right-6">
-                                <p className="text-xs font-light uppercase tracking-[0.32em] text-zinc-500">Tool Catalog</p>
-                                <p className="mt-2 max-w-md text-sm font-light leading-7 text-zinc-200">
-                                    現場写真、法令、報告書、音声翻訳まで、目的別に選べる実務支援メニュー。
-                                </p>
-                            </div>
                         </div>
                     </div>
                 </section>
