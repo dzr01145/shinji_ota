@@ -63,10 +63,10 @@ const RevisedProfile: React.FC = () => {
               <img
                 src={VISUALS.hero}
                 alt="Industrial workplace"
-                className="aspect-[16/11] w-full object-cover opacity-86 brightness-[0.78] contrast-[0.92] saturate-[0.88]"
+                className="aspect-[16/11] w-full object-cover opacity-95 brightness-[0.92] contrast-[0.94] saturate-[0.90]"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-black/25 to-black/70" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#07080a]/90 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/5 via-black/15 to-black/52" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#07080a]/76 via-transparent to-transparent" />
             </div>
           </div>
 
@@ -101,14 +101,14 @@ const RevisedProfile: React.FC = () => {
               <img
                 src="/profile_image.jpg"
                 alt="Business profile"
-                className="absolute inset-0 h-full w-full object-cover object-center brightness-[0.50] contrast-[0.90] saturate-[0.86] transition-opacity duration-700 group-hover:opacity-0"
+                className="absolute inset-0 h-full w-full object-cover object-center brightness-[0.68] contrast-[0.92] saturate-[0.90] transition-opacity duration-700 group-hover:opacity-0"
               />
               <img
                 src="/profile_image2.jpg"
                 alt="Field profile"
-                className="absolute inset-0 h-full w-full object-cover object-center brightness-[0.56] contrast-[0.90] saturate-[0.86] opacity-0 transition-opacity duration-700 group-hover:opacity-85"
+                className="absolute inset-0 h-full w-full object-cover object-center brightness-[0.72] contrast-[0.92] saturate-[0.90] opacity-0 transition-opacity duration-700 group-hover:opacity-92"
               />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/12 to-black/30" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/42 via-black/8 to-black/18" />
             </div>
           </div>
 
