@@ -28,17 +28,17 @@ const AIPlayground: React.FC = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-200 pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+        <main className="min-h-screen bg-[#07080a] text-zinc-200 antialiased">
             <nav className="fixed left-6 top-1/2 z-40 hidden -translate-y-1/2 md:block" aria-label="AI tools section navigation">
                 <div className="relative py-2">
                     <div className="absolute left-[5px] top-0 h-full w-px bg-white/22 transition-colors hover:bg-cyan-300/45" />
                     <div className="relative flex flex-col gap-5">
                         {sectionNav.map((item) => (
                             <a key={item.href} href={item.href} className="group flex items-center gap-3 focus-visible:outline-none">
-                                <span className="h-[11px] w-[11px] rounded-full border border-white/45 bg-slate-950 transition-all group-hover:border-cyan-300 group-hover:bg-cyan-300 group-hover:shadow-[0_0_0_4px_rgba(103,232,249,0.14)] group-focus-visible:border-cyan-300 group-focus-visible:bg-cyan-300" />
-                                <span className="flex translate-x-0.5 flex-col whitespace-nowrap font-light text-slate-300/85 opacity-85 transition-all group-hover:translate-x-0 group-hover:text-white group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:text-white group-focus-visible:opacity-100">
+                                <span className="h-[11px] w-[11px] rounded-full border border-white/45 bg-[#07080a] transition-all group-hover:border-cyan-300 group-hover:bg-cyan-300 group-hover:shadow-[0_0_0_4px_rgba(103,232,249,0.14)] group-focus-visible:border-cyan-300 group-focus-visible:bg-cyan-300" />
+                                <span className="flex translate-x-0.5 flex-col whitespace-nowrap font-light text-zinc-300/85 opacity-85 transition-all group-hover:translate-x-0 group-hover:text-white group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:text-white group-focus-visible:opacity-100">
                                     <span className="text-[12px] tracking-[0.14em]">{item.ja}</span>
-                                    <span className="mt-0.5 text-[9px] uppercase tracking-[0.22em] text-slate-500/95 group-hover:text-cyan-300 group-focus-visible:text-cyan-300">{item.label}</span>
+                                    <span className="mt-0.5 text-[9px] uppercase tracking-[0.22em] text-zinc-500/95 group-hover:text-cyan-300 group-focus-visible:text-cyan-300">{item.label}</span>
                                 </span>
                             </a>
                         ))}
@@ -46,72 +46,81 @@ const AIPlayground: React.FC = () => {
                 </div>
             </nav>
 
-            <div className="max-w-7xl mx-auto">
-                {/* Header */}
-                <div id="ai-tools-top" className="text-center mb-12 scroll-mt-28">
-                    <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-6">
-                        Safety Solutions & AI Tools
-                    </h1>
-                    <p className="text-lg text-slate-400 max-w-3xl mx-auto">
-                        現場の安全を守るための最先端AIツールと専門家サポート。<br />
-                        必要な時に、必要な分だけ利用できる柔軟なソリューションを提供します。
-                    </p>
-                </div>
+            <div className="mx-auto max-w-7xl px-6 pb-24 pt-28 md:pl-40 lg:pl-44">
+                <section id="ai-tools-top" className="scroll-mt-28 border-b border-white/10 pb-16">
+                    <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
+                        <div>
+                            <p className="text-[11px] font-light uppercase tracking-[0.48em] text-zinc-500">
+                                Safety Solutions / AI Tools
+                            </p>
+                            <h1 className="mt-6 max-w-3xl text-4xl font-light leading-[1.18] tracking-tight text-white md:text-5xl">
+                                現場の安全判断を、
+                                <br />
+                                使えるAIツールへ
+                            </h1>
+                            <p className="mt-5 max-w-2xl text-base font-light leading-8 text-zinc-400 md:text-lg">
+                                労働安全衛生、リスクアセスメント、ナレッジ継承、翻訳支援を、実務で使いやすい形に整理したツール一覧です。
+                            </p>
+                        </div>
+                        <div className="relative overflow-hidden border border-white/10 bg-black">
+                            <img
+                                src="/images/revise-control-room.png"
+                                alt="AI tools control room"
+                                className="aspect-[16/9] w-full object-cover opacity-88 brightness-[0.72] contrast-[0.92] saturate-[0.88]"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-r from-black/10 via-black/25 to-[#07080a]/72" />
+                            <div className="absolute bottom-6 left-6 right-6">
+                                <p className="text-xs font-light uppercase tracking-[0.32em] text-zinc-500">Tool Catalog</p>
+                                <p className="mt-2 max-w-md text-sm font-light leading-7 text-zinc-200">
+                                    現場写真、法令、報告書、音声翻訳まで、目的別に選べる実務支援メニュー。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 {/* Featured Portal Section */}
-                <section id="portal" className="mb-20 relative scroll-mt-28">
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-3xl rounded-3xl -z-10"></div>
-                    <div className="relative overflow-hidden rounded-2xl border border-slate-700 group hover:border-cyan-400/50 transition-all duration-500">
-
-                        {/* Background Image for Portal */}
-                        <div className="absolute inset-0 z-0">
+                <section id="portal" className="scroll-mt-28 border-b border-white/10 py-20">
+                    <div className="group relative overflow-hidden border border-white/10 bg-black transition-colors duration-500 hover:border-white/35">
+                        <div className="absolute inset-0">
                             <img
                                 src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2000&auto=format&fit=crop"
                                 alt="Office Collaboration"
-                                className="h-full w-full object-cover opacity-30 transition-transform duration-700 group-hover:scale-105"
+                                className="h-full w-full object-cover opacity-55 brightness-[0.60] contrast-[0.94] saturate-[0.86] transition-transform duration-700 group-hover:scale-[1.03]"
                             />
-                            <div className="absolute inset-0 bg-slate-900/80 group-hover:bg-slate-900/70 transition-colors duration-500"></div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#07080a]/94 via-[#07080a]/78 to-black/42" />
                         </div>
 
-                        <div className="relative z-10 p-8 md:p-12 text-center backdrop-blur-sm">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-cyan-400"></div>
-
-                            <div className="inline-flex items-center gap-2 bg-slate-800/90 border border-slate-700 rounded-full px-4 py-1 mb-6 shadow-lg">
-                                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
-                                <span className="text-xs font-bold text-cyan-400 tracking-wider uppercase">Portal</span>
+                        <div className="relative z-10 grid gap-10 p-6 md:p-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
+                            <div>
+                                <p className="text-[11px] font-light uppercase tracking-[0.42em] text-zinc-500">Featured Portal</p>
+                                <h2 className="mt-5 text-3xl font-light tracking-tight text-white md:text-4xl">
+                                    Your Safety Partner <span className="text-xl text-zinc-500">Mockup</span>
+                                </h2>
                             </div>
+                            <div>
+                                <p className="max-w-2xl text-base font-light leading-8 text-zinc-300">
+                                    安全衛生の総合プラットフォーム。AIツール、専門家ネットワーク、教育コンテンツへアクセスできます。
+                                </p>
 
-                            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
-                                Your Safety Partner <span className="text-red-400 text-2xl align-middle font-normal">（Mockup）</span>
-                            </h2>
-                            <p className="text-slate-200 text-lg max-w-2xl mx-auto mb-8 leading-relaxed drop-shadow-md font-medium">
-                                安全衛生の総合プラットフォーム。<br />
-                                AIツール、専門家ネットワーク、教育コンテンツへアクセス
-                            </p>
-
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                                <a
-                                    href="https://safety-partner.onrender.com/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/25 min-w-[200px]"
-                                >
-                                    ポータルサイトを開く <ExternalLink className="w-5 h-5" />
-                                </a>
+                                <div className="mt-8">
+                                    <a
+                                        href="https://safety-partner.onrender.com/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center justify-center gap-2 border border-white/80 bg-white px-6 py-3 text-sm font-light text-zinc-950 transition-colors hover:bg-zinc-200"
+                                    >
+                                        ポータルサイトを開く <ExternalLink className="w-5 h-5" />
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
                 {/* 1. Specialized AI Chat & Legal Consultation */}
-                <section id="ai-chat" className="mb-20 scroll-mt-28">
-                    <div className="flex items-center gap-4 mb-8">
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                        <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
-                            <span className="bg-cyan-500/10 p-2 rounded-lg">専門AIチャット・法令相談</span>
-                        </h2>
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                    </div>
+                <section id="ai-chat" className="scroll-mt-28 border-b border-white/10 py-20">
+                    <SectionHeading title="専門AIチャット・法令相談" subtitle="Specialized AI consultation" />
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <ToolCard
                             icon={<Bot className="w-8 h-8 text-cyan-400" />}
@@ -152,14 +161,8 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* 2. Safety Management & Risk Assessment */}
-                <section id="risk-assessment" className="mb-20 scroll-mt-28">
-                    <div className="flex items-center gap-4 mb-8">
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                        <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
-                            <span className="bg-cyan-500/10 p-2 rounded-lg">安全管理・リスクアセスメント</span>
-                        </h2>
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                    </div>
+                <section id="risk-assessment" className="scroll-mt-28 border-b border-white/10 py-20">
+                    <SectionHeading title="安全管理・リスクアセスメント" subtitle="Safety management and risk assessment" />
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <ToolCard
                             icon={<Camera className="w-8 h-8 text-cyan-400" />}
@@ -220,14 +223,8 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* 3. Management Systems & PDCA */}
-                <section id="management-system" className="mb-20 scroll-mt-28">
-                    <div className="flex items-center gap-4 mb-8">
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                        <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
-                            <span className="bg-cyan-500/10 p-2 rounded-lg">マネジメントシステム・PDCA</span>
-                        </h2>
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                    </div>
+                <section id="management-system" className="scroll-mt-28 border-b border-white/10 py-20">
+                    <SectionHeading title="マネジメントシステム・PDCA" subtitle="Management system and PDCA" />
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <ToolCard
                             icon={<ClipboardCheck className="w-8 h-8 text-cyan-400" />}
@@ -260,14 +257,8 @@ const AIPlayground: React.FC = () => {
                 </section>
 
                 {/* 4. Knowledge Transfer & Operational Support */}
-                <section id="knowledge-support" className="mb-20 scroll-mt-28">
-                    <div className="flex items-center gap-4 mb-8">
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                        <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
-                            <span className="bg-cyan-500/10 p-2 rounded-lg">ナレッジ継承・業務支援</span>
-                        </h2>
-                        <div className="h-px flex-1 bg-slate-800"></div>
-                    </div>
+                <section id="knowledge-support" className="scroll-mt-28 py-20">
+                    <SectionHeading title="ナレッジ継承・業務支援" subtitle="Knowledge transfer and operational support" />
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <ToolCard
                             icon={<Newspaper className="w-8 h-8 text-cyan-400" />}
@@ -308,9 +299,16 @@ const AIPlayground: React.FC = () => {
                     </div>
                 </section>
             </div>
-        </div>
+        </main>
     );
 };
+
+const SectionHeading: React.FC<{ title: string; subtitle: string }> = ({ title, subtitle }) => (
+    <div className="mb-10">
+        <p className="text-[11px] font-light uppercase tracking-[0.42em] text-zinc-500">{subtitle}</p>
+        <h2 className="mt-4 text-3xl font-light tracking-tight text-white md:text-4xl">{title}</h2>
+    </div>
+);
 
 // Unified ToolCard Component
 const ToolCard: React.FC<{
@@ -323,40 +321,38 @@ const ToolCard: React.FC<{
     features?: string[];
     imageUrl?: string;
 }> = ({ icon, title, description, link, buttonText, badge, features, imageUrl }) => (
-    <div className="group relative flex flex-col h-full overflow-hidden rounded-xl border border-slate-800 bg-slate-900 transition-all duration-500 hover:border-cyan-500/50 hover:shadow-2xl hover:shadow-cyan-500/10">
-
-        {/* Background Image with Overlay */}
+    <article className="group relative flex h-full flex-col overflow-hidden border border-white/10 bg-[#0b0c0f] transition-colors duration-500 hover:border-white/35">
         {imageUrl && (
-            <div className="absolute inset-0 z-0">
+            <div className="relative h-36 overflow-hidden border-b border-white/10 bg-black">
                 <img
                     src={imageUrl}
                     alt={title}
-                    className="h-full w-full object-cover opacity-50 transition-transform duration-700 group-hover:scale-110"
+                    className="h-full w-full object-cover opacity-82 brightness-[0.70] contrast-[0.92] saturate-[0.88] transition-transform duration-700 group-hover:scale-[1.04]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-900/40 transition-opacity duration-500 group-hover:via-slate-950/70"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0b0c0f]/82 via-transparent to-black/18" />
             </div>
         )}
 
-        <div className="relative z-10 flex flex-col h-full p-6">
+        <div className="flex h-full flex-col p-6">
             {badge && (
-                <span className="absolute top-4 left-6 z-20 bg-cyan-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg shadow-cyan-500/20">
+                <span className="mb-5 w-fit border border-cyan-300/45 px-3 py-1 text-[10px] font-light uppercase tracking-[0.24em] text-cyan-200">
                     {badge}
                 </span>
             )}
 
-            <div className="bg-slate-800/80 backdrop-blur-sm p-3 rounded-lg w-fit mb-4 group-hover:bg-cyan-500/20 transition-colors border border-slate-700/50 group-hover:border-cyan-500/30">
+            <div className="mb-5 flex h-11 w-11 items-center justify-center border border-white/10 bg-black/20 text-cyan-300 transition-colors group-hover:border-cyan-300/45">
                 {icon}
             </div>
 
-            <h3 className="text-xl font-bold text-slate-100 mb-2 group-hover:text-cyan-400 transition-colors">{title}</h3>
-            <p className="text-slate-400 text-sm mb-6 flex-grow leading-relaxed">{description}</p>
+            <h3 className="mb-3 text-xl font-light leading-8 text-white">{title}</h3>
+            <p className="mb-6 flex-grow text-sm font-light leading-7 text-zinc-400">{description}</p>
 
             {features && (
-                <ul className="space-y-2 mb-6">
+                <ul className="mb-6 space-y-2 border-t border-white/10 pt-5">
                     {features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-sm text-slate-300">
-                            <CheckCircle2 className="w-4 h-4 text-cyan-500 shrink-0" />
-                            <span className="opacity-90">{feature}</span>
+                        <li key={idx} className="flex items-start gap-2 text-sm font-light leading-6 text-zinc-300">
+                            <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-cyan-300" />
+                            <span>{feature}</span>
                         </li>
                     ))}
                 </ul>
@@ -367,13 +363,13 @@ const ToolCard: React.FC<{
                     href={link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 w-full bg-slate-800/80 hover:bg-cyan-600 hover:text-white text-cyan-400 font-medium py-3 rounded-lg transition-all duration-300 backdrop-blur-sm border border-slate-700 group-hover:border-cyan-500/30"
+                    className="inline-flex w-full items-center justify-center gap-2 border border-white/20 bg-black/20 px-5 py-3 text-sm font-light text-zinc-200 transition-colors hover:border-white/70 hover:text-white"
                 >
                     {buttonText} <ExternalLink className="w-4 h-4" />
                 </a>
             </div>
         </div>
-    </div>
+    </article>
 );
 
 export default AIPlayground;
