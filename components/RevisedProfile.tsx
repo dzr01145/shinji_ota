@@ -97,16 +97,16 @@ const RevisedProfile: React.FC = () => {
       <section id="profile-detail" className="scroll-mt-28 bg-[#0b0c0f] py-24">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
           <div className="group relative overflow-hidden border border-white/10 bg-black">
-            <div className="relative aspect-[16/11]">
+            <div className="relative aspect-[4/3]">
               <img
                 src="/profile_image.jpg"
                 alt="Business profile"
-                className="absolute inset-0 h-full w-full object-cover object-center brightness-[0.68] contrast-[0.92] saturate-[0.90] transition-opacity duration-700 group-hover:opacity-0"
+                className="absolute inset-0 h-full w-full object-cover object-[50%_38%] brightness-[0.68] contrast-[0.92] saturate-[0.90] transition-opacity duration-700 group-hover:opacity-0"
               />
               <img
                 src="/profile_image2.jpg"
                 alt="Field profile"
-                className="absolute inset-0 h-full w-full object-cover object-center brightness-[0.82] contrast-[0.94] saturate-[0.94] opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+                className="absolute inset-0 h-full w-full object-cover object-[50%_36%] brightness-[0.82] contrast-[0.94] saturate-[0.94] opacity-0 transition-opacity duration-700 group-hover:opacity-100"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10" />
             </div>
